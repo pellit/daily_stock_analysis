@@ -1,25 +1,38 @@
 name: analisis-diario-de-acciones
 
+# Compartimos la configuración de build
+x-comun: &comun
+  build:
+    context: ..
+    dockerfile: docker/Dockerfile
+  restart: unless-stopped
+  environment:
+    - TZ=America/Argentina/Buenos_Aires
+    - WEBUI_HOST=0.0.0.0
+  volumes:
+    - datos_app:/app/data
+    - registros_app:/app/logs
+    - reportes_app:/app/reports
+  deploy:
+    resources:
+      limits:
+        memory: 1G
+      reservations:
+        memory: 512M
+
 services:
+  # 1. Analizador en segundo plano
   analizador:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile
+    <<: *comun
     container_name: analizador-acciones
-    restart: unless-stopped
-    environment:
-      - TZ=America/Argentina/Buenos_Aires
-      - WEBUI_HOST=0.0.0.0
-    volumes:
-      - datos_app:/app/data
-      - registros_app:/app/logs
-      - reportes_app:/app/reports
-    deploy:
-      resources:
-        limits:
-          memory: 1G
-        reservations:
-          memory: 512M
+
+  # 2. Servidor Web / Interfaz Visual
+  servidor-web:
+    <<: *comun
+    container_name: servidor-acciones
+    command: ["python", "main.py", "--serve-only", "--host", "0.0.0.0", "--port", "8000"]
+    ports:
+      - "8000:8000" # Exponemos el puerto 8000 hacia el exterior
 
 volumes:
   datos_app:
