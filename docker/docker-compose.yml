@@ -1,44 +1,26 @@
 name: analisis-diario-de-acciones
 
-# Definición de configuraciones reutilizables
-x-comun: &comun
-  build:
-    context: .
-    dockerfile: ./docker/Dockerfile
-  restart: unless-stopped
-
-  # Volúmenes para persistir datos, registros y reportes generados
-  volumes:
-    - datos_app:/app/data
-    - registros_app:/app/logs
-    - reportes_app:/app/reports
-
-  environment:
-    # Zona horaria (Ajustada a Argentina)
-    - TZ=America/Argentina/Buenos_Aires
-    - WEBUI_HOST=0.0.0.0
-
-  # Límite de memoria RAM
-  deploy:
-    resources:
-      limits:
-        memory: 1G
-      reservations:
-        memory: 512M
-
-# ==========================================
-# SERVICIOS A EJECUTAR
-# ==========================================
 services:
-
-  # 1. Servicio Analizador (Ejecuta el análisis y el envío de correo)
   analizador:
-    <<: *comun
+    build:
+      context: ./docker
+      dockerfile: Dockerfile
     container_name: analizador-acciones
+    restart: unless-stopped
+    environment:
+      - TZ=America/Argentina/Buenos_Aires
+      - WEBUI_HOST=0.0.0.0
+    volumes:
+      - datos_app:/app/data
+      - registros_app:/app/logs
+      - reportes_app:/app/reports
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
 
-# ==========================================
-# VOLÚMENES PERSISTENTES
-# ==========================================
 volumes:
   datos_app:
   registros_app:
