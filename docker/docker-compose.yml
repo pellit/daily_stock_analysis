@@ -4,7 +4,7 @@ name: analisis-diario-de-acciones
 x-comun: &comun
   build:
     context: .
-    dockerfile: docker/Dockerfile
+    dockerfile: ./docker/Dockerfile
   restart: unless-stopped
 
   # Volúmenes para persistir datos, registros y reportes generados
@@ -12,40 +12,29 @@ x-comun: &comun
     - datos_app:/app/data
     - registros_app:/app/logs
     - reportes_app:/app/reports
-    - estrategias_app:/app/strategies:ro
 
   environment:
     # Zona horaria (Ajustada a Argentina)
     - TZ=America/Argentina/Buenos_Aires
-
-    # Dirección IP de escucha del servidor interno
     - WEBUI_HOST=0.0.0.0
 
-  # Configuración de rendimiento y límite de memoria
+  # Límite de memoria RAM
   deploy:
     resources:
       limits:
-        memory: 1G      # Límite máximo de RAM
+        memory: 1G
       reservations:
-        memory: 512M    # Memoria RAM reservada mínima
+        memory: 512M
 
 # ==========================================
 # SERVICIOS A EJECUTAR
 # ==========================================
 services:
 
-  # 1. Servicio Analizador (Ejecuta la descarga, análisis de IA y envío de correo)
+  # 1. Servicio Analizador (Ejecuta el análisis y el envío de correo)
   analizador:
     <<: *comun
     container_name: analizador-acciones
-
-  # 2. Servicio Servidor Web / API (Opcional: Si deseas consultar la interfaz visual)
-  servidor-web:
-    <<: *comun
-    container_name: servidor-acciones
-    command: ["python", "main.py", "--serve-only", "--host", "0.0.0.0", "--port", "${API_PORT:-8000}"]
-    ports:
-      - "${API_PORT:-8000}:${API_PORT:-8000}"
 
 # ==========================================
 # VOLÚMENES PERSISTENTES
@@ -54,4 +43,3 @@ volumes:
   datos_app:
   registros_app:
   reportes_app:
-  estrategias_app:
