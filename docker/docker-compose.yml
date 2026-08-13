@@ -3,7 +3,7 @@ name: analisis-diario-de-acciones
 services:
   analizador:
     build:
-      context: ./docker
+      context: .
       dockerfile: Dockerfile
     container_name: analizador-acciones
     restart: unless-stopped
