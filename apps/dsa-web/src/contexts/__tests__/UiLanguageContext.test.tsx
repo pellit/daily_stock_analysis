@@ -46,7 +46,7 @@ describe('UiLanguageContext', () => {
     })).toBe('en');
   });
 
-  it('falls back from invalid storage to the first supported browser language and then zh', () => {
+  it('falls back from invalid storage to the first supported browser language and then en', () => {
     expect(resolveInitialUiLanguage({
       storage: createStorage('fr'),
       navigatorLike: { language: 'en-US', languages: ['en-US'] },
@@ -60,7 +60,7 @@ describe('UiLanguageContext', () => {
     expect(resolveInitialUiLanguage({
       storage: createStorage(null),
       navigatorLike: { language: 'tr-TR', languages: ['tr-TR'] },
-    })).toBe('zh');
+    })).toBe('en');
   });
 
   it('falls back to browser language if storage getItem throws', () => {

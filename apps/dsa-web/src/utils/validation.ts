@@ -1,10 +1,12 @@
+import type { UiLanguage } from '../i18n/uiText';
+
 interface ValidationResult {
   valid: boolean;
   message?: string;
   normalized: string;
 }
 
-const SUPPORTED_QUERY_CHARACTERS = /^[A-Z0-9.\u3400-\u9FFF\s]+$/;
+const SUPPORTED_QUERY_CHARACTERS = /^[A-Z0-9.㐀-鿿\s]+$/;
 
 const STOCK_CODE_PATTERNS = [
   /^\d{6}$/, // A-share 6-digit code
@@ -18,6 +20,16 @@ const STOCK_CODE_PATTERNS = [
   /^[A-Z]{1,5}(?:\.(?:US|[A-Z]))?$/, // Common US ticker format
 ];
 
+const REQUIRED_MESSAGE: Record<UiLanguage, string> = {
+  zh: '请输入股票代码',
+  en: 'Please enter a stock code',
+};
+
+const INVALID_FORMAT_MESSAGE: Record<UiLanguage, string> = {
+  zh: '股票代码格式不正确',
+  en: 'Invalid stock code format',
+};
+
 /**
  * Check whether the input looks like a stock code.
  */
@@ -29,18 +41,21 @@ export const looksLikeStockCode = (value: string): boolean => {
 /**
  * Validate common A-share, HK, US, JP, and KR stock code formats.
  */
-export const validateStockCode = (value: string): ValidationResult => {
+export const validateStockCode = (
+  value: string,
+  language: UiLanguage = 'en',
+): ValidationResult => {
   const normalized = value.trim().toUpperCase();
 
   if (!normalized) {
-    return { valid: false, message: '请输入股票代码', normalized };
+    return { valid: false, message: REQUIRED_MESSAGE[language], normalized };
   }
 
   const valid = looksLikeStockCode(normalized);
 
   return {
     valid,
-    message: valid ? undefined : '股票代码格式不正确',
+    message: valid ? undefined : INVALID_FORMAT_MESSAGE[language],
     normalized,
   };
 };

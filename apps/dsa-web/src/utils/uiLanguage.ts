@@ -53,15 +53,15 @@ function getBrowserUiLanguage(navigatorLike?: Pick<Navigator, 'language' | 'lang
 
   for (const candidate of languageCandidates) {
     const normalized = candidate.toLowerCase();
-    if (normalized.startsWith('zh')) {
-      return 'zh';
-    }
     if (normalized.startsWith('en')) {
       return 'en';
     }
+    if (normalized.startsWith('zh')) {
+      return 'zh';
+    }
   }
 
-  return 'zh';
+  return 'en';
 }
 
 export function resolveInitialUiLanguage({
@@ -81,7 +81,7 @@ export function resolveInitialUiLanguage({
 
 export function getRuntimeInitialLanguage(): UiLanguage {
   if (typeof window === 'undefined') {
-    return 'zh';
+    return 'en';
   }
 
   return resolveInitialUiLanguage({
