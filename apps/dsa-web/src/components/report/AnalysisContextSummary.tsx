@@ -37,14 +37,13 @@ const QUALITY_STYLE = {
 
 const BLOCK_LABELS: Record<ReportLanguage, Record<string, string>> = {
   zh: {
-    quote: '行情',
-    daily_bars: '日线',
-    technical: '技术',
-    news: '新闻',
-    fundamentals: '基本面',
-    chip: '筹码',
-  },
-  en: {
+    quote: 'quote',
+    daily_bars: 'daily bars',
+    technical: 'technical',
+    news: 'news',
+    fundamentals: 'fundamentals',
+    chip: 'chip',
+  }, en: {
     quote: 'quote',
     daily_bars: 'daily bars',
     technical: 'technical',
@@ -64,38 +63,37 @@ const BLOCK_LABELS: Record<ReportLanguage, Record<string, string>> = {
 
 const TEXT = {
   zh: {
-    eyebrow: '数据上下文',
-    title: '输入数据块',
-    counts: '状态计数',
-    source: '来源',
-    sourceUnavailable: '未记录输入来源',
-    warnings: '告警',
-    missingReasons: '说明',
-    diagnosticCode: '诊断码',
-    inputScope: '本次分析输入',
-    evidenceScope: '仅代表进入本次 LLM 的输入，不等同于数据源运行成功',
-    qualityScore: '质量分',
-    limitations: '数据限制',
-    newsResultCount: '新闻结果数',
-    triggerSource: '触发来源',
+    eyebrow: 'DATA CONTEXT',
+    title: 'Input Blocks',
+    counts: 'Status Counts',
+    source: 'Source',
+    sourceUnavailable: 'Input source not recorded',
+    warnings: 'Warnings',
+    missingReasons: 'Details',
+    diagnosticCode: 'Diagnostic code',
+    inputScope: 'Analysis Input',
+    evidenceScope: 'Shows inputs included in this LLM run, not provider run success',
+    qualityScore: 'Quality',
+    limitations: 'Data Limitations',
+    newsResultCount: 'News Results',
+    triggerSource: 'Trigger',
     qualityLevel: {
-      good: '良好',
-      usable: '可用',
-      limited: '受限',
-      poor: '较差',
+      good: 'Good',
+      usable: 'Usable',
+      limited: 'Limited',
+      poor: 'Poor',
     },
     status: {
-      available: '可用',
-      missing: '缺失',
-      not_supported: '不支持',
-      fallback: '降级',
-      stale: '过期',
-      estimated: '估算',
-      partial: '部分可用',
-      fetch_failed: '抓取失败',
+      available: 'Available',
+      missing: 'Missing',
+      not_supported: 'Not supported',
+      fallback: 'Fallback',
+      stale: 'Stale',
+      estimated: 'Estimated',
+      partial: 'Partial',
+      fetch_failed: 'Fetch failed',
     },
-  },
-  en: {
+  }, en: {
     eyebrow: 'DATA CONTEXT',
     title: 'Input Blocks',
     counts: 'Status Counts',
@@ -163,21 +161,20 @@ const TEXT = {
 
 const MISSING_REASON_LABELS: Record<ReportLanguage, Record<string, string>> = {
   zh: {
-    daily_bars_missing: '日线数据未进入本次分析，技术指标可能不完整；请检查日线数据源、网络或限流后重新分析',
-    news_context_missing: '新闻未进入本次 LLM 分析，结论未使用新闻上下文；报告页相关资讯由独立接口补充，显示与否不代表已进入本次分析。请检查搜索配置、网络或限流后重新分析',
-    realtime_quote_missing: '实时行情未进入本次分析，当前价格相关结论可能受限；请检查行情数据源、网络或限流后重新分析',
-    trend_result_missing: '技术分析结果未进入本次分析，技术面判断可能不完整；请检查日线完整性后重新分析',
-    fundamental_context_missing: '基本面未进入本次分析，结论未使用基本面数据；请检查基本面数据源、网络或限流后重新分析',
-    fundamental_pipeline_failed: '基本面抓取失败，本次分析未使用基本面数据；请检查数据源配置、网络或限流后重新分析',
-    fundamentals_not_supported: '当前市场或标的不支持基本面数据，本次分析未使用该数据；请结合其他指标判断',
-    fundamental_coverage_missing: '基本面覆盖数据未进入本次分析，结论可能缺少部分财务信息；请检查数据源覆盖范围后重新分析',
-    fundamental_source_chain_missing: '未记录基本面来源链元数据；基本面是否进入本次分析以当前状态为准，请结合来源和告警复核数据出处',
-    chip_distribution_missing: '筹码数据未进入本次分析，结论未使用筹码分布；请确认当前市场或标的数据支持情况',
-    chip_not_supported: '当前市场或标的不支持筹码数据，本次分析未使用该指标；请结合其他指标判断',
-    today_missing: '今日数据未进入本次分析，盘中判断可能受限；请结合实时行情复核后重新分析',
-    yesterday_missing: '昨日数据未进入本次分析，日线对比可能不完整；请等待数据源更新后重新分析',
-  },
-  en: {
+    daily_bars_missing: 'Daily bars were not included, so technical indicators may be incomplete; check the daily data source, network, or rate limits and rerun',
+    news_context_missing: 'News was not included in this LLM run, so the conclusion did not use news context; related news on the report page is loaded separately and does not indicate that it was used in this analysis. Check search configuration, network, or rate limits and rerun',
+    realtime_quote_missing: 'Real-time quotes were not included, so price-related conclusions may be limited; check the quote source, network, or rate limits and rerun',
+    trend_result_missing: 'Technical analysis was not included, so the technical view may be incomplete; check daily-bar completeness and rerun',
+    fundamental_context_missing: 'Fundamentals were not included, so the conclusion did not use fundamental data; check the data source, network, or rate limits and rerun',
+    fundamental_pipeline_failed: 'Fundamental retrieval failed and this analysis did not use fundamental data; check the data-source configuration, network, or rate limits and rerun',
+    fundamentals_not_supported: 'Fundamental data is not supported for this market or symbol and was not used; cross-check other indicators',
+    fundamental_coverage_missing: 'Fundamental coverage was not included, so some financial context may be missing; check source coverage and rerun',
+    fundamental_source_chain_missing: 'Fundamental source-chain metadata was not recorded; use the current status to determine whether fundamentals were included, and review the source and warnings for provenance',
+    chip_distribution_missing: 'Chip distribution was not included and was not used in the conclusion; confirm support for this market or symbol',
+    chip_not_supported: 'Chip data is not supported for this market or symbol and was not used; cross-check other indicators',
+    today_missing: 'Today\'s data was not included, so intraday conclusions may be limited; cross-check real-time quotes and rerun',
+    yesterday_missing: 'Yesterday\'s data was not included, so daily comparisons may be incomplete; wait for the source to update and rerun',
+  }, en: {
     daily_bars_missing: 'Daily bars were not included, so technical indicators may be incomplete; check the daily data source, network, or rate limits and rerun',
     news_context_missing: 'News was not included in this LLM run, so the conclusion did not use news context; related news on the report page is loaded separately and does not indicate that it was used in this analysis. Check search configuration, network, or rate limits and rerun',
     realtime_quote_missing: 'Real-time quotes were not included, so price-related conclusions may be limited; check the quote source, network, or rate limits and rerun',
@@ -210,8 +207,7 @@ const MISSING_REASON_LABELS: Record<ReportLanguage, Record<string, string>> = {
 };
 
 const UNKNOWN_REASON_DETAILS: Record<ReportLanguage, string> = {
-  zh: '未记录明确原因；请结合状态、来源和告警排查',
-  en: 'No specific reason was recorded; review the status, source, and warnings',
+  zh: 'No specific reason was recorded; review the status, source, and warnings', en: 'No specific reason was recorded; review the status, source, and warnings',
   ko: '명확한 원인이 기록되지 않았습니다. 상태, 출처 및 경고를 함께 확인하세요',
 };
 
@@ -220,15 +216,14 @@ const STATUS_FALLBACK_GUIDANCE: Record<
   Partial<Record<AnalysisContextPackBlockStatus, string>>
 > = {
   zh: {
-    missing: '数据未进入本次分析，相关结论可能不完整；请检查数据源、配置或网络后重新分析',
-    fetch_failed: '数据抓取失败，本次分析未使用该数据；请检查数据源、网络或限流后重新分析',
-    not_supported: '当前市场或标的不支持该数据，本次分析未使用该数据；请结合其他指标判断',
-    fallback: '本次分析使用了备用数据路径；请结合来源和告警复核结果',
-    stale: '本次分析使用的不是最新数据；请检查更新时间并按需重新分析',
-    estimated: '本次分析使用了估算数据；请结合原始数据复核结果',
-    partial: '仅部分数据进入本次分析，相关结论可能不完整；请检查告警和数据源后重新分析',
-  },
-  en: {
+    missing: 'Data was not included, so related conclusions may be incomplete; check the data source, configuration, or network and rerun',
+    fetch_failed: 'Data retrieval failed and this analysis did not use the data; check the source, network, or rate limits and rerun',
+    not_supported: 'This data is not supported for the current market or symbol and was not used; cross-check other indicators',
+    fallback: 'This analysis used a fallback data path; review the result against its source and warnings',
+    stale: 'This analysis used data that may not be current; check the timestamp and rerun if needed',
+    estimated: 'This analysis used estimated data; cross-check the result against source data',
+    partial: 'Only part of the data was included, so related conclusions may be incomplete; check warnings and the data source and rerun',
+  }, en: {
     missing: 'Data was not included, so related conclusions may be incomplete; check the data source, configuration, or network and rerun',
     fetch_failed: 'Data retrieval failed and this analysis did not use the data; check the source, network, or rate limits and rerun',
     not_supported: 'This data is not supported for the current market or symbol and was not used; cross-check other indicators',

@@ -1,13 +1,11 @@
 import type { UiLanguage } from '../i18n/uiText';
 
 const DATE_LOCALE: Record<UiLanguage, string> = {
-  zh: 'zh-CN',
-  en: 'en-US',
+  zh: 'en-US', en: 'en-US',
 };
 
 const REPORT_TYPE_LABELS: Record<UiLanguage, Record<string, string>> = {
-  zh: { simple: '普通', detailed: '标准', full: '完整', brief: '简版', market_review: '大盘' },
-  en: { simple: 'Simple', detailed: 'Detailed', full: 'Full', brief: 'Brief', market_review: 'Market Review' },
+  zh: { simple: 'Simple', detailed: 'Detailed', full: 'Full', brief: 'Brief', market_review: 'Market Review' }, en: { simple: 'Simple', detailed: 'Detailed', full: 'Full', brief: 'Brief', market_review: 'Market Review' },
 };
 
 export const formatDateTime = (

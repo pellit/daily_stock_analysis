@@ -21,13 +21,11 @@ const STOCK_CODE_PATTERNS = [
 ];
 
 const REQUIRED_MESSAGE: Record<UiLanguage, string> = {
-  zh: '请输入股票代码',
-  en: 'Please enter a stock code',
+  zh: 'Please enter a stock code', en: 'Please enter a stock code',
 };
 
 const INVALID_FORMAT_MESSAGE: Record<UiLanguage, string> = {
-  zh: '股票代码格式不正确',
-  en: 'Invalid stock code format',
+  zh: 'Invalid stock code format', en: 'Invalid stock code format',
 };
 
 /**

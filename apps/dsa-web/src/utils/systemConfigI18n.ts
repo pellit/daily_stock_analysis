@@ -3,16 +3,15 @@ import type { UiLanguage } from '../i18n/uiText';
 
 const categoryTitleMap: Record<UiLanguage, Record<SystemConfigCategory, string>> = {
   zh: {
-  base: '基础设置',
-  data_source: '数据源',
-  ai_model: 'AI 模型',
-  notification: '通知渠道',
-  system: '系统设置',
-  agent: 'Agent 设置',
-  backtest: '回测配置',
-  uncategorized: '其他',
-  },
-  en: {
+    base: 'Base settings',
+    data_source: 'Data sources',
+    ai_model: 'AI models',
+    notification: 'Notifications',
+    system: 'System',
+    agent: 'Agent',
+    backtest: 'Backtest',
+    uncategorized: 'Other',
+  }, en: {
     base: 'Base settings',
     data_source: 'Data sources',
     ai_model: 'AI models',
@@ -26,16 +25,15 @@ const categoryTitleMap: Record<UiLanguage, Record<SystemConfigCategory, string>>
 
 const categoryDescriptionMap: Record<UiLanguage, Partial<Record<SystemConfigCategory, string>>> = {
   zh: {
-  base: '管理自选股与基础运行参数。',
-  data_source: '管理行情数据源与优先级策略。',
-  ai_model: '管理模型服务、模型名称与推理参数。',
-  notification: '管理机器人、Webhook 和消息推送配置。',
-  system: '管理调度、日志、端口等系统级参数。',
-  agent: '管理 Agent 模式、策略与多 Agent 编排配置。',
-  backtest: '管理回测开关、评估窗口和引擎参数。',
-  uncategorized: '其他未归类的配置项。',
-  },
-  en: {
+    base: 'Manage watchlists and base runtime parameters.',
+    data_source: 'Manage market data sources and priority strategies.',
+    ai_model: 'Manage model services, model names, and inference parameters.',
+    notification: 'Manage bots, webhooks, and notification delivery.',
+    system: 'Manage scheduling, logging, ports, and system parameters.',
+    agent: 'Manage Agent mode, strategies, and multi-agent orchestration.',
+    backtest: 'Manage backtest switches, evaluation windows, and engine parameters.',
+    uncategorized: 'Other uncategorized settings.',
+  }, en: {
     base: 'Manage watchlists and base runtime parameters.',
     data_source: 'Manage market data sources and priority strategies.',
     ai_model: 'Manage model services, model names, and inference parameters.',
@@ -398,8 +396,7 @@ const fieldOptionLabelMap: Record<string, Record<string, string>> = {
     brief: '简报',
   },
   REPORT_LANGUAGE: {
-    zh: '中文',
-    en: '英文',
+    zh: '英文', en: '英文',
     ko: '韩文',
     chinese: '中文',
     english: '英文',
@@ -482,8 +479,7 @@ const fieldOptionLabelMapEn: Record<string, Record<string, string>> = {
     brief: 'Brief',
   },
   REPORT_LANGUAGE: {
-    zh: 'Chinese',
-    en: 'English',
+    zh: 'English', en: 'English',
     ko: 'Korean',
     chinese: 'Chinese',
     english: 'English',
