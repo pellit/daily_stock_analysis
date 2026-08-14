@@ -166,6 +166,7 @@ def _warn_if_open_cors_without_auth() -> None:
 from api.v1 import api_v1_router
 from api.middlewares.auth import add_auth_middleware
 from api.middlewares.error_handler import add_error_handlers
+from api.middlewares.i18n import build_swagger_description, t as api_t
 from api.v1.schemas.common import HealthResponse
 from src.auth import is_auth_enabled
 from src.data.stock_index_loader import find_existing_stock_index_path
@@ -324,16 +325,7 @@ def create_app(static_dir: Optional[Path] = None) -> FastAPI:
     # 创建 FastAPI 实例
     app = FastAPI(
         title="Daily Stock Analysis API",
-        description=(
-            "A股/港股/美股自选股智能分析系统 API\n\n"
-            "## 功能模块\n"
-            "- 股票分析：触发 AI 智能分析\n"
-            "- 历史记录：查询历史分析报告\n"
-            "- 股票数据：获取行情数据\n\n"
-            "## 认证方式\n"
-            "支持可选管理员认证：ADMIN_AUTH_ENABLED=true 时，除登录、状态、健康检查和 "
-            "OpenAPI 文档外，/api/v1/* 需要有效管理员会话 Cookie；关闭时不强制认证。"
-        ),
+        description=build_swagger_description(),
         version="1.0.0",
         lifespan=app_lifespan,
     )
@@ -431,15 +423,15 @@ def create_app(static_dir: Optional[Path] = None) -> FastAPI:
         "/health",
         response_model=HealthResponse,
         tags=["Health"],
-        summary="健康检查",
-        description="用于负载均衡器或监控系统检查服务状态"
+        summary=api_t("health_endpoint_summary"),
+        description=api_t("health_endpoint_description")
     )
     @app.get(
         "/api/health",
         response_model=HealthResponse,
         tags=["Health"],
-        summary="健康检查",
-        description="用于负载均衡器或监控系统检查服务状态"
+        summary=api_t("health_endpoint_summary"),
+        description=api_t("health_endpoint_description")
     )
     async def health_check() -> HealthResponse:
         """健康检查接口"""

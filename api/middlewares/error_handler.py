@@ -16,6 +16,12 @@ from typing import Callable
 
 from fastapi import Request, Response
 from fastapi.responses import JSONResponse
+from api.middlewares.i18n import (
+    resolve_from_accept_language,
+    reset_locale,
+    set_locale,
+    t as api_t,
+)
 from starlette.middleware.base import BaseHTTPMiddleware
 
 logger = logging.getLogger(__name__)
@@ -43,6 +49,7 @@ class ErrorHandlerMiddleware(BaseHTTPMiddleware):
         Returns:
             Response: 响应对象
         """
+        set_locale(resolve_from_accept_language(request.headers.get('accept-language')))
         try:
             response = await call_next(request)
             return response
@@ -61,7 +68,7 @@ class ErrorHandlerMiddleware(BaseHTTPMiddleware):
                 status_code=500,
                 content={
                     "error": "internal_error",
-                    "message": "服务器内部错误，请稍后重试",
+                    "message": api_t("error_internal_with_detail"),
                     "detail": str(e) if logger.isEnabledFor(logging.DEBUG) else None
                 }
             )
@@ -93,7 +100,7 @@ def add_error_handlers(app) -> None:
             status_code=exc.status_code,
             content={
                 "error": "http_error",
-                "message": str(exc.detail) if exc.detail else "HTTP Error",
+                "message": str(exc.detail) if exc.detail else api_t("error_http_default"),
                 "detail": None
             }
         )
@@ -105,7 +112,7 @@ def add_error_handlers(app) -> None:
             status_code=422,
             content={
                 "error": "validation_error",
-                "message": "请求参数验证失败",
+                "message": api_t("error_validation_failed"),
                 "detail": exc.errors()
             }
         )
@@ -122,7 +129,7 @@ def add_error_handlers(app) -> None:
             status_code=500,
             content={
                 "error": "internal_error",
-                "message": "服务器内部错误",
+                "message": api_t("error_internal_short"),
                 "detail": None
             }
         )
