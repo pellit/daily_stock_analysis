@@ -232,26 +232,28 @@ class ChannelDetector:
     """
 
     @staticmethod
-    def get_channel_name(channel: NotificationChannel) -> str:
-        """获取渠道中文名称"""
-        names = {
-            NotificationChannel.WECHAT: "企业微信",
-            NotificationChannel.FEISHU: "飞书",
-            NotificationChannel.DINGTALK: "钉钉",
-            NotificationChannel.TELEGRAM: "Telegram",
-            NotificationChannel.EMAIL: "邮件",
-            NotificationChannel.PUSHOVER: "Pushover",
-            NotificationChannel.NTFY: "ntfy",
-            NotificationChannel.GOTIFY: "Gotify",
-            NotificationChannel.PUSHPLUS: "PushPlus",
-            NotificationChannel.SERVERCHAN3: "Server酱3",
-            NotificationChannel.CUSTOM: "自定义Webhook",
-            NotificationChannel.DISCORD: "Discord机器人",
-            NotificationChannel.SLACK: "Slack",
-            NotificationChannel.ASTRBOT: "ASTRBOT机器人",
-            NotificationChannel.UNKNOWN: "未知渠道",
+    def get_channel_name(channel: NotificationChannel, language: str = "zh") -> str:
+        """Return the localized channel display name."""
+        labels = get_report_labels(language)
+        channel_keys = {
+            NotificationChannel.WECHAT: "channel_wechat",
+            NotificationChannel.FEISHU: "channel_feishu",
+            NotificationChannel.DINGTALK: "channel_dingtalk",
+            NotificationChannel.TELEGRAM: "channel_telegram",
+            NotificationChannel.EMAIL: "channel_email",
+            NotificationChannel.PUSHOVER: "channel_pushover",
+            NotificationChannel.NTFY: "channel_ntfy",
+            NotificationChannel.GOTIFY: "channel_gotify",
+            NotificationChannel.PUSHPLUS: "channel_pushplus",
+            NotificationChannel.SERVERCHAN3: "channel_serverchan3",
+            NotificationChannel.CUSTOM: "channel_custom",
+            NotificationChannel.DISCORD: "channel_discord",
+            NotificationChannel.SLACK: "channel_slack",
+            NotificationChannel.ASTRBOT: "channel_astrbot",
+            NotificationChannel.UNKNOWN: "channel_unknown",
         }
-        return names.get(channel, "未知渠道")
+        key = channel_keys.get(channel, "channel_unknown")
+        return labels.get(key, labels.get("channel_unknown", "Unknown"))
 
 
 class NotificationService(
@@ -916,7 +918,7 @@ class NotificationService(
         report_lines.extend([
             f"## 📊 {labels['summary_heading']}",
             "",
-            "| 指标 | 数值 |",
+            f"| {labels.get('markdown_metric_header', '指标')} | {labels.get('markdown_value_header', '数值')} |",
             "|------|------|",
             f"| 🟢 {labels['buy_label']} | **{buy_count}** {labels['stock_unit_compact']} |",
             f"| 🟡 {labels['watch_label']} | **{hold_count}** {labels['stock_unit_compact']} |",
@@ -959,21 +961,21 @@ class NotificationService(
                 # 核心看点
                 if hasattr(result, 'key_points') and result.key_points:
                     report_lines.extend([
-                        f"**🎯 核心看点**：{result.key_points}",
+                        f"**{labels.get('markdown_core_points_label', '🎯 核心看点')}**：{result.key_points}",
                         "",
                     ])
 
                 # 买入/卖出理由
                 if hasattr(result, 'buy_reason') and result.buy_reason:
                     report_lines.extend([
-                        f"**💡 操作理由**：{result.buy_reason}",
+                        f"**{labels.get('markdown_buy_reason_label', '💡 操作理由')}**：{result.buy_reason}",
                         "",
                     ])
 
                 # 走势分析
                 if hasattr(result, 'trend_analysis') and result.trend_analysis:
                     report_lines.extend([
-                        "#### 📉 走势分析",
+                        f"#### {labels.get('markdown_trend_section_heading', '📉 走势分析')}",
                         f"{result.trend_analysis}",
                         "",
                     ])
@@ -981,12 +983,12 @@ class NotificationService(
                 # 短期/中期展望
                 outlook_lines = []
                 if hasattr(result, 'short_term_outlook') and result.short_term_outlook:
-                    outlook_lines.append(f"- **短期（1-3日）**：{result.short_term_outlook}")
+                    outlook_lines.append(f"- **{labels.get('markdown_short_term_outlook_label', '短期（1-3日）')}**：{result.short_term_outlook}")
                 if hasattr(result, 'medium_term_outlook') and result.medium_term_outlook:
-                    outlook_lines.append(f"- **中期（1-2周）**：{result.medium_term_outlook}")
+                    outlook_lines.append(f"- **{labels.get('markdown_medium_term_outlook_label', '中期（1-2周）')}**：{result.medium_term_outlook}")
                 if outlook_lines:
                     report_lines.extend([
-                        "#### 🔮 市场展望",
+                        f"#### {labels.get('markdown_outlook_section_heading', '🔮 市场展望')}",
                         *outlook_lines,
                         "",
                     ])
@@ -994,16 +996,16 @@ class NotificationService(
                 # 技术面分析
                 tech_lines = []
                 if result.technical_analysis:
-                    tech_lines.append(f"**综合**：{result.technical_analysis}")
+                    tech_lines.append(f"**{labels.get('markdown_technical_summary_label', '综合')}**：{result.technical_analysis}")
                 if hasattr(result, 'ma_analysis') and result.ma_analysis:
-                    tech_lines.append(f"**均线**：{result.ma_analysis}")
+                    tech_lines.append(f"**{labels.get('markdown_ma_label', '均线')}**：{result.ma_analysis}")
                 if hasattr(result, 'volume_analysis') and result.volume_analysis:
-                    tech_lines.append(f"**量能**：{result.volume_analysis}")
+                    tech_lines.append(f"**{labels.get('markdown_volume_label', '量能')}**：{result.volume_analysis}")
                 if hasattr(result, 'pattern_analysis') and result.pattern_analysis:
-                    tech_lines.append(f"**形态**：{result.pattern_analysis}")
+                    tech_lines.append(f"**{labels.get('markdown_pattern_label', '形态')}**：{result.pattern_analysis}")
                 if tech_lines:
                     report_lines.extend([
-                        "#### 📊 技术面分析",
+                        f"#### {labels.get('markdown_technical_section_heading', '📊 技术面分析')}",
                         *tech_lines,
                         "",
                     ])
@@ -1013,9 +1015,9 @@ class NotificationService(
                 if hasattr(result, 'fundamental_analysis') and result.fundamental_analysis:
                     fund_lines.append(result.fundamental_analysis)
                 if hasattr(result, 'sector_position') and result.sector_position:
-                    fund_lines.append(f"**板块地位**：{result.sector_position}")
+                    fund_lines.append(f"**{labels.get('markdown_sector_position_label', '板块地位')}**：{result.sector_position}")
                 if hasattr(result, 'company_highlights') and result.company_highlights:
-                    fund_lines.append(f"**公司亮点**：{result.company_highlights}")
+                    fund_lines.append(f"**{labels.get('markdown_company_highlights_label', '公司亮点')}**：{result.company_highlights}")
                 if fund_lines:
                     report_lines.extend([
                         "#### 🏢 基本面分析",
@@ -1026,14 +1028,14 @@ class NotificationService(
                 # 消息面/情绪面
                 news_lines = []
                 if result.news_summary:
-                    news_lines.append(f"**新闻摘要**：{result.news_summary}")
+                    news_lines.append(f"**{labels.get('markdown_news_summary_label', '新闻摘要')}**：{result.news_summary}")
                 if hasattr(result, 'market_sentiment') and result.market_sentiment:
-                    news_lines.append(f"**市场情绪**：{result.market_sentiment}")
+                    news_lines.append(f"**{labels.get('markdown_market_sentiment_label', '市场情绪')}**：{result.market_sentiment}")
                 if hasattr(result, 'hot_topics') and result.hot_topics:
-                    news_lines.append(f"**相关热点**：{result.hot_topics}")
+                    news_lines.append(f"**{labels.get('markdown_hot_topics_label', '相关热点')}**：{result.hot_topics}")
                 if news_lines:
                     report_lines.extend([
-                        "#### 📰 消息面/情绪面",
+                        f"#### {labels.get('markdown_news_section_heading', '📰 消息面/情绪面')}",
                         *news_lines,
                         "",
                     ])
@@ -1041,7 +1043,7 @@ class NotificationService(
                 # 综合分析
                 if result.analysis_summary:
                     report_lines.extend([
-                        "#### 📝 综合分析",
+                        f"#### {labels.get('markdown_summary_section_heading', '📝 综合分析')}",
                         result.analysis_summary,
                         "",
                     ])
@@ -1049,21 +1051,21 @@ class NotificationService(
                 # 风险提示
                 if hasattr(result, 'risk_warning') and result.risk_warning:
                     report_lines.extend([
-                        f"⚠️ **风险提示**：{result.risk_warning}",
+                        f"**{labels.get('markdown_risk_warning_label', '⚠️ 风险提示')}**：{result.risk_warning}",
                         "",
                     ])
 
                 # 数据来源说明
                 if hasattr(result, 'search_performed') and result.search_performed:
-                    report_lines.append("*🔍 已执行联网搜索*")
+                    report_lines.append(f"*{labels.get('markdown_search_performed_label', '🔍 已执行联网搜索')}*")
                 if hasattr(result, 'data_sources') and result.data_sources:
-                    report_lines.append(f"*📋 数据来源：{result.data_sources}*")
+                    report_lines.append(f"*{labels.get('markdown_data_sources_label', '📋 数据来源')}：{result.data_sources}*")
 
                 # 错误信息（如果有）
                 if not result.success and result.error_message:
                     report_lines.extend([
                         "",
-                        f"❌ **分析异常**：{result.error_message[:100]}",
+                        f"**{labels.get('markdown_error_message_label', '❌ 分析异常')}**：{result.error_message[:100]}",
                     ])
 
                 report_lines.extend([
@@ -1098,7 +1100,8 @@ class NotificationService(
             return value
         prefixes = ['理想买入点：', '次优买入点：', '止损位：', '目标位：',
                      '理想买入点:', '次优买入点:', '止损位:', '目标位:',
-                     'Ideal Entry:', 'Secondary Entry:', 'Stop Loss:', 'Target:']
+                     'Ideal Entry:', 'Secondary Entry:', 'Stop Loss:', 'Target:',
+                     '이상적 진입:', '차선 진입:', '손절:', '목표:']
         for prefix in prefixes:
             if value.startswith(prefix):
                 return value[len(prefix):]
