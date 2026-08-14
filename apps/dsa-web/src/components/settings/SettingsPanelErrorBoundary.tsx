@@ -13,7 +13,7 @@ interface SettingsPanelErrorBoundaryProps {
 }
 
 interface SettingsPanelErrorBoundaryLabels {
-  loadFailedSuffix: string;
+  loadFailedTitle: string;
   runtimeErrorMessage: string;
   defaultDiagnosticHint: string;
   errorSummaryPrefix: string;
@@ -25,6 +25,7 @@ interface SettingsPanelErrorBoundaryState {
 }
 
 const MAX_ERROR_SUMMARY_LENGTH = 180;
+const FALLBACK_ERROR_SUMMARY = 'Unknown frontend runtime error';
 
 function sanitizeUrlLikeText(value: string) {
   return value.replace(/https?:\/\/[^\s"'<>]+/gi, (match) => {
@@ -47,8 +48,8 @@ function getSafeErrorSummary(error: unknown) {
     ? error.message
     : typeof error === 'string'
       ? error
-      : '未知前端运行时异常';
-  const normalized = rawMessage.replace(/\s+/g, ' ').trim() || '未知前端运行时异常';
+      : FALLBACK_ERROR_SUMMARY;
+  const normalized = rawMessage.replace(/\s+/g, ' ').trim() || FALLBACK_ERROR_SUMMARY;
   const sanitized = sanitizeUrlLikeText(normalized)
     .replace(/\bBearer\s+[A-Za-z0-9._~+/=-]{8,}/gi, 'Bearer [redacted]')
     .replace(/\b(sk-[A-Za-z0-9_-]{8,})\b/g, '[redacted-key]')
@@ -98,7 +99,7 @@ class SettingsPanelErrorBoundaryImpl extends Component<
     return (
       <div className={cn('rounded-[1.5rem] border settings-border bg-card/94 p-5 shadow-soft-card-strong backdrop-blur-sm', this.props.className)}>
         <InlineAlert
-          title={`${this.props.title}${this.props.labels.loadFailedSuffix}`}
+          title={this.props.labels.loadFailedTitle}
           variant="danger"
           message={(
             <div className="space-y-2">
@@ -123,21 +124,14 @@ class SettingsPanelErrorBoundaryImpl extends Component<
   }
 }
 
-export const SettingsPanelErrorBoundary = (props: SettingsPanelErrorBoundaryProps) => {
-  const { language } = useUiLanguage();
-  const labels: SettingsPanelErrorBoundaryLabels = language === 'en'
-    ? {
-        loadFailedSuffix: ' failed to load',
-        runtimeErrorMessage: 'This settings area hit a frontend runtime error. Other settings remain usable.',
-        defaultDiagnosticHint: 'Provide the release version, runtime environment, and trigger path to help diagnose the issue.',
-        errorSummaryPrefix: 'Error summary: ',
-      }
-    : {
-        loadFailedSuffix: '加载失败',
-        runtimeErrorMessage: '该设置区域发生前端运行时异常，页面其他设置仍可继续使用。',
-        defaultDiagnosticHint: '请补充 release 版本、运行环境和触发入口，便于定位问题。',
-        errorSummaryPrefix: '错误摘要：',
-      };
+export const SettingsPanelErrorBoundary = ({ title, ...rest }: SettingsPanelErrorBoundaryProps) => {
+  const { t } = useUiLanguage();
+  const labels: SettingsPanelErrorBoundaryLabels = {
+    loadFailedTitle: t('settings.errorBoundaryLoadFailed', { title }),
+    runtimeErrorMessage: t('settings.errorBoundaryRuntimeMessage'),
+    defaultDiagnosticHint: t('settings.errorBoundaryDiagnosticHint'),
+    errorSummaryPrefix: t('settings.errorSummaryPrefix'),
+  };
 
-  return <SettingsPanelErrorBoundaryImpl {...props} labels={labels} />;
+  return <SettingsPanelErrorBoundaryImpl {...rest} title={title} labels={labels} />;
 };
