@@ -13,13 +13,13 @@ const context: MarketStructureContext = {
     status: 'partial',
     market: 'cn',
     activeThemes: [
-      { name: '机器人概念', changePct: 4.2, rank: 1, source: 'concept', phase: 'accelerating' },
+      { name: 'RoboticsTheme', changePct: 4.2, rank: 1, source: 'concept', phase: 'accelerating' },
     ],
     leadingConcepts: [
-      { name: '机器人概念', changePct: 4.2, rank: 1, source: 'concept' },
+      { name: 'RoboticsTheme', changePct: 4.2, rank: 1, source: 'concept' },
     ],
     leadingIndustries: [
-      { name: '通用设备', changePct: 2.1, rank: 2, source: 'industry' },
+      { name: 'General设备', changePct: 2.1, rank: 2, source: 'industry' },
     ],
     laggingThemes: [],
     themeBreadth: {
@@ -39,23 +39,23 @@ const context: MarketStructureContext = {
     schemaVersion: 'stock-market-position-v1',
     status: 'partial',
     stockCode: '300024',
-    stockName: '机器人',
+    stockName: 'Robotics',
     market: 'cn',
     primaryTheme: {
-      name: '机器人概念',
+      name: 'RoboticsTheme',
       source: 'concept',
       phase: 'accelerating',
       rank: 1,
       changePct: 4.2,
     },
     relatedBoards: [
-      { name: '机器人概念', type: '概念', source: 'concept', rank: 1, changePct: 4.2 },
+      { name: 'RoboticsTheme', type: 'Theme', source: 'concept', rank: 1, changePct: 4.2 },
     ],
     stockRole: 'follower',
     themePhase: 'accelerating',
     riskTags: [
-      { code: 'theme_data_partial', message: '题材主线数据不完整' },
-      { code: 'stock_theme_evidence_partial', message: '个股板块未匹配到市场题材榜单，个股位置按降级证据处理' },
+      { code: 'theme_data_partial', message: '题材主线Data不Complete' },
+      { code: 'stock_theme_evidence_partial', message: '个sharesSector未匹配到Market题材榜单，个shares位置按FallbackEvidence处理' },
     ],
     missingFields: ['hotspot_constituents', 'leader_stocks'],
   },
@@ -65,14 +65,14 @@ describe('MarketStructureCard', () => {
   it('renders market layer and stock layer in Chinese', () => {
     render(<MarketStructureCard context={context} language="zh" />);
 
-    expect(screen.getByRole('region', { name: '题材主线与个股位置' })).toBeInTheDocument();
-    expect(screen.getByText('大盘题材层')).toBeVisible();
-    expect(screen.getByText('个股位置层')).toBeVisible();
-    expect(screen.getAllByText('部分可用')).toHaveLength(3);
-    expect(screen.getAllByText(/机器人概念/)).toHaveLength(3);
-    expect(screen.getByText('加速')).toBeVisible();
+    expect(screen.getByRole('region', { name: '题材主线与个shares位置' })).toBeInTheDocument();
+    expect(screen.getByText('Market题材层')).toBeVisible();
+    expect(screen.getByText('个shares位置层')).toBeVisible();
+    expect(screen.getAllByText('PartialAvailable')).toHaveLength(3);
+    expect(screen.getAllByText(/RoboticsTheme/)).toHaveLength(3);
+    expect(screen.getByText('Accelerating')).toBeVisible();
     expect(screen.getByText('跟随')).toBeVisible();
-    expect(screen.getByText('题材主线数据不完整')).toBeVisible();
+    expect(screen.getByText('题材主线Data不Complete')).toBeVisible();
     expect(screen.getByText('leader_stocks')).toBeVisible();
   });
 
@@ -87,7 +87,7 @@ describe('MarketStructureCard', () => {
     expect(screen.getByText('Missing Evidence')).toBeVisible();
     expect(screen.getByText('Market theme data is incomplete')).toBeVisible();
     expect(screen.getByText('Stock board did not match theme rankings')).toBeVisible();
-    expect(screen.queryByText('题材主线数据不完整')).not.toBeInTheDocument();
+    expect(screen.queryByText('题材主线Data不Complete')).not.toBeInTheDocument();
   });
 
   it('renders Korean labels', () => {

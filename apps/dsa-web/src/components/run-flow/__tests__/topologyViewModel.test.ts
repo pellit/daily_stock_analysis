@@ -15,16 +15,16 @@ const baseSnapshot: RunFlowSnapshot = {
     eventCount: 3,
   },
   lanes: [
-    { id: 'entry', label: '入口', order: 1 },
-    { id: 'data_source', label: '数据来源', order: 2 },
-    { id: 'analysis', label: '分析引擎', order: 3 },
+    { id: 'entry', label: 'Entry', order: 1 },
+    { id: 'data_source', label: 'DataSource', order: 2 },
+    { id: 'analysis', label: 'Analyze引擎', order: 3 },
   ],
   nodes: [
     {
       id: 'task_queue',
       lane: 'entry',
       kind: 'queue',
-      label: '任务队列',
+      label: '任务Queue',
       status: 'success',
     },
     {
@@ -114,7 +114,7 @@ const baseSnapshot: RunFlowSnapshot = {
       severity: 'warning',
       type: 'provider_run',
       nodeId: 'provider_news_search_tavily_1',
-      title: '新闻舆情失败',
+      title: '新闻舆情Failure',
     },
     {
       id: 'evt-block',
@@ -122,7 +122,7 @@ const baseSnapshot: RunFlowSnapshot = {
       severity: 'warning',
       type: 'context_block_status',
       nodeId: 'context_block_fundamental',
-      title: '基本面输入状态',
+      title: '基本面InputStatus',
     },
   ],
 };
@@ -161,7 +161,7 @@ describe('buildRunFlowTopologyModel', () => {
           id: 'provider_compatible_alpha_1',
           lane: 'data_source',
           kind: 'data_source',
-          label: '兼容行情 · Alpha',
+          label: '兼容Quote · Alpha',
           status: 'failed',
           provider: 'Alpha',
           metadata: { dataType: 'compatible_live_quote', attempt: 1 },
@@ -170,7 +170,7 @@ describe('buildRunFlowTopologyModel', () => {
           id: 'provider_compatible_beta_2',
           lane: 'data_source',
           kind: 'data_source',
-          label: '兼容行情 · Beta',
+          label: '兼容Quote · Beta',
           status: 'success',
           provider: 'Beta',
           metadata: { dataType: 'compatible_live_quote', attempt: 2 },
@@ -215,7 +215,7 @@ describe('buildRunFlowTopologyModel', () => {
           severity: 'warning',
           type: 'provider_run',
           nodeId: 'provider_compatible_alpha_1',
-          title: '兼容行情失败',
+          title: '兼容QuoteFailure',
         },
         {
           id: 'evt-normalized-block',
@@ -223,7 +223,7 @@ describe('buildRunFlowTopologyModel', () => {
           severity: 'success',
           type: 'context_block_status',
           nodeId: 'api_normalized_context_news',
-          title: '新闻输入状态',
+          title: '新闻InputStatus',
         },
       ],
     };
@@ -256,7 +256,7 @@ describe('buildRunFlowTopologyModel', () => {
           id: 'provider_realtime_quote_tickflowfetcher_1',
           lane: 'data_source',
           kind: 'data_source',
-          label: '实时行情 · TickFlowFetcher',
+          label: '实时Quote · TickFlowFetcher',
           status: 'failed',
           provider: 'TickFlowFetcher',
           durationMs: 892,
@@ -266,7 +266,7 @@ describe('buildRunFlowTopologyModel', () => {
           id: 'provider_realtime_quote_aksharefetcher_2',
           lane: 'data_source',
           kind: 'data_source',
-          label: '实时行情 · AkshareFetcher',
+          label: '实时Quote · AkshareFetcher',
           status: 'success',
           provider: 'AkshareFetcher',
           durationMs: 8700,
@@ -297,7 +297,7 @@ describe('buildRunFlowTopologyModel', () => {
     const quoteGroup = collapsed.nodes.find((node) => node.id === 'topology_data_realtime_quote');
 
     expect(quoteGroup).toMatchObject({
-      label: '实时行情',
+      label: '实时Quote',
       status: 'fallback',
       provider: 'TickFlowFetcher -> AkshareFetcher',
       attempts: 2,
@@ -316,7 +316,7 @@ describe('buildRunFlowTopologyModel', () => {
     expect(expanded.nodes.map((node) => node.id)).toContain('provider_realtime_quote_tickflowfetcher_1');
     expect(expanded.nodes.map((node) => node.id)).toContain('provider_realtime_quote_aksharefetcher_2');
     expect(expanded.nodes.find((node) => node.id === 'provider_realtime_quote_tickflowfetcher_1')).toMatchObject({
-      label: '实时行情 · TickFlowFetcher',
+      label: '实时Quote · TickFlowFetcher',
       provider: 'TickFlowFetcher',
       metadata: expect.objectContaining({
         topologyRole: 'provider_attempt',

@@ -23,10 +23,10 @@ describe('stockIndexLoader', () => {
     {
       canonicalCode: '600519.SH',
       displayCode: '600519',
-      nameZh: '贵州茅台',
+      nameZh: 'Kweichow Moutai',
       pinyinFull: 'guizhoumaotai',
       pinyinAbbr: 'gzmt',
-      aliases: ['茅台'],
+      aliases: ['Moutai'],
       market: 'CN',
       assetType: 'stock',
       active: true,
@@ -35,10 +35,10 @@ describe('stockIndexLoader', () => {
     {
       canonicalCode: '000001.SZ',
       displayCode: '000001',
-      nameZh: '平安银行',
+      nameZh: 'Ping An Bank',
       pinyinFull: 'pinganyinxing',
       pinyinAbbr: 'payh',
-      aliases: ['平银'],
+      aliases: ['Ping An Bank'],
       market: 'CN',
       assetType: 'stock',
       active: true,
@@ -47,10 +47,10 @@ describe('stockIndexLoader', () => {
     {
       canonicalCode: '00700.HK',
       displayCode: '00700',
-      nameZh: '腾讯控股',
+      nameZh: 'Tencent Holdings',
       pinyinFull: 'tengxunkonggu',
       pinyinAbbr: 'txkg',
-      aliases: ['腾讯'],
+      aliases: ['Tencent'],
       market: 'HK',
       assetType: 'stock',
       active: true,
@@ -59,7 +59,7 @@ describe('stockIndexLoader', () => {
     {
       canonicalCode: 'AAPL.US',
       displayCode: 'AAPL',
-      nameZh: '苹果',
+      nameZh: 'Apple',
       pinyinFull: 'pingguo',
       pinyinAbbr: 'pg',
       aliases: [],
@@ -71,10 +71,10 @@ describe('stockIndexLoader', () => {
     {
       canonicalCode: '600000.SH',
       displayCode: '600000',
-      nameZh: '浦发银行',
+      nameZh: 'SPDBBanking',
       pinyinFull: 'pufayinxing',
       pinyinAbbr: 'pfyh',
-      aliases: ['浦发'],
+      aliases: ['SPDB'],
       market: 'CN',
       assetType: 'stock',
       active: false,
@@ -103,8 +103,8 @@ describe('stockIndexLoader', () => {
 
     test('successfully loads compressed format index (tuple format)', async () => {
       const compressedData = [
-        ['600519.SH', '600519', '贵州茅台', 'guizhoumaotai', 'gzmt', ['茅台'], 'CN', 'stock', true, 100],
-        ['000001.SZ', '000001', '平安银行', 'pinganyinxing', 'payh', ['平银'], 'CN', 'stock', true, 90],
+        ['600519.SH', '600519', 'Kweichow Moutai', 'guizhoumaotai', 'gzmt', ['Moutai'], 'CN', 'stock', true, 100],
+        ['000001.SZ', '000001', 'Ping An Bank', 'pinganyinxing', 'payh', ['Ping An Bank'], 'CN', 'stock', true, 90],
       ];
 
       mockFetch.mockResolvedValueOnce({
@@ -118,7 +118,7 @@ describe('stockIndexLoader', () => {
       expect(result.fallback).toBe(false);
       expect(result.data).toHaveLength(2);
       expect(result.data[0].canonicalCode).toBe('600519.SH');
-      expect(result.data[0].nameZh).toBe('贵州茅台');
+      expect(result.data[0].nameZh).toBe('Kweichow Moutai');
     });
 
     test('returns fallback mode on network error', async () => {
@@ -197,10 +197,10 @@ describe('stockIndexLoader', () => {
       expect(compressed[0]).toEqual([
         '600519.SH',
         '600519',
-        '贵州茅台',
+        'Kweichow Moutai',
         'guizhoumaotai',
         'gzmt',
-        ['茅台'],
+        ['Moutai'],
         'CN',
         'stock',
         true,
@@ -213,7 +213,7 @@ describe('stockIndexLoader', () => {
         {
           canonicalCode: 'TEST.US',
           displayCode: 'TEST',
-          nameZh: '测试',
+          nameZh: 'Test',
           pinyinFull: 'test',
           pinyinAbbr: 'test',
           aliases: [],
@@ -234,7 +234,7 @@ describe('stockIndexLoader', () => {
         {
           canonicalCode: 'TEST.US',
           displayCode: 'TEST',
-          nameZh: '测试',
+          nameZh: 'Test',
           pinyinFull: 'test',
           pinyinAbbr: 'test',
           aliases: undefined as unknown as string[],
@@ -261,7 +261,7 @@ describe('stockIndexLoader', () => {
       const result = findStockInIndex('600519.SH', mockIndexData);
       expect(result).not.toBeNull();
       expect(result?.canonicalCode).toBe('600519.SH');
-      expect(result?.nameZh).toBe('贵州茅台');
+      expect(result?.nameZh).toBe('Kweichow Moutai');
     });
 
     test('returns null for non-existent stock', () => {
@@ -324,7 +324,7 @@ describe('stockIndexLoader', () => {
         {
           canonicalCode: 'TEST.US',
           displayCode: 'TEST',
-          nameZh: '测试',
+          nameZh: 'Test',
           pinyinFull: 'test',
           pinyinAbbr: 'test',
           aliases: [],
@@ -446,7 +446,7 @@ describe('stockIndexLoader', () => {
       const largeIndex: StockIndexItem[] = Array.from({ length: 10000 }, (_, i) => ({
         canonicalCode: `TEST${i}.US`,
         displayCode: `TEST${i}`,
-        nameZh: `测试${i}`,
+        nameZh: `Test\${i}`,
         pinyinFull: `test${i}`,
         pinyinAbbr: `t${i}`,
         aliases: [],
@@ -466,10 +466,10 @@ describe('stockIndexLoader', () => {
         {
           canonicalCode: 'TEST.US',
           displayCode: 'TEST',
-          nameZh: '测试·公司',
+          nameZh: 'Test·公司',
           pinyinFull: 'test-gongsi',
           pinyinAbbr: 'test',
-          aliases: ['测试(集团)'],
+          aliases: ['Test(集团)'],
           market: 'US',
           assetType: 'stock',
           active: true,
@@ -478,8 +478,8 @@ describe('stockIndexLoader', () => {
       ];
 
       const compressed = compressIndex(specialChars);
-      expect(compressed[0][2]).toBe('测试·公司');
-      expect(compressed[0][5]).toEqual(['测试(集团)']);
+      expect(compressed[0][2]).toBe('Test·公司');
+      expect(compressed[0][5]).toEqual(['Test(集团)']);
     });
   });
 });

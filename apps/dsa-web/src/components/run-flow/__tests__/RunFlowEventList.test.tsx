@@ -10,7 +10,7 @@ const events: RunFlowEvent[] = [
     severity: 'info',
     type: 'task_created',
     nodeId: 'request',
-    title: '任务创建',
+    title: '任务Create',
   },
   {
     id: 'evt-2',
@@ -18,8 +18,8 @@ const events: RunFlowEvent[] = [
     severity: 'warning',
     type: 'provider_fallback',
     nodeId: 'daily_data',
-    title: '日线降级',
-    message: 'Tushare 失败后切换 AkShare',
+    title: 'DailyFallback',
+    message: 'Fallback to AkShare after Tushare failure',
   },
   {
     id: 'evt-3',
@@ -27,7 +27,7 @@ const events: RunFlowEvent[] = [
     severity: 'danger',
     type: 'task_cancelled',
     nodeId: 'queue',
-    title: '任务取消',
+    title: '任务Cancel',
   },
 ];
 
@@ -35,28 +35,28 @@ describe('RunFlowEventList', () => {
   it('filters fallback and cancellation events with visible text labels', () => {
     render(<RunFlowEventList events={events} />);
 
-    expect(screen.getByText('任务创建')).toBeInTheDocument();
-    expect(screen.getByText('日线降级')).toBeInTheDocument();
-    expect(screen.getByText('任务取消')).toBeInTheDocument();
+    expect(screen.getByText('任务Create')).toBeInTheDocument();
+    expect(screen.getByText('DailyFallback')).toBeInTheDocument();
+    expect(screen.getByText('任务Cancel')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: '降级回退/重试' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Fallback/retry' }));
 
-    expect(screen.getByText('日线降级')).toBeInTheDocument();
-    expect(screen.queryByText('任务创建')).not.toBeInTheDocument();
-    expect(screen.queryByText('任务取消')).not.toBeInTheDocument();
+    expect(screen.getByText('DailyFallback')).toBeInTheDocument();
+    expect(screen.queryByText('任务Create')).not.toBeInTheDocument();
+    expect(screen.queryByText('任务Cancel')).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: '取消' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
 
-    expect(screen.getByText('任务取消')).toBeInTheDocument();
-    expect(screen.queryByText('日线降级')).not.toBeInTheDocument();
-    expect(screen.getByText('危险')).toBeInTheDocument();
+    expect(screen.getByText('任务Cancel')).toBeInTheDocument();
+    expect(screen.queryByText('DailyFallback')).not.toBeInTheDocument();
+    expect(screen.getByText('Danger')).toBeInTheDocument();
   });
 
   it('selects the event node when an event row is clicked', () => {
     const onSelectNode = vi.fn();
     render(<RunFlowEventList events={events} onSelectNode={onSelectNode} />);
 
-    fireEvent.click(screen.getByRole('button', { name: '查看事件 日线降级 关联节点' }));
+    fireEvent.click(screen.getByRole('button', { name: '查看事件 DailyFallback 关联节点' }));
 
     expect(onSelectNode).toHaveBeenCalledWith('daily_data');
   });

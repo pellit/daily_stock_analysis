@@ -85,7 +85,7 @@ describe('screeningApi', () => {
       },
     });
 
-    await expect(screeningApi.enable()).rejects.toThrow('选股功能不可用');
+    await expect(screeningApi.enable()).rejects.toThrow('Screening功能不Available');
 
     expect(updateConfig).toHaveBeenNthCalledWith(1, {
       configVersion: 'v1',
@@ -136,11 +136,11 @@ describe('screeningApi', () => {
         provider_used: 'akshare',
         hotspots: [
           {
-            topic: 'AI算力',
+            topic: 'AI computing',
             heat_score: 88,
             trend_score: 12,
             sample_stock_count: 8,
-            leaders: ['中际旭创'],
+            leaders: ['Innolight'],
           },
         ],
         hotspot_count: 1,
@@ -149,7 +149,7 @@ describe('screeningApi', () => {
             enabled: true,
             provider: 'akshare',
             topic: 'AI绠楀姏',
-            route: [{ title: '盘中发酵', description: '事件摘要' }],
+            route: [{ title: 'Intraday发酵', description: '事件摘要' }],
             stocks: [],
             stock_count: 0,
           },
@@ -209,22 +209,22 @@ describe('screeningApi', () => {
       data: {
         enabled: true,
         provider: 'akshare',
-        topic: '玻璃基板',
-        summary: '玻璃基板盘中发酵',
-        route: [{ title: '盘中发酵', description: '出现大笔买入' }],
+        topic: 'Glass substrate',
+        summary: 'Glass substrateIntraday发酵',
+        route: [{ title: 'Intraday发酵', description: '出现大笔Buy' }],
         stocks: [{ code: '920438', name: '戈碧迦', role: '异动核心' }],
         leader_stocks: [{ code: '920438', name: '戈碧迦', role: '异动核心' }],
         stock_count: 1,
       },
     });
 
-    const result = await screeningApi.getHotspotDetail({ topic: '玻璃基板', provider: 'akshare' });
+    const result = await screeningApi.getHotspotDetail({ topic: 'Glass substrate', provider: 'akshare' });
 
     expect(get).toHaveBeenCalledWith('/api/v1/screening/hotspots/%E7%8E%BB%E7%92%83%E5%9F%BA%E6%9D%BF', {
       params: { provider: 'akshare', refresh: false, include_search: false },
       timeout: 300000,
     });
-    expect(result.topic).toBe('玻璃基板');
+    expect(result.topic).toBe('Glass substrate');
     expect(result.stockCount).toBe(1);
     expect(result.stocks[0].name).toBe('戈碧迦');
     expect(result.leaderStocks?.[0].name).toBe('戈碧迦');
@@ -235,7 +235,7 @@ describe('screeningApi', () => {
       data: {
         enabled: true,
         provider: 'akshare',
-        topic: '玻璃基板',
+        topic: 'Glass substrate',
         route: [],
         stocks: [],
         stock_count: 0,
@@ -244,7 +244,7 @@ describe('screeningApi', () => {
       },
     });
 
-    const result = await screeningApi.getHotspotDetail({ topic: '玻璃基板', includeSearch: true });
+    const result = await screeningApi.getHotspotDetail({ topic: 'Glass substrate', includeSearch: true });
 
     expect(get).toHaveBeenCalledWith('/api/v1/screening/hotspots/%E7%8E%BB%E7%92%83%E5%9F%BA%E6%9D%BF', {
       params: { provider: 'akshare', refresh: false, include_search: true },
@@ -279,7 +279,7 @@ describe('screeningApi', () => {
         task_id: 'screen-task-1',
         trace_id: 'screen-task-1',
         status: 'pending',
-        message: 'Screening 选股任务已提交',
+        message: 'Screening Screening任务已Submit',
         strategy: 'dual_low',
         market: 'cn',
         max_results: 3,
@@ -326,7 +326,7 @@ describe('screeningApi', () => {
           task_id: 'screen-task-storage-disabled',
           trace_id: 'screen-task-storage-disabled',
           status: 'pending',
-          message: '选股任务已提交',
+          message: 'Screening任务已Submit',
           strategy: 'dual_low',
           market: 'cn',
           max_results: 3,
@@ -357,7 +357,7 @@ describe('screeningApi', () => {
         trace_id: 'screen-task-1',
         status: 'completed',
         progress: 100,
-        message: '任务执行完成',
+        message: '任务执行Complete',
         result: {
           enabled: true,
           candidates: [],

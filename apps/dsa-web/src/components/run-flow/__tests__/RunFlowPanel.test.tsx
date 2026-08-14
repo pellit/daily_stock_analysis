@@ -22,7 +22,7 @@ const snapshot: RunFlowSnapshot = {
   taskId: 'task-1',
   traceId: 'trace-1',
   stockCode: '600519',
-  stockName: '贵州茅台',
+  stockName: '贵州茅units',
   status: 'degraded',
   generatedAt: '2026-06-08T08:00:00Z',
   summary: {
@@ -34,19 +34,19 @@ const snapshot: RunFlowSnapshot = {
     eventCount: 3,
   },
   lanes: [
-    { id: 'entry', label: '入口', order: 1 },
-    { id: 'data_source', label: '数据来源', order: 2 },
-    { id: 'analysis', label: '分析引擎', order: 3 },
-    { id: 'artifact', label: '产物', order: 4 },
+    { id: 'entry', label: 'Entry', order: 1 },
+    { id: 'data_source', label: 'DataSource', order: 2 },
+    { id: 'analysis', label: 'Analyze引擎', order: 3 },
+    { id: 'artifact', label: 'Output', order: 4 },
   ],
   nodes: [
     {
       id: 'request',
       lane: 'entry',
       kind: 'entry',
-      label: '用户请求',
+      label: 'UserRequest',
       status: 'success',
-      message: '任务请求已创建',
+      message: '任务Request已Create',
     },
     {
       id: 'news',
@@ -58,7 +58,7 @@ const snapshot: RunFlowSnapshot = {
       durationMs: 1200,
       attempts: 2,
       recordCount: 8,
-      message: '主数据源失败后降级成功',
+      message: '主SourceFailure后FallbackSuccess',
       metadata: {
         fallbackFrom: 'Tushare',
         fallbackTo: 'AkShare',
@@ -68,7 +68,7 @@ const snapshot: RunFlowSnapshot = {
       id: 'llm',
       lane: 'analysis',
       kind: 'model',
-      label: 'LLM 生成',
+      label: 'LLM Generation',
       provider: 'DeepSeek',
       status: 'success',
       durationMs: 1800,
@@ -81,7 +81,7 @@ const snapshot: RunFlowSnapshot = {
       to: 'news',
       kind: 'control',
       status: 'success',
-      label: '调度',
+      label: 'Scheduler',
     },
     {
       id: 'news-llm',
@@ -89,7 +89,7 @@ const snapshot: RunFlowSnapshot = {
       to: 'llm',
       kind: 'fallback',
       status: 'fallback',
-      label: '降级输入',
+      label: 'FallbackInput',
     },
   ],
   events: [
@@ -99,7 +99,7 @@ const snapshot: RunFlowSnapshot = {
       severity: 'info',
       type: 'task_created',
       nodeId: 'request',
-      title: '任务创建',
+      title: '任务Create',
     },
     {
       id: 'evt-2',
@@ -107,8 +107,8 @@ const snapshot: RunFlowSnapshot = {
       severity: 'warning',
       type: 'provider_fallback',
       nodeId: 'news',
-      title: '新闻数据源降级',
-      message: '重试后切换数据源',
+      title: '新闻SourceFallback',
+      message: 'Retry后切换Source',
     },
   ],
 };
@@ -120,7 +120,7 @@ const providerAttemptSnapshot: RunFlowSnapshot = {
       id: 'task_queue',
       lane: 'entry',
       kind: 'queue',
-      label: '任务队列',
+      label: '任务Queue',
       status: 'success',
     },
     {
@@ -182,7 +182,7 @@ const providerAttemptSnapshot: RunFlowSnapshot = {
       severity: 'warning',
       type: 'provider_run',
       nodeId: 'provider_news_search_tavily_1',
-      title: '新闻舆情失败',
+      title: '新闻舆情Failure',
     },
   ],
 };
@@ -246,21 +246,21 @@ describe('RunFlowPanel', () => {
     render(<RunFlowPanel source={{ type: 'task', taskId: 'task-1' }} />);
 
     expect(screen.getByTestId('run-flow-panel-loading')).toBeInTheDocument();
-    expect(screen.getByText('正在加载运行流')).toBeInTheDocument();
+    expect(screen.getByText('Loading run flow')).toBeInTheDocument();
   });
 
   it('renders an error state and reload action when the request fails', async () => {
     vi.mocked(analysisApi.getTaskFlow).mockRejectedValue({
       response: {
         status: 404,
-        data: { message: '运行流不存在' },
+        data: { message: 'RUN FLOW不存在' },
       },
     });
 
     render(<RunFlowPanel source={{ type: 'task', taskId: 'missing-task' }} />);
 
     expect(await screen.findByTestId('run-flow-panel-error')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '重新加载' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Reload' })).toBeInTheDocument();
   });
 
   it('renders an empty snapshot state when there are no nodes or events', async () => {
@@ -274,29 +274,29 @@ describe('RunFlowPanel', () => {
 
     render(<RunFlowPanel source={{ type: 'history', recordId: 1 }} />);
 
-    expect(await screen.findByText('暂无运行流细节')).toBeInTheDocument();
+    expect(await screen.findByText('No run-flow details yet')).toBeInTheDocument();
     expect(historyApi.getRecordFlow).toHaveBeenCalledWith(1);
   });
 
   it('renders a successful graph, event stream, and selectable node details', async () => {
     vi.mocked(analysisApi.getTaskFlow).mockResolvedValue(snapshot);
 
-    render(<RunFlowPanel source={{ type: 'task', taskId: 'task-1' }} title="贵州茅台运行流" />);
+    render(<RunFlowPanel source={{ type: 'task', taskId: 'task-1' }} title="贵州茅unitsRUN FLOW" />);
 
     expect(await screen.findByTestId('run-flow-panel')).toBeInTheDocument();
-    expect(screen.getByText('贵州茅台运行流')).toBeInTheDocument();
+    expect(screen.getByText('贵州茅unitsRUN FLOW')).toBeInTheDocument();
     expect(screen.getByTestId('run-flow-layout')).toHaveClass('xl:grid-cols-[minmax(0,1fr)_19.25rem]');
     expect(screen.getByTestId('run-flow-events-column')).toHaveClass('xl:max-h-[calc(100vh-18rem)]');
     expect(screen.getByTestId('run-flow-graph')).toBeInTheDocument();
     expect(screen.getByTestId('run-flow-events')).toBeInTheDocument();
     expect(await screen.findByTestId('run-flow-node-details')).toHaveTextContent('新闻舆情');
 
-    fireEvent.click(screen.getByRole('button', { name: 'LLM 生成 节点，状态 成功' }));
+    fireEvent.click(screen.getByRole('button', { name: 'LLM Generation 节点，Status Success' }));
 
-    expect(screen.getByTestId('run-flow-node-details')).toHaveTextContent('LLM 生成');
+    expect(screen.getByTestId('run-flow-node-details')).toHaveTextContent('LLM Generation');
     expect(screen.getByTestId('run-flow-node-details')).toHaveTextContent('DeepSeek');
 
-    fireEvent.click(screen.getByRole('button', { name: '新闻舆情 节点，状态 降级回退' }));
+    fireEvent.click(screen.getByRole('button', { name: '新闻舆情 节点，Status Fallback' }));
 
     expect(screen.getByTestId('run-flow-node-details')).toHaveTextContent('fallbackFrom');
     expect(screen.getByTestId('run-flow-node-details')).toHaveTextContent('Tushare');
@@ -313,7 +313,7 @@ describe('RunFlowPanel', () => {
           id: 'artifact',
           lane: 'artifact',
           kind: 'artifact',
-          label: '保存报告',
+          label: 'SaveReport',
           status: 'success',
         },
       ],
@@ -325,7 +325,7 @@ describe('RunFlowPanel', () => {
           to: 'artifact',
           kind: 'data',
           status: 'success',
-          label: '保存',
+          label: 'Save',
         },
       ],
     });
@@ -333,8 +333,8 @@ describe('RunFlowPanel', () => {
     render(<RunFlowPanel source={{ type: 'task', taskId: 'task-1' }} />);
 
     expect(await screen.findByTestId('run-flow-node-details')).toHaveTextContent('新闻舆情');
-    expect(screen.getByText('保存')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '新闻舆情 节点，状态 降级回退' })).toHaveAttribute('aria-pressed', 'false');
+    expect(screen.getByText('Save')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '新闻舆情 节点，Status Fallback' })).toHaveAttribute('aria-pressed', 'false');
   });
 
   it('expands provider attempt groups from node details', async () => {
@@ -344,12 +344,12 @@ describe('RunFlowPanel', () => {
 
     expect(await screen.findByTestId('run-flow-node-topology_data_news_search')).toBeInTheDocument();
     expect(screen.queryByTestId('run-flow-node-provider_news_search_tavily_1')).not.toBeInTheDocument();
-    expect(await screen.findByTestId('run-flow-node-details')).toHaveTextContent('运行尝试');
+    expect(await screen.findByTestId('run-flow-node-details')).toHaveTextContent('Run attempts');
 
-    fireEvent.click(screen.getByRole('button', { name: '展开尝试' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Expand attempts' }));
 
     expect(await screen.findByTestId('run-flow-node-provider_news_search_tavily_1')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '收起尝试' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Collapse attempts' })).toBeInTheDocument();
   });
 
   it('renders TickFlow realtime fallback attempts through generic provider groups', async () => {
@@ -367,7 +367,7 @@ describe('RunFlowPanel', () => {
           id: 'provider_realtime_quote_tickflowfetcher_1',
           lane: 'data_source',
           kind: 'data_source',
-          label: '实时行情 · TickFlowFetcher',
+          label: '实时Quote · TickFlowFetcher',
           provider: 'TickFlowFetcher',
           status: 'failed',
           durationMs: 892,
@@ -377,7 +377,7 @@ describe('RunFlowPanel', () => {
           id: 'provider_realtime_quote_aksharefetcher_2',
           lane: 'data_source',
           kind: 'data_source',
-          label: '实时行情 · AkshareFetcher',
+          label: '实时Quote · AkshareFetcher',
           provider: 'AkshareFetcher',
           status: 'success',
           durationMs: 8700,
@@ -445,7 +445,7 @@ describe('RunFlowPanel', () => {
 
     const details = await screen.findByTestId('run-flow-node-details');
 
-    expect(details).toHaveTextContent('运行尝试');
+    expect(details).toHaveTextContent('Run attempts');
     expect(details).not.toHaveTextContent('data_type');
     expect(details).not.toHaveTextContent('provider_chain');
     expect(details).not.toHaveTextContent('success_count');
@@ -462,7 +462,7 @@ describe('RunFlowPanel', () => {
     const details = await screen.findByTestId('run-flow-node-details');
 
     expect(details).toHaveTextContent('ContextPack');
-    expect(details).toHaveTextContent('上下文输入');
+    expect(details).toHaveTextContent('Context inputs');
     expect(details).toHaveTextContent('新闻');
     expect(details).toHaveTextContent('基本面');
     expect(details).not.toHaveTextContent('context_status_counts');

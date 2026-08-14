@@ -86,9 +86,9 @@ describe('HomeStockWorkspace', () => {
         latestItem: {
           id: 21,
           stockCode: '600519',
-          stockName: '贵州茅台',
+          stockName: 'Kweichow Moutai',
           sentimentScore: 88,
-          operationAdvice: '买入',
+          operationAdvice: 'Buy',
           analysisCount: 1,
           lastAnalysisTime: '2026-03-19T09:00:00+08:00',
         },
@@ -96,7 +96,7 @@ describe('HomeStockWorkspace', () => {
       selectedRecordId: 21,
     });
 
-    const row = screen.getByRole('button', { name: '打开 600519 最新分析详情' });
+    const row = screen.getByRole('button', { name: 'Open 600519 LatestAnalyzeDetail' });
     fireEvent.click(row);
 
     expect(onHistoryItemClick).toHaveBeenCalledWith(21);
@@ -112,10 +112,10 @@ describe('HomeStockWorkspace', () => {
       }],
     });
 
-    const row = screen.getByRole('button', { name: '暂无 AAPL 的分析详情，可先分析' });
+    const row = screen.getByRole('button', { name: '暂无 AAPL 的AnalyzeDetail，可先Analyze' });
     fireEvent.click(row);
 
-    expect(await screen.findByRole('alert')).toHaveTextContent('暂无分析详情，可先分析。');
+    expect(await screen.findByRole('alert')).toHaveTextContent('No analysis details yet. Run an analysis first.');
     expect(onHistoryItemClick).not.toHaveBeenCalled();
   });
 
@@ -128,12 +128,12 @@ describe('HomeStockWorkspace', () => {
       }],
     });
 
-    const row = screen.getByRole('button', { name: '正在查找 AAPL 的最新分析详情' });
+    const row = screen.getByRole('button', { name: '正在查找 AAPL 的LatestAnalyzeDetail' });
     fireEvent.click(row);
 
-    expect(await screen.findByRole('alert')).toHaveTextContent('正在查找最新分析详情，请稍候。');
+    expect(await screen.findByRole('alert')).toHaveTextContent('Looking up the latest analysis details. Please wait.');
     expect(onHistoryItemClick).not.toHaveBeenCalled();
-    expect(screen.getByText('正在查找详情...')).toBeInTheDocument();
+    expect(screen.getByText('Looking up details...')).toBeInTheDocument();
   });
 
   it('shows retry feedback instead of no-detail copy when the latest detail lookup failed', async () => {
@@ -145,12 +145,12 @@ describe('HomeStockWorkspace', () => {
       }],
     });
 
-    const row = screen.getByRole('button', { name: 'AAPL 的最新分析详情暂时无法确认，请稍后重试' });
+    const row = screen.getByRole('button', { name: 'AAPL 的LatestAnalyzeDetail暂时无法Confirm，请稍后Retry' });
     fireEvent.click(row);
 
-    expect(await screen.findByRole('alert')).toHaveTextContent('最新分析详情暂时无法确认，请稍后重试。');
-    expect(screen.queryByText('暂无分析详情，可先分析。')).not.toBeInTheDocument();
-    expect(screen.getByText('详情暂不可用')).toBeInTheDocument();
+    expect(await screen.findByRole('alert')).toHaveTextContent('Latest analysis details are temporarily unavailable. Please retry shortly.');
+    expect(screen.queryByText('No analysis details yet. Run an analysis first.')).not.toBeInTheDocument();
+    expect(screen.getByText('Details unavailable')).toBeInTheDocument();
     expect(onHistoryItemClick).not.toHaveBeenCalled();
   });
 
@@ -229,8 +229,8 @@ describe('HomeStockWorkspace', () => {
       }],
     });
 
-    fireEvent.click(screen.getByRole('button', { name: '暂无 AAPL 的分析详情，可先分析' }));
-    expect(await screen.findByRole('alert')).toHaveTextContent('暂无分析详情，可先分析。');
+    fireEvent.click(screen.getByRole('button', { name: '暂无 AAPL 的AnalyzeDetail，可先Analyze' }));
+    expect(await screen.findByRole('alert')).toHaveTextContent('No analysis details yet. Run an analysis first.');
 
     rerenderWatchlistRows([{
       code: 'AAPL',
@@ -247,7 +247,7 @@ describe('HomeStockWorkspace', () => {
     }]);
 
     await waitFor(() => expect(screen.queryByRole('alert')).not.toBeInTheDocument());
-    expect(screen.getByRole('button', { name: '打开 AAPL 最新分析详情' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Open AAPL LatestAnalyzeDetail' })).toBeInTheDocument();
   });
 
   it('derives an opened notice from the latest row state instead of retaining stale copy', async () => {
@@ -289,16 +289,16 @@ describe('HomeStockWorkspace', () => {
         latestItem: {
           id: 21,
           stockCode: '600519',
-          stockName: '贵州茅台',
+          stockName: 'Kweichow Moutai',
           sentimentScore: 88,
-          operationAdvice: '买入',
+          operationAdvice: 'Buy',
           analysisCount: 1,
           lastAnalysisTime: '2026-03-19T09:00:00+08:00',
         },
       }],
     });
 
-    fireEvent.click(screen.getByRole('button', { name: '从自选股移除 600519' }));
+    fireEvent.click(screen.getByRole('button', { name: '从WatchlistRemove 600519' }));
 
     expect(onRemoveFromWatchlist).toHaveBeenCalledWith('600519');
     expect(onHistoryItemClick).not.toHaveBeenCalled();
@@ -312,9 +312,9 @@ describe('HomeStockWorkspace', () => {
         latestItem: {
           id: 88,
           stockCode: '00700',
-          stockName: '腾讯控股',
+          stockName: 'Tencent Holdings',
           sentimentScore: 91,
-          operationAdvice: '买入',
+          operationAdvice: 'Buy',
           analysisCount: 1,
           lastAnalysisTime: '2026-03-19T09:00:00+08:00',
         },
@@ -322,6 +322,6 @@ describe('HomeStockWorkspace', () => {
       selectedStockCode: '00700.HK',
     });
 
-    expect(screen.getByRole('button', { name: '打开 HK700 最新分析详情' })).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByRole('button', { name: 'Open latest analysis for HK700' })).toHaveAttribute('aria-pressed', 'true');
   });
 });
