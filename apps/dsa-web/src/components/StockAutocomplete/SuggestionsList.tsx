@@ -3,6 +3,7 @@
  */
 
 import type { CSSProperties } from 'react';
+import { useUiLanguage } from '../../contexts/UiLanguageContext';
 import type { StockSuggestion } from '../../types/stockIndex';
 import { Badge } from '../common';
 import { cn } from '../../utils/cn';
@@ -19,6 +20,30 @@ export interface SuggestionsListProps {
   /** Custom style (for Portal fixed positioning) */
   style?: CSSProperties;
 }
+
+type MarketKey = 'cn' | 'hk' | 'us' | 'jp' | 'kr' | 'index' | 'etf' | 'bse';
+
+const MARKET_KEY_MAP: Record<string, MarketKey> = {
+  CN: 'cn',
+  HK: 'hk',
+  US: 'us',
+  JP: 'jp',
+  KR: 'kr',
+  INDEX: 'index',
+  ETF: 'etf',
+  BSE: 'bse',
+};
+
+const MARKET_BADGE_CLASS: Record<MarketKey, string> = {
+  cn: 'border-danger/25 bg-danger/10 text-danger',
+  hk: 'border-success/25 bg-success/10 text-success',
+  us: 'border-cyan/25 bg-cyan/10 text-cyan',
+  jp: 'border-indigo-500/25 bg-indigo-500/10 text-indigo-500',
+  kr: 'border-rose-500/25 bg-rose-500/10 text-rose-500',
+  index: 'border-purple/25 bg-purple/10 text-purple',
+  etf: 'border-warning/25 bg-warning/10 text-warning',
+  bse: 'border-orange-500/25 bg-orange-500/10 text-orange-500',
+};
 
 export function SuggestionsList({
   suggestions,
@@ -76,44 +101,37 @@ export function SuggestionsList({
   );
 }
 
-const MARKET_BADGE_CONFIG = {
-  CN: { label: 'A股', className: 'border-danger/25 bg-danger/10 text-danger' },
-  HK: { label: '港股', className: 'border-success/25 bg-success/10 text-success' },
-  US: { label: '美股', className: 'border-cyan/25 bg-cyan/10 text-cyan' },
-  JP: { label: '日股', className: 'border-indigo-500/25 bg-indigo-500/10 text-indigo-500' },
-  KR: { label: '韩股', className: 'border-rose-500/25 bg-rose-500/10 text-rose-500' },
-  INDEX: { label: '指数', className: 'border-purple/25 bg-purple/10 text-purple' },
-  ETF: { label: 'ETF', className: 'border-warning/25 bg-warning/10 text-warning' },
-  BSE: { label: '北交所', className: 'border-orange-500/25 bg-orange-500/10 text-orange-500' },
-} as const;
-
 function MarketBadge({ market }: { market: string }) {
-  const config = MARKET_BADGE_CONFIG[market as keyof typeof MARKET_BADGE_CONFIG];
+  const { t } = useUiLanguage();
+  const key = MARKET_KEY_MAP[market];
 
-  if (!config) {
-    throw new Error(`Unsupported market in stock suggestion: ${market}`);
+  if (!key) {
+    throw new Error(t('stockMarket.unsupportedMarket', { market }));
   }
 
   return (
-    <Badge variant="default" size="sm" className={cn('min-w-[3rem] justify-center shadow-none', config.className)}>
-      {config.label}
+    <Badge variant="default" size="sm" className={cn('min-w-[3rem] justify-center shadow-none', MARKET_BADGE_CLASS[key])}>
+      {t(`stockMarket.badge.${key}` as const)}
     </Badge>
   );
 }
 
-function MatchTypeBadge({ matchType }: { matchType: string }) {
-  const configMap = {
-    exact: { label: '精确', className: 'border-cyan/25 bg-cyan/10 text-cyan' },
-    prefix: { label: '前缀', className: 'border-purple/25 bg-purple/10 text-purple' },
-    contains: { label: '包含', className: 'border-warning/25 bg-warning/10 text-warning' },
-    fuzzy: { label: '模糊', className: 'border-border/55 bg-elevated/75 text-muted-text' },
-  };
+type MatchTypeKey = 'exact' | 'prefix' | 'contains' | 'fuzzy';
 
-  const config = configMap[matchType as keyof typeof configMap] || configMap.fuzzy;
+const MATCH_TYPE_CLASS: Record<MatchTypeKey, string> = {
+  exact: 'border-cyan/25 bg-cyan/10 text-cyan',
+  prefix: 'border-purple/25 bg-purple/10 text-purple',
+  contains: 'border-warning/25 bg-warning/10 text-warning',
+  fuzzy: 'border-border/55 bg-elevated/75 text-muted-text',
+};
+
+function MatchTypeBadge({ matchType }: { matchType: string }) {
+  const { t } = useUiLanguage();
+  const key = (['exact', 'prefix', 'contains', 'fuzzy'] as const).find((candidate) => candidate === matchType) ?? 'fuzzy';
 
   return (
-    <Badge variant="default" size="sm" className={cn('shrink-0 shadow-none', config.className)}>
-      {config.label}
+    <Badge variant="default" size="sm" className={cn('shrink-0 shadow-none', MATCH_TYPE_CLASS[key])}>
+      {t(`stockMarket.matchType.${key}` as const)}
     </Badge>
   );
 }
