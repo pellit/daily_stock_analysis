@@ -94,11 +94,11 @@ export function getRuntimeInitialLanguage(): UiLanguage {
  * Translate a UI text key outside of React render contexts (Zustand stores,
  * utility modules, etc.) where `useUiLanguage()` is unavailable.
  *
- * The resolved language is read from localStorage at call time, matching
- * the persisted user preference (or browser-locale fallback). It does not
- * subscribe to language changes — callers that need reactivity must use
- * the `useUiLanguage` hook from a React component.
+ * The UI is English-only; the resolver used to read from localStorage but
+ * always returns English now. Step D will delete the storage helpers
+ * entirely. Callers that need a React-reactive view should use the
+ * `useUiLanguage` hook from a component.
  */
 export function translateUiText(key: UiTextKey, params?: UiTextParams): string {
-  return formatUiText(UI_TEXT[getRuntimeInitialLanguage()][key], params);
+  return formatUiText(UI_TEXT.en[key], params);
 }

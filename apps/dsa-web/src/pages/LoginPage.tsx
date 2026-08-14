@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { motion, useMotionValue, useTransform, useSpring } from "motion/react";
 import { Lock, Loader2, Cpu, TrendingUp, Network, ShieldCheck } from "lucide-react";
 import { Button, Input, ParticleBackground } from '../components/common';
-import { UiLanguageToggle } from '../components/i18n/UiLanguageToggle';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import type { ParsedApiError } from '../api/error';
 import { isParsedApiError } from '../api/error';
@@ -77,7 +76,6 @@ const LoginPage: React.FC = () => {
       <ParticleBackground />
 
       <div className="absolute right-4 top-4 z-30">
-        <UiLanguageToggle />
       </div>
 
       {/* Cyber Grid */}
