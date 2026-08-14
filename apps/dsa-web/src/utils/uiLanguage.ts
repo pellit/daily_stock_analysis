@@ -1,4 +1,4 @@
-import type { UiLanguage } from '../i18n/uiText';
+import { formatUiText, UI_TEXT, type UiLanguage, type UiTextKey, type UiTextParams } from '../i18n/uiText';
 
 export const UI_LANGUAGE_STORAGE_KEY = 'dsa.uiLanguage';
 
@@ -88,4 +88,17 @@ export function getRuntimeInitialLanguage(): UiLanguage {
     storage: getUiLanguageStorage(),
     navigatorLike: window.navigator,
   });
+}
+
+/**
+ * Translate a UI text key outside of React render contexts (Zustand stores,
+ * utility modules, etc.) where `useUiLanguage()` is unavailable.
+ *
+ * The resolved language is read from localStorage at call time, matching
+ * the persisted user preference (or browser-locale fallback). It does not
+ * subscribe to language changes — callers that need reactivity must use
+ * the `useUiLanguage` hook from a React component.
+ */
+export function translateUiText(key: UiTextKey, params?: UiTextParams): string {
+  return formatUiText(UI_TEXT[getRuntimeInitialLanguage()][key], params);
 }

@@ -8,6 +8,7 @@ import {
   isParsedApiError,
   type ParsedApiError,
 } from '../api/error';
+import { translateUiText } from '../utils/uiLanguage';
 import { generateUUID } from '../utils/uuid';
 
 const STORAGE_KEY_SESSION = 'dsa_chat_session_id';
@@ -74,7 +75,7 @@ type StreamFailureEvent = {
 
 function streamFailureFallback(event: StreamFailureEvent, defaultMessage: string): string {
   return event.backend === 'codex_app_server'
-    ? 'Codex Agent 暂时无法完成本次问股，请查看 Agent 设置中的运行状态。'
+    ? translateUiText('chat.codexAgentUnavailable')
     : defaultMessage;
 }
 
@@ -331,7 +332,7 @@ export const useAgentChatStore = create<AgentChatState & AgentChatActions>((set,
     };
     const skillNames = meta?.skillNames?.length
       ? meta.skillNames
-      : [meta?.skillName ?? '通用'];
+      : [meta?.skillName ?? translateUiText('chat.defaultSkillName')];
     const skillName = skillNames.join('、');
 
     const userMessage: Message = {
@@ -364,8 +365,8 @@ export const useAgentChatStore = create<AgentChatState & AgentChatActions>((set,
       let acceptedEvent: StreamAcceptedEvent | null = null;
       const currentProgressSteps: ProgressStep[] = [];
       const protocolError = (message: string) => createParsedApiError({
-        title: '请求未被接受',
-        message: 'Agent 没有确认接收本次问题，请保留当前内容后重试。',
+        title: translateUiText('chat.requestNotAcceptedTitle'),
+        message: translateUiText('chat.requestNotAcceptedMessage'),
         rawMessage: message,
         category: 'upstream_network',
       });
@@ -423,7 +424,7 @@ export const useAgentChatStore = create<AgentChatState & AgentChatActions>((set,
           if (doneEvent.success === false) {
             throw getStreamFailureError(
               doneEvent,
-              streamFailureFallback(doneEvent, '大模型调用出错，请检查 API Key 配置'),
+              streamFailureFallback(doneEvent, translateUiText('chat.llmErrorFallback')),
             );
           }
           finalContent = doneEvent.content ?? '';
@@ -435,7 +436,7 @@ export const useAgentChatStore = create<AgentChatState & AgentChatActions>((set,
           const failureEvent = event as unknown as StreamFailureEvent;
           throw getStreamFailureError(
             failureEvent,
-            streamFailureFallback(failureEvent, '分析出错'),
+            streamFailureFallback(failureEvent, translateUiText('chat.analysisErrorFallback')),
           );
         }
 
@@ -477,8 +478,8 @@ export const useAgentChatStore = create<AgentChatState & AgentChatActions>((set,
 
       if (!receivedDoneEvent && !ac.signal.aborted) {
         throw createParsedApiError({
-          title: '回复未完整返回',
-          message: 'Agent 流式响应在完成前中断，请重试。',
+          title: translateUiText('chat.incompleteResponseTitle'),
+          message: translateUiText('chat.incompleteResponseMessage'),
           rawMessage: 'Agent stream ended before a done event was received.',
           category: 'upstream_network',
         });
@@ -494,7 +495,7 @@ export const useAgentChatStore = create<AgentChatState & AgentChatActions>((set,
             {
               id: (Date.now() + 1).toString(),
               role: 'assistant',
-              content: finalContent || '（无内容）',
+              content: finalContent || translateUiText('chat.emptyContentFallback'),
               skills: payload.skills,
               skill: payload.skills?.[0],
               skillNames,
