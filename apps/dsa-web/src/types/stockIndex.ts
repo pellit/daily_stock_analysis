@@ -15,15 +15,15 @@ export interface StockIndexItem {
   canonicalCode: string;
   /** Display code: 600519 */
   displayCode: string;
-  /** Chinese name: 贵州茅台 */
+  /** Chinese name, e.g. "贵州茅台". */
   nameZh: string;
-  /** English name: Kweichow Moutai */
+  /** English name, e.g. "Kweichow Moutai". */
   nameEn?: string;
-  /** Pinyin full: guizhoumaotai */
+  /** Pinyin full, e.g. "guizhoumaotai". */
   pinyinFull?: string;
-  /** Pinyin abbreviation: gzmt */
+  /** Pinyin abbreviation, e.g. "gzmt". */
   pinyinAbbr?: string;
-  /** Aliases: ["茅台"] */
+  /** Aliases, e.g. ["Moutai"]. */
   aliases?: string[];
   /** Market */
   market: Market;

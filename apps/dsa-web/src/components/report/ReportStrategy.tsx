@@ -35,9 +35,9 @@ const StrategyItem: React.FC<StrategyItemProps> = ({
 );
 
 /**
- * 策略点位区组件 - 终端风格
+ * Strategy and price levels section component — terminal-style.
  */
-export const ReportStrategy: React.FC<ReportStrategyProps> = ({ strategy, language = 'zh' }) => {
+export const ReportStrategy: React.FC<ReportStrategyProps> = ({ strategy, language = 'en' }) => {
   if (!strategy) {
     return null;
   }

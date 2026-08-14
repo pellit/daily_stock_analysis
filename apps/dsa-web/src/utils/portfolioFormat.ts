@@ -164,13 +164,13 @@ export function buildFxRefreshFeedback(
     };
   }
 
-  const pairWord = language === 'en' ? 'pair' : '对';
+  const pairWord = language === 'en' ? 'pair' : 'pair';
   const updatedLine = language === 'en'
-    ? `FX refreshed: ${data.updatedCount} ${data.pairWord}${data.updatedCount === 1 ? '' : 's'} updated.`
-    : `汇率已刷新，共更新 ${data.updatedCount} ${pairWord}。`;
+    ? `FX refreshed: ${data.updatedCount} ${pairWord}${data.updatedCount === 1 ? '' : 's'} updated.`
+    : `FX refreshed: ${data.updatedCount} ${pairWord}${data.updatedCount === 1 ? '' : 's'} updated.`;
   const partialLine = language === 'en'
     ? `Updated ${data.updatedCount} ${pairWord}${data.updatedCount === 1 ? '' : 's'}, ${data.staleCount} stale, ${data.errorCount} failed.`
-    : `更新 ${data.updatedCount} ${pairWord}，仍过期 ${data.staleCount} ${pairWord}，失败 ${data.errorCount} ${pairWord}。`;
+    : `Updated ${data.updatedCount} ${pairWord}${data.updatedCount === 1 ? '' : 's'}, ${data.staleCount} stale, ${data.errorCount} failed.`;
 
   if (data.updatedCount > 0 && data.staleCount === 0 && data.errorCount === 0) {
     return {
@@ -182,10 +182,10 @@ export function buildFxRefreshFeedback(
   const summary = partialLine;
   const fallbackWarning = language === 'en'
     ? `Some currency pairs still use stale/fallback rates. ${summary}`
-    : `已尝试刷新，但仍有部分货币对使用 stale/fallback 汇率。${summary}`;
+    : `Some currency pairs still use stale/fallback rates. ${summary}`;
   const incompleteWarning = language === 'en'
     ? `Online refresh did not fully succeed. ${summary}`
-    : `在线刷新未完全成功。${summary}`;
+    : `Online refresh did not fully succeed. ${summary}`;
 
   if (data.staleCount > 0) {
     return {

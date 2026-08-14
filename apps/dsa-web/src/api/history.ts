@@ -12,7 +12,7 @@ import type {
 } from '../types/analysis';
 import type { RunFlowSnapshot } from '../types/runFlow';
 
-// ============ API 接口 ============
+// ============ API endpoints ============
 
 export interface GetHistoryListParams extends HistoryFilters {
   page?: number;
@@ -25,8 +25,8 @@ export interface GetHistoryListOptions {
 
 export const historyApi = {
   /**
-   * 获取历史分析列表
-   * @param params 筛选和分页参数
+   * Fetch the history analysis list.
+   * @param params filter and pagination parameters
    */
   getList: async (
     params: GetHistoryListParams = {},
@@ -55,8 +55,8 @@ export const historyApi = {
   },
 
   /**
-   * 获取历史报告详情
-   * @param recordId 分析历史记录主键 ID（使用 ID 而非 query_id，因为 query_id 在批量分析时可能重复）
+   * Fetch history report details.
+   * @param recordId analysis history record primary key ID (using ID instead of query_id because query_id may collide in batch analyses)
    */
   getDetail: async (recordId: number): Promise<AnalysisReport> => {
     const response = await apiClient.get<Record<string, unknown>>(`/api/v1/history/${recordId}`);
@@ -64,9 +64,9 @@ export const historyApi = {
   },
 
   /**
-   * 获取历史报告关联新闻
-   * @param recordId 分析历史记录主键 ID
-   * @param limit 返回数量限制
+   * Fetch news associated with a history report.
+   * @param recordId analysis history record primary key ID
+   * @param limit maximum number of results to return
    */
   getNews: async (recordId: number, limit = 20): Promise<NewsIntelResponse> => {
     const response = await apiClient.get<Record<string, unknown>>(`/api/v1/history/${recordId}/news`, {
@@ -81,9 +81,9 @@ export const historyApi = {
   },
 
   /**
-   * 获取历史报告的 Markdown 格式内容
-   * @param recordId 分析历史记录主键 ID
-   * @returns Markdown 格式的完整报告内容
+   * Fetch the Markdown content of a history report.
+   * @param recordId analysis history record primary key ID
+   * @returns complete Markdown report content
    */
   getMarkdown: async (recordId: number): Promise<string> => {
     const response = await apiClient.get<{ content: string }>(`/api/v1/history/${recordId}/markdown`);
@@ -91,8 +91,8 @@ export const historyApi = {
   },
 
   /**
-   * 生成历史报告分享图片
-   * @param recordId 分析历史记录主键 ID
+   * Generate a share image for a history report.
+   * @param recordId analysis history record primary key ID
    */
   getShareImage: async (recordId: number): Promise<Blob> => {
     const response = await apiClient.get<Blob>(`/api/v1/history/${recordId}/share-image`, {
@@ -102,8 +102,8 @@ export const historyApi = {
   },
 
   /**
-   * 获取历史报告运行诊断摘要
-   * @param recordId 分析历史记录主键 ID
+   * Fetch the runtime diagnostics summary for a history report.
+   * @param recordId analysis history record primary key ID
    */
   getDiagnostics: async (recordId: number): Promise<RunDiagnosticSummary> => {
     const response = await apiClient.get<Record<string, unknown>>(`/api/v1/history/${recordId}/diagnostics`);
@@ -111,8 +111,8 @@ export const historyApi = {
   },
 
   /**
-   * 获取历史报告运行流快照
-   * @param recordId 分析历史记录主键 ID
+   * Fetch the runtime flow snapshot for a history report.
+   * @param recordId analysis history record primary key ID
    */
   getRecordFlow: async (recordId: number): Promise<RunFlowSnapshot> => {
     const response = await apiClient.get<Record<string, unknown>>(`/api/v1/history/${recordId}/flow`);
@@ -120,8 +120,8 @@ export const historyApi = {
   },
 
   /**
-   * 批量删除历史记录
-   * @param recordIds 分析历史记录主键 ID 列表
+   * Bulk-delete history records.
+   * @param recordIds analysis history record primary key IDs
    */
   deleteRecords: async (recordIds: number[]): Promise<{ deleted: number }> => {
     const response = await apiClient.delete<Record<string, unknown>>('/api/v1/history', {
@@ -132,8 +132,8 @@ export const historyApi = {
   },
 
   /**
-   * 按股票代码删除所有历史记录
-   * @param stockCode 股票代码
+   * Delete every history record for a stock code.
+   * @param stockCode stock code
    */
   deleteByCode: async (stockCode: string): Promise<{ deleted: number }> => {
     const response = await apiClient.delete<Record<string, unknown>>(`/api/v1/history/by-code/${encodeURIComponent(stockCode)}`);
@@ -141,7 +141,7 @@ export const historyApi = {
   },
 
   /**
-   * 获取个股栏列表（不重复个股，不包含大盘复盘）
+   * Fetch the per-stock bar list (deduplicated per symbol, excluding market reviews).
    */
   getStockBarList: async (params: {
     startDate?: string;
