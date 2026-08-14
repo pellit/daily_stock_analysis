@@ -2526,6 +2526,7 @@ class NotificationService(
         email_stock_codes: Optional[List[str]],
         email_send_to_all: bool,
         route_type: Optional[str] = None,
+        report_language: Optional[str] = None,
     ) -> bool:
         use_image = self._should_use_image_for_channel(channel, image_bytes)
         sanitized_content = strip_hidden_markdown_metadata(content).strip()
@@ -2540,9 +2541,9 @@ class NotificationService(
                     sanitized_content, filename=f"report_{date_str}.md"
                 )
                 return self.send_feishu_file(filepath)
-            return self.send_to_feishu(sanitized_content)
+            return self.send_to_feishu(sanitized_content, report_language=report_language)
         if channel == NotificationChannel.DINGTALK:
-            return self.send_to_dingtalk(sanitized_content)
+            return self.send_to_dingtalk(sanitized_content, report_language=report_language)
         if channel == NotificationChannel.TELEGRAM:
             if use_image:
                 return self._send_telegram_photo(image_bytes)
@@ -2554,27 +2555,28 @@ class NotificationService(
             elif email_stock_codes and self._stock_email_groups:
                 receivers = self.get_receivers_for_stocks(email_stock_codes)
             if use_image:
-                return self._send_email_with_inline_image(image_bytes, receivers=receivers)
+                return self._send_email_with_inline_image(image_bytes, receivers=receivers, report_language=report_language)
             return self.send_to_email(
                 sanitized_content,
                 receivers=receivers,
+                report_language=report_language,
             )
         if channel == NotificationChannel.PUSHOVER:
             return self.send_to_pushover(content)
         if channel == NotificationChannel.NTFY:
-            return self.send_to_ntfy(sanitized_content)
+            return self.send_to_ntfy(sanitized_content, report_language=report_language)
         if channel == NotificationChannel.GOTIFY:
-            return self.send_to_gotify(sanitized_content)
+            return self.send_to_gotify(sanitized_content, report_language=report_language)
         if channel == NotificationChannel.PUSHPLUS:
-            return self.send_to_pushplus(sanitized_content)
+            return self.send_to_pushplus(sanitized_content, report_language=report_language)
         if channel == NotificationChannel.SERVERCHAN3:
-            return self.send_to_serverchan3(sanitized_content)
+            return self.send_to_serverchan3(sanitized_content, report_language=report_language)
         if channel == NotificationChannel.CUSTOM:
             if use_image:
                 return self._send_custom_webhook_image(image_bytes, fallback_content=content)
-            return self.send_to_custom(sanitized_content)
+            return self.send_to_custom(sanitized_content, report_language=report_language)
         if channel == NotificationChannel.DISCORD:
-            return self.send_to_discord(content)
+            return self.send_to_discord(content, report_language=report_language)
         if channel == NotificationChannel.SLACK:
             if use_image:
                 return self._send_slack_image(image_bytes, fallback_content=content)
@@ -2594,6 +2596,7 @@ class NotificationService(
         dedup_key: Optional[str] = None,
         cooldown_key: Optional[str] = None,
         structured_payload: Optional[Dict[str, Any]] = None,
+        report_language: Optional[str] = None,
     ) -> NotificationDispatchResult:
         """
         Send a notification and return per-channel diagnostics.
@@ -2615,6 +2618,7 @@ class NotificationService(
             dedup_key: 可选稳定去重 key；未设置时使用内容 hash
             cooldown_key: 可选冷却 key；未设置时使用路由/级别默认 key
             structured_payload: 可选的个股或市场结构化结果，仅用于图片模板精确填充
+            report_language: 报告语言（zh/en/ko），用于本地化渠道标题与错误信息
 
         Returns:
             Structured dispatch diagnostics.
@@ -2750,6 +2754,7 @@ class NotificationService(
                     email_stock_codes=email_stock_codes,
                     email_send_to_all=email_send_to_all,
                     route_type=route_type,
+                    report_language=report_language,
                 )
                 latency_ms = int((time.monotonic() - started_at) * 1000)
 
@@ -2812,6 +2817,7 @@ class NotificationService(
         dedup_key: Optional[str] = None,
         cooldown_key: Optional[str] = None,
         structured_payload: Optional[Dict[str, Any]] = None,
+        report_language: Optional[str] = None,
     ) -> bool:
         """
         统一发送接口 - 向所有已配置的渠道发送。
@@ -2828,6 +2834,7 @@ class NotificationService(
             dedup_key=dedup_key,
             cooldown_key=cooldown_key,
             structured_payload=structured_payload,
+            report_language=report_language,
         )
         return bool(result.success)
 

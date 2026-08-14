@@ -18,6 +18,7 @@ import smtplib
 from data_provider.base import normalize_stock_code
 from src.config import Config
 from src.formatters import markdown_to_html_document, strip_hidden_markdown_metadata
+from src.report_language import get_report_labels
 
 
 logger = logging.getLogger(__name__)
@@ -109,9 +110,13 @@ class EmailSender:
                 result.append(e)
         return result
 
-    def _format_sender_address(self, sender: str) -> str:
+    def _format_sender_address(self, sender: str, language: str = "zh") -> str:
         """Encode display name safely so non-ASCII sender names work across SMTP providers."""
-        sender_name = self._email_config.get('sender_name') or '股票分析助手'
+        default_name = get_report_labels(language).get(
+            'sender_email_fallback_name',
+            get_report_labels("zh").get('sender_email_fallback_name', '股票分析助手'),
+        )
+        sender_name = self._email_config.get('sender_name') or default_name
         return formataddr((str(Header(str(sender_name), 'utf-8')), sender))
 
     @staticmethod
@@ -138,32 +143,35 @@ class EmailSender:
         receivers: Optional[List[str]] = None,
         *,
         timeout_seconds: Optional[float] = None,
+        report_language: Optional[str] = None,
     ) -> bool:
         """
         通过 SMTP 发送邮件（自动识别 SMTP 服务器）
-        
+
         Args:
             content: 邮件内容（支持 Markdown，会转换为 HTML）
             subject: 邮件主题（可选，默认自动生成）
             receivers: 收件人列表（可选，默认使用配置的 receivers）
-            
+            report_language: 报告语言（zh/en/ko），用于本地化主题、发件人名与图片说明
+
         Returns:
             是否发送成功
         """
         if not self._is_email_configured():
             logger.warning("邮件配置不完整，跳过推送")
             return False
-        
+
         sender = self._email_config['sender']
         password = self._email_config['password']
         receivers = receivers or self._email_config['receivers']
+        labels = get_report_labels(report_language or "zh")
         server: Optional[smtplib.SMTP] = None
-        
+
         try:
             # 生成主题
             if subject is None:
                 date_str = datetime.now().strftime('%Y-%m-%d')
-                subject = f"📈 股票智能分析报告 - {date_str}"
+                subject = f"📈 {labels.get('sender_report_title', '股票智能分析报告')} - {date_str}"
 
             sanitized_content = strip_hidden_markdown_metadata(content).strip()
             
@@ -173,7 +181,7 @@ class EmailSender:
             # 构建邮件
             msg = MIMEMultipart('alternative')
             msg['Subject'] = Header(subject, 'utf-8')
-            msg['From'] = self._format_sender_address(sender)
+            msg['From'] = self._format_sender_address(sender, language=report_language or "zh")
             msg['To'] = ', '.join(receivers)
             
             # 添加纯文本和 HTML 两个版本
@@ -226,7 +234,8 @@ class EmailSender:
             self._close_server(server)
 
     def _send_email_with_inline_image(
-        self, image_bytes: bytes, receivers: Optional[List[str]] = None
+        self, image_bytes: bytes, receivers: Optional[List[str]] = None,
+        report_language: Optional[str] = None,
     ) -> bool:
         """Send email with inline image attachment (Issue #289)."""
         if not self._is_email_configured():
@@ -234,20 +243,21 @@ class EmailSender:
         sender = self._email_config['sender']
         password = self._email_config['password']
         receivers = receivers or self._email_config['receivers']
+        labels = get_report_labels(report_language or "zh")
         server: Optional[smtplib.SMTP] = None
         try:
             date_str = datetime.now().strftime('%Y-%m-%d')
-            subject = f"📈 股票智能分析报告 - {date_str}"
+            subject = f"📈 {labels.get('sender_report_title', '股票智能分析报告')} - {date_str}"
             msg = MIMEMultipart('related')
             msg['Subject'] = Header(subject, 'utf-8')
-            msg['From'] = self._format_sender_address(sender)
+            msg['From'] = self._format_sender_address(sender, language=report_language or "zh")
             msg['To'] = ', '.join(receivers)
 
             alt = MIMEMultipart('alternative')
-            alt.attach(MIMEText('报告已生成，详见下方图片。', 'plain', 'utf-8'))
+            alt.attach(MIMEText(labels.get('sender_email_alt_text', '报告已生成，详见下方图片。'), 'plain', 'utf-8'))
             html_body = (
-                '<p>报告已生成，详见下方图片（点击可查看大图）：</p>'
-                '<p><img src="cid:report-image" alt="股票分析报告" style="max-width:100%%;" /></p>'
+                f'<p>{labels.get("sender_email_alt_text_html", "报告已生成，详见下方图片（点击可查看大图）：")}</p>'
+                f'<p><img src="cid:report-image" alt="{labels.get("sender_email_image_alt_html", "股票分析报告")}" style="max-width:100%%;" /></p>'
             )
             alt.attach(MIMEText(html_body, 'html', 'utf-8'))
             msg.attach(alt)

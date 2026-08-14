@@ -17,6 +17,7 @@ from src.formatters import (
     chunk_content_by_max_words,
     strip_hidden_markdown_metadata,
 )
+from src.report_language import get_report_labels
 
 
 logger = logging.getLogger(__name__)
@@ -61,13 +62,14 @@ class DiscordSender:
         webhook_ok = bool(self._discord_config['webhook_url'])
         return bot_ok or webhook_ok
     
-    def send_to_discord(self, content: str, *, timeout_seconds: Optional[float] = None) -> bool:
+    def send_to_discord(self, content: str, *, timeout_seconds: Optional[float] = None, report_language: Optional[str] = None) -> bool:
         """
         推送消息到 Discord（支持 Webhook 和 Bot API）
-        
+
         Args:
             content: Markdown 格式的消息内容
-            
+            report_language: 报告语言（zh/en/ko），用于本地化机器人用户名
+
         Returns:
             是否发送成功
         """
@@ -86,6 +88,7 @@ class DiscordSender:
                 self._send_discord_webhook,
                 "Webhook",
                 timeout_seconds=timeout_seconds,
+                report_language=report_language,
             )
 
         # 其次使用 Bot API（权限高，需要 channel_id）
@@ -95,6 +98,7 @@ class DiscordSender:
                 self._send_discord_bot,
                 "Bot",
                 timeout_seconds=timeout_seconds,
+                report_language=report_language,
             )
 
         logger.warning("Discord 配置不完整，跳过推送")
@@ -126,6 +130,7 @@ class DiscordSender:
         channel_name: str,
         *,
         timeout_seconds: Optional[float] = None,
+        report_language: Optional[str] = None,
     ) -> bool:
         """逐片发送 Discord 消息；失败片不应阻断后续片尝试。"""
         total_chunks = len(chunks)
@@ -135,7 +140,7 @@ class DiscordSender:
             logger.info("Discord %s 分批发送：共 %d 批", channel_name, total_chunks)
 
         for i, chunk in enumerate(chunks):
-            if send_once(chunk, timeout_seconds=timeout_seconds):
+            if send_once(chunk, timeout_seconds=timeout_seconds, report_language=report_language):
                 success_count += 1
                 if total_chunks > 1:
                     logger.info("Discord %s 第 %d/%d 批发送成功", channel_name, i + 1, total_chunks)
@@ -148,21 +153,23 @@ class DiscordSender:
         return success_count == total_chunks
 
   
-    def _send_discord_webhook(self, content: str, *, timeout_seconds: Optional[float] = None) -> bool:
+    def _send_discord_webhook(self, content: str, *, timeout_seconds: Optional[float] = None, report_language: Optional[str] = None) -> bool:
         """
         使用 Webhook 发送消息到 Discord
-        
+
         Discord Webhook 支持 Markdown 格式
-        
+
         Args:
             content: Markdown 格式的消息内容
-            
+            report_language: 报告语言（zh/en/ko），用于本地化机器人用户名
+
         Returns:
             是否发送成功
         """
+        labels = get_report_labels(report_language or "zh")
         payload = {
             'content': content,
-            'username': 'A股分析机器人',
+            'username': labels.get('sender_discord_username', 'A股分析机器人'),
             'avatar_url': 'https://picsum.photos/200'
         }
 

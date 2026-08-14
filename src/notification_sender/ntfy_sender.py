@@ -12,6 +12,7 @@ import requests
 
 from src.config import Config
 from src.formatters import strip_hidden_markdown_metadata
+from src.report_language import get_report_labels
 
 
 logger = logging.getLogger(__name__)

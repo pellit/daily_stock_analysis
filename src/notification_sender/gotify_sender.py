@@ -12,6 +12,7 @@ import requests
 
 from src.config import Config
 from src.formatters import strip_hidden_markdown_metadata
+from src.report_language import get_report_labels
 
 
 logger = logging.getLogger(__name__)
@@ -64,6 +65,7 @@ class GotifySender:
         title: Optional[str] = None,
         *,
         timeout_seconds: Optional[float] = None,
+        report_language: Optional[str] = None,
     ) -> bool:
         """Publish a notification to Gotify using JSON and header auth."""
         if not self._is_gotify_configured():
@@ -77,7 +79,8 @@ class GotifySender:
 
         if title is None:
             date_str = datetime.now().strftime("%Y-%m-%d")
-            title = f"📈 股票分析报告 - {date_str}"
+            labels = get_report_labels(report_language or "zh")
+            title = f"📈 {labels.get('sender_report_title_short', '股票分析报告')} - {date_str}"
         sanitized_content = strip_hidden_markdown_metadata(content).strip()
 
         headers = {

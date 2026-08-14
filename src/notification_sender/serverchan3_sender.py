@@ -13,6 +13,7 @@ import re
 
 from src.config import Config
 from src.formatters import strip_hidden_markdown_metadata
+from src.report_language import get_report_labels
 
 
 logger = logging.getLogger(__name__)
@@ -67,7 +68,8 @@ class Serverchan3Sender:
         # 处理消息标题
         if title is None:
             date_str = datetime.now().strftime('%Y-%m-%d')
-            title = f"📈 股票分析报告 - {date_str}"
+            labels = get_report_labels(report_language or 'zh')
+            title = f"📈 {labels.get('sender_report_title_short', '股票分析报告')} - {date_str}"
         sanitized_content = strip_hidden_markdown_metadata(content).strip()
 
         try:

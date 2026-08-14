@@ -70,7 +70,8 @@ class PushplusSender:
 
         if title is None:
             date_str = datetime.now().strftime('%Y-%m-%d')
-            title = f"📈 股票分析报告 - {date_str}"
+            labels = get_report_labels(report_language or 'zh')
+            title = f"� {labels.get('sender_report_title_short', '股票分析报告')} - {date_str}"
         sanitized_content = strip_hidden_markdown_metadata(content).strip()
 
         try:
