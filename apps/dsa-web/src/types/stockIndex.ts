@@ -15,7 +15,7 @@ export interface StockIndexItem {
   canonicalCode: string;
   /** Display code: 600519 */
   displayCode: string;
-  /** Chinese name, e.g. "贵州茅台". */
+  /** Chinese name, e.g. "Kweichow Moutai" in Chinese characters. */
   nameZh: string;
   /** English name, e.g. "Kweichow Moutai". */
   nameEn?: string;
