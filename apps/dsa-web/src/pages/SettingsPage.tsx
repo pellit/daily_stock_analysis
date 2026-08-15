@@ -1376,6 +1376,7 @@ const SettingsPage: React.FC = () => {
         notify: false,
         originalQuery: firstSetupStockCode,
         selectionSource: 'manual',
+        reportLanguage: uiLanguage,
       });
       const taskId = 'taskId' in result ? result.taskId : result.accepted?.[0]?.taskId;
       setSetupSmokeSuccess(

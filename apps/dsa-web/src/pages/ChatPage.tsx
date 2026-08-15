@@ -717,13 +717,20 @@ const ChatPage: React.FC = () => {
         ? nextActiveStockContext
         : followUpContextRef.current ?? nextActiveStockContext ?? undefined;
 
+      // Always attach the active UI language so the agent backend defaults
+      // report_language to it without relying on the X-UI-Language header
+      // alone (the backend also reads that header as a fallback).
+      const contextWithLanguage = contextForSend
+        ? { ...contextForSend, report_language: language }
+        : { report_language: language };
+
       const payload = {
         message: msgText,
         session_id: sessionId,
         ...(requestedSkillIds !== null
           ? { skills: normalizeSelectedSkillIds(requestedSkillIds) }
           : {}),
-        context: contextForSend ?? undefined,
+        context: contextWithLanguage,
       };
       await startStream(payload, {
         skillNames: usedSkillNames,

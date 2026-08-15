@@ -917,7 +917,10 @@ export const useStockPoolStore = create<StockPoolState>((set, get) => ({
         notify,
         forceRefresh,
         skills,
-        ...(options?.reportLanguage !== undefined && { reportLanguage: options.reportLanguage }),
+        // Default to the pinned UI language ('en'). Callers may still override
+        // by passing reportLanguage in options, but doing so requires an opt-in
+        // rather than an opt-out — keeping the en-default visible.
+        reportLanguage: options?.reportLanguage ?? 'en',
       });
 
       if (requestId !== analyzeRequestSeq) {

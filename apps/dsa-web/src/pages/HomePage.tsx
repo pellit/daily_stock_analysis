@@ -1036,6 +1036,7 @@ const HomePage: React.FC = () => {
       const result = await analysisApi.triggerMarketReview({
         sendNotification: notify,
         regions: marketReviewRegionOverride,
+        reportLanguage: uiLanguage,
       });
       setMarketReviewNotice({
         variant: 'success',
@@ -1254,6 +1255,7 @@ const HomePage: React.FC = () => {
             reportType: 'detailed',
             notify,
             skills: selectedAnalysisSkills,
+            reportLanguage: uiLanguage,
           });
           const counts = countBatchAccepted(result);
           acceptedCount += counts.accepted;

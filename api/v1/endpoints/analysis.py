@@ -29,7 +29,7 @@ from typing import Optional, Union, Dict, Any
 from fastapi import APIRouter, HTTPException, Depends, Query, Body
 from fastapi.responses import JSONResponse, StreamingResponse
 
-from api.deps import get_config_dep
+from api.deps import get_config_dep, get_ui_language_header
 from api.v1.errors import api_error
 from api.v1.schemas.analysis import (
     AnalyzeRequest,
@@ -120,9 +120,17 @@ def _build_market_review_runtime(config: Config, source_message: Optional[Any] =
     return _runtime_build_market_review_runtime(config, source_message)
 
 
-def _with_request_report_language(config: Config, report_language: Optional[str]) -> Config:
-    """Return a request-scoped config copy when the caller overrides report language."""
-    normalized = normalize_report_language(report_language, default="")
+def _with_request_report_language(
+    config: Config,
+    report_language: Optional[str],
+    fallback: Optional[str] = None,
+) -> Config:
+    """Return a request-scoped config copy when the caller overrides report language.
+
+    ``fallback`` is consulted when ``report_language`` is empty so callers can
+    pass through the ``X-UI-Language`` header as a last-resort default.
+    """
+    normalized = normalize_report_language(report_language or fallback, default="")
     if not normalized:
         return config
 
@@ -277,7 +285,8 @@ def _resolve_and_normalize_input(raw_value: str) -> str:
 )
 def trigger_analysis(
         request: AnalyzeRequest,
-        config: Config = Depends(get_config_dep)
+        config: Config = Depends(get_config_dep),
+        ui_language: Optional[str] = Depends(get_ui_language_header),
 ) -> Union[AnalysisResultResponse, JSONResponse]:
     """
     触发股票分析
@@ -344,15 +353,16 @@ def trigger_analysis(
                 "validation_error",
                 "同步模式仅支持单只股票分析，请使用 async_mode=true 进行批量分析",
             )
-        return _handle_sync_analysis(stock_codes[0], request)
+        return _handle_sync_analysis(stock_codes[0], request, ui_language=ui_language)
 
     # Async mode submits one task per stock.
-    return _handle_async_analysis_batch(stock_codes, request)
+    return _handle_async_analysis_batch(stock_codes, request, ui_language=ui_language)
 
 
 def _handle_async_analysis_batch(
     stock_codes: list,
-    request: AnalyzeRequest
+    request: AnalyzeRequest,
+    ui_language: Optional[str] = None,
 ) -> JSONResponse:
     """
     Handle asynchronous analysis requests, including batch submission.
@@ -371,7 +381,10 @@ def _handle_async_analysis_batch(
     notify = getattr(request, "notify", True)
     skills = getattr(request, "skills", None)
     analysis_phase = request.analysis_phase
-    report_language = normalize_report_language(getattr(request, "report_language", None), default="")
+    report_language = normalize_report_language(
+        getattr(request, "report_language", None) or ui_language,
+        default="",
+    )
 
     submit_kwargs = dict(
         stock_codes=stock_codes,
@@ -452,7 +465,8 @@ def _handle_async_analysis_batch(
 
 def _handle_sync_analysis(
     stock_code: str,
-    request: AnalyzeRequest
+    request: AnalyzeRequest,
+    ui_language: Optional[str] = None,
 ) -> AnalysisResultResponse:
     """
     处理同步分析请求
@@ -474,7 +488,7 @@ def _handle_sync_analysis(
             send_notification=getattr(request, "notify", True),
             skills=getattr(request, "skills", None),
             analysis_phase=request.analysis_phase,
-            report_language=getattr(request, "report_language", None),
+            report_language=getattr(request, "report_language", None) or ui_language,
         )
 
         if result is None:
@@ -533,11 +547,16 @@ def _handle_sync_analysis(
 def trigger_market_review(
     request: Optional[MarketReviewRequest] = Body(None),
     config: Config = Depends(get_config_dep),
+    ui_language: Optional[str] = Depends(get_ui_language_header),
 ) -> MarketReviewAccepted:
     """Trigger market review from Web/API without blocking the request."""
     request = request or MarketReviewRequest()
 
-    runtime_config = _with_request_report_language(config, request.report_language)
+    runtime_config = _with_request_report_language(
+        config,
+        request.report_language,
+        fallback=ui_language,
+    )
     effective_region = request.region or (
         normalize_market_review_region_lenient(runtime_config.market_review_region) or "cn"
     )

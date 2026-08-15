@@ -14,9 +14,10 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import AliasChoices, BaseModel, ConfigDict, Field
 
-from api.deps import get_agent_chat_session_service
+from api.deps import get_agent_chat_session_service, get_ui_language_header
 from api.v1.schemas.system_config import AgentBackendStatusResponse
 from src.config import get_config
+from src.report_language import normalize_report_language
 from src.services.agent_chat_session_service import AgentChatSessionService
 from src.services.agent_model_service import list_agent_model_deployments
 
@@ -65,7 +66,12 @@ class ChatRequest(BaseModel):
         return self.skills
 
 
-def _build_agent_chat_context(request: ChatRequest, config, skills: Optional[List[str]]) -> Dict[str, Any]:
+def _build_agent_chat_context(
+    request: ChatRequest,
+    config,
+    skills: Optional[List[str]],
+    ui_language: Optional[str] = None,
+) -> Dict[str, Any]:
     """Build the shared context contract for regular and streaming Agent Chat."""
     context = dict(request.context or {})
     context.pop("skills", None)
@@ -74,7 +80,8 @@ def _build_agent_chat_context(request: ChatRequest, config, skills: Optional[Lis
         context["skills"] = skills
     report_language = context.get("report_language")
     if report_language is None or (isinstance(report_language, str) and not report_language.strip()):
-        context["report_language"] = config.report_language
+        resolved = normalize_report_language(ui_language, default="")
+        context["report_language"] = resolved or config.report_language
     return context
 
 
@@ -198,6 +205,7 @@ async def get_strategies():
 async def agent_chat(
     request: ChatRequest,
     session_service: AgentChatSessionService = Depends(get_agent_chat_session_service),
+    ui_language: Optional[str] = Depends(get_ui_language_header),
 ):
     """
     Chat with the AI Agent without progress events.
@@ -229,7 +237,7 @@ async def agent_chat(
         selected_skill_ids = skill_selection.selected_skill_ids_update
         executor = _build_executor(config, skills or None)
 
-        ctx = _build_agent_chat_context(request, config, skills)
+        ctx = _build_agent_chat_context(request, config, skills, ui_language=ui_language)
 
         # Offload the blocking call to a thread to avoid blocking the event loop.
         loop = asyncio.get_running_loop()
@@ -477,6 +485,7 @@ async def agent_research(request: ResearchRequest):
 async def agent_chat_stream(
     request: ChatRequest,
     session_service: AgentChatSessionService = Depends(get_agent_chat_session_service),
+    ui_language: Optional[str] = Depends(get_ui_language_header),
 ):
     """
     Chat with the AI Agent, streaming progress via SSE.
@@ -508,7 +517,7 @@ async def agent_chat_stream(
     )
     skills = skill_selection.effective_skill_ids
     selected_skill_ids = skill_selection.selected_skill_ids_update
-    stream_ctx = _build_agent_chat_context(request, config, skills)
+    stream_ctx = _build_agent_chat_context(request, config, skills, ui_language=ui_language)
 
     if backend_id == "codex_app_server":
         with _ACTIVE_CODEX_STREAMS_LOCK:

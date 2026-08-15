@@ -10,16 +10,19 @@ API 依赖注入模块
 3. 提供服务层依赖
 """
 
-from typing import Generator
+from typing import Generator, Optional
 
-from fastapi import Request
+from fastapi import Header, Request
 from sqlalchemy.orm import Session
 
+from src.report_language import normalize_report_language
 from src.storage import DatabaseManager
 from src.config import get_config, Config
 from src.services.system_config_service import SystemConfigService
 from src.services.runtime_scheduler import RuntimeSchedulerService
 from src.services.agent_chat_session_service import AgentChatSessionService
+
+UI_LANGUAGE_HEADER = "X-UI-Language"
 
 
 def get_db() -> Generator[Session, None, None]:
@@ -85,3 +88,18 @@ def get_runtime_scheduler_service(request: Request) -> RuntimeSchedulerService:
         service = RuntimeSchedulerService()
         request.app.state.runtime_scheduler_service = service
     return service
+
+
+def get_ui_language_header(
+    x_ui_language: Optional[str] = Header(default=None, alias=UI_LANGUAGE_HEADER),
+) -> Optional[str]:
+    """Return the validated UI language from the ``X-UI-Language`` request header.
+
+    The frontend axios interceptor sets this on every request so backend
+    endpoints can default ``report_language`` to the user's UI locale even
+    when the request body omits it. Returns ``None`` when the header is
+    absent or carries an unsupported value; callers should treat that as
+    "no preference" and fall back to the global config default.
+    """
+    normalized = normalize_report_language(x_ui_language, default="")
+    return normalized or None
