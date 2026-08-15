@@ -23,7 +23,7 @@ const {
       taskId: 'screen-task-1',
       traceId: 'screen-task-1',
       status: 'pending',
-      message: 'Screening Screening任务已Submit',
+      message: 'Screening ScreeningTaskSubmitted',
       strategy: 'dual_low',
       market: 'cn',
       maxResults: 3,
@@ -36,7 +36,7 @@ const {
       traceId: 'screen-task-1',
       status: 'completed',
       progress: 100,
-      message: '任务执行Complete',
+      message: 'TaskexecuteComplete',
       result: lastScreenResult,
     };
   });
@@ -123,18 +123,18 @@ describe('StockScreeningPage', () => {
       topic: 'AI computing',
       name: 'AI computing',
       canonicalTopic: 'Compute',
-      summary: 'AICompute Intraday发酵。',
+      summary: 'AICompute IntradaySend酵.',
       qualityStatus: 'stale',
       missingFields: ['live_stocks'],
       fallbackUsed: true,
       stale: true,
       staleAgeHours: 2.5,
       sourceErrors: ['akshare timeout'],
-      route: [{ title: 'Intraday发酵', description: '出现大笔Buy。', source: 'eastmoney_board_change' }],
+      route: [{ title: 'IntradaySend酵', description: 'showbig笔Buy.', source: 'eastmoney_board_change' }],
       stocks: [{
         code: '300000',
         name: 'Innolight',
-        role: '核心龙头',
+        role: 'Core leader',
         hotStockScore: 88,
         source: 'last_good_cache.leader_stocks',
         sourceConfidence: 0.65,
@@ -154,7 +154,7 @@ describe('StockScreeningPage', () => {
     expect(await screen.findByText('Screening enabled')).toBeInTheDocument();
     expect(screen.queryByText(/AlphaSift/)).not.toBeInTheDocument();
     expect(screen.queryByText(/theme_heat/)).not.toBeInTheDocument();
-    expect(screen.queryByText('Experimental与Riskinfo')).not.toBeInTheDocument();
+    expect(screen.queryByText('ExperimentalandRiskinfo')).not.toBeInTheDocument();
     expect(screen.queryByText('ScreeningResult')).not.toBeInTheDocument();
   });
 
@@ -168,7 +168,7 @@ describe('StockScreeningPage', () => {
         enabled: true,
         available: false,
       });
-    enableScreening.mockRejectedValueOnce(new Error('Screening功能不Available，请Check后端Log'));
+    enableScreening.mockRejectedValueOnce(new Error('Screeningfeaturenot Available, Please CheckBackendLog'));
 
     render(<StockScreeningPage />);
 
@@ -180,8 +180,8 @@ describe('StockScreeningPage', () => {
     await waitFor(() => expect(getScreeningStatus).toHaveBeenCalledTimes(2));
     expect(screen.getAllByText('Screening disabled').length).toBeGreaterThan(0);
     expect(screen.getByRole('button', { name: /运行Screening/ })).toBeDisabled();
-    expect(screen.getByText('Screening功能不Available')).toBeInTheDocument();
-    expect(screen.getByText('Screening功能不Available，请Check后端Log')).toBeInTheDocument();
+    expect(screen.getByText('Screeningfeaturenot Available')).toBeInTheDocument();
+    expect(screen.getByText('Screeningfeaturenot Available, Please CheckBackendLog')).toBeInTheDocument();
   });
 
   it('loads Screening hotspot themes on demand', async () => {
@@ -211,7 +211,7 @@ describe('StockScreeningPage', () => {
             trendScore: 12,
             persistenceScore: 66,
             changePct: 4.2,
-            stage: 'Accelerating主升',
+            stage: 'Acceleratingmain Rise',
             sampleStockCount: 8,
             leaders: ['Innolight', 'Foxconn Industrial Internet'],
           },
@@ -231,17 +231,17 @@ describe('StockScreeningPage', () => {
     fireEvent.click(await screen.findByRole('button', { name: /AI computing/ }));
     await waitFor(() => expect(getHotspotDetail).toHaveBeenCalledWith({ topic: 'AI computing', provider: 'akshare', refresh: false }));
     await waitFor(() => expect(screen.getAllByText('AI computing').length).toBeGreaterThan(0));
-    expect(screen.getByText('强势领先')).toBeInTheDocument();
+    expect(screen.getByText('strong领first')).toBeInTheDocument();
     expect(screen.getAllByText(/Innolight、Foxconn Industrial Internet/).length).toBeGreaterThan(0);
     expect(screen.getByText(/覆盖 8 shares/)).toBeInTheDocument();
-    expect(await screen.findByText('发酵Time线')).toBeInTheDocument();
-    expect(screen.getByText('标准题材：Compute')).toBeInTheDocument();
-    expect(screen.getByText('质量 Cache')).toBeInTheDocument();
-    expect(screen.getByText('Cache回退 2.5h')).toBeInTheDocument();
-    expect(screen.getByText('DetailData已Fallback，Expand查看Reason')).toBeInTheDocument();
+    expect(await screen.findByText('Send酵Time线')).toBeInTheDocument();
+    expect(screen.getByText('标准topic: Compute')).toBeInTheDocument();
+    expect(screen.getByText('质amount Cache')).toBeInTheDocument();
+    expect(screen.getByText('CacheReturndelist 2.5h')).toBeInTheDocument();
+    expect(screen.getByText('DetailData Fallback, ExpandViewReason')).toBeInTheDocument();
     expect(screen.getByText(/暂缺：实时ThemesharesQuote/)).toBeInTheDocument();
-    expect(screen.getByText('热点明细RequestTimeout')).toBeInTheDocument();
-    expect(screen.getByText('Intraday发酵')).toBeInTheDocument();
+    expect(screen.getByText('hot点detailRequestTimeout')).toBeInTheDocument();
+    expect(screen.getByText('IntradaySend酵')).toBeInTheDocument();
     expect(screen.getByText('Themeshares')).toBeInTheDocument();
     expect(screen.getByText('Innolight')).toBeInTheDocument();
     expect(screen.queryByText(/last_good_cache|置信 65%/)).not.toBeInTheDocument();
@@ -271,7 +271,7 @@ describe('StockScreeningPage', () => {
         enabled: true,
         provider: 'akshare',
         topic: 'AI computing',
-        route: [{ title: 'Intraday发酵', description: 'Themeshares活跃。' }],
+        route: [{ title: 'IntradaySend酵', description: 'Themesharesactive.' }],
         stocks: [],
         stockCount: 0,
       })
@@ -282,8 +282,8 @@ describe('StockScreeningPage', () => {
         newsSearchRequested: true,
         newsSearchStatus: 'available',
         route: [{
-          title: 'ComputeSupply chain出现新Catalyst',
-          description: '近期订单与政策预期升温。',
+          title: 'ComputeSupply chainshownewCatalyst',
+          description: 'near期订formand政策expectedRise温.',
           url: 'https://example.com/ai-news',
           searchResult: true,
         }],
@@ -298,7 +298,7 @@ describe('StockScreeningPage', () => {
     fireEvent.click(await screen.findByRole('button', { name: /AI computing/ }));
     await waitFor(() => expect(getHotspotDetail).toHaveBeenCalledTimes(1));
 
-    fireEvent.click(await screen.findByRole('button', { name: 'SearchLatest消息' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'SearchLatestmessage' }));
 
     await waitFor(() => expect(getHotspotDetail).toHaveBeenLastCalledWith({
       topic: 'AI computing',
@@ -306,7 +306,7 @@ describe('StockScreeningPage', () => {
       refresh: false,
       includeSearch: true,
     }));
-    const link = await screen.findByRole('link', { name: '查看消息' });
+    const link = await screen.findByRole('link', { name: 'Viewmessage' });
     expect(link).toHaveAttribute('href', 'https://example.com/ai-news');
 
     getHotspotDetail.mockResolvedValueOnce({
@@ -315,15 +315,15 @@ describe('StockScreeningPage', () => {
       topic: 'AI computing',
       newsSearchRequested: true,
       newsSearchStatus: 'unavailable',
-      route: [{ title: 'Intraday发酵', description: 'Themeshares活跃。' }],
+      route: [{ title: 'IntradaySend酵', description: 'Themesharesactive.' }],
       stocks: [],
       stockCount: 0,
     });
-    fireEvent.click(screen.getByRole('button', { name: 'SearchLatest消息' }));
+    fireEvent.click(screen.getByRole('button', { name: 'SearchLatestmessage' }));
 
-    expect(await screen.findByText('消息SearchFailure，请稍后Retry。')).toBeInTheDocument();
-    expect(screen.getByText('Intraday发酵')).toBeInTheDocument();
-    expect(screen.queryByRole('link', { name: '查看消息' })).not.toBeInTheDocument();
+    expect(await screen.findByText('messageSearchFailure, Please waitRetry.')).toBeInTheDocument();
+    expect(screen.getByText('IntradaySend酵')).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Viewmessage' })).not.toBeInTheDocument();
 
     getHotspotDetail.mockResolvedValueOnce({
       enabled: true,
@@ -331,21 +331,21 @@ describe('StockScreeningPage', () => {
       topic: 'AI computing',
       newsSearchRequested: true,
       newsSearchStatus: 'no_results',
-      route: [{ title: 'Intraday发酵', description: 'Themeshares活跃。' }],
+      route: [{ title: 'IntradaySend酵', description: 'Themesharesactive.' }],
       stocks: [],
       stockCount: 0,
     });
-    fireEvent.click(screen.getByRole('button', { name: 'SearchLatest消息' }));
+    fireEvent.click(screen.getByRole('button', { name: 'SearchLatestmessage' }));
 
-    expect(await screen.findByText('暂未搜到该题材近期的Valid消息。')).toBeInTheDocument();
-    expect(screen.queryByText('消息SearchFailure，请稍后Retry。')).not.toBeInTheDocument();
+    expect(await screen.findByText('暂not 搜to该topicnear期 Validmessage.')).toBeInTheDocument();
+    expect(screen.queryByText('messageSearchFailure, Please waitRetry.')).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: /Collapse热点题材/ }));
     fireEvent.click(screen.getByRole('button', { name: /Expand热点题材/ }));
     fireEvent.click(await screen.findByRole('button', { name: /AI computing/ }));
 
-    await waitFor(() => expect(screen.queryByRole('link', { name: '查看消息' })).not.toBeInTheDocument());
-    expect(screen.getByText('Intraday发酵')).toBeInTheDocument();
+    await waitFor(() => expect(screen.queryByRole('link', { name: 'Viewmessage' })).not.toBeInTheDocument());
+    expect(screen.getByText('IntradaySend酵')).toBeInTheDocument();
     expect(getHotspotDetail).toHaveBeenCalledTimes(4);
   });
 
@@ -359,7 +359,7 @@ describe('StockScreeningPage', () => {
         topic: 'Text media',
         name: 'Text media',
         heatScore: 100,
-        stage: '初次异动',
+        stage: '初times异Move',
         leaders: ['China Online'],
       }],
       hotspotCount: 1,
@@ -400,14 +400,14 @@ describe('StockScreeningPage', () => {
     fireEvent.click(screen.getByRole('button', { name: /Expand热点题材/ }));
     fireEvent.click(await screen.findByRole('button', { name: /Text media/ }));
 
-    expect(await screen.findByText('Text media：热度 100.0，Phase 初次异动，核心shares China Online。')).toBeInTheDocument();
-    expect(screen.getByText('质量 Available')).toBeInTheDocument();
-    expect(screen.getByText('备用Source')).toBeInTheDocument();
+    expect(await screen.findByText('Text media: hot度 100.0, Phase 初times异Move, Coreshares China Online.')).toBeInTheDocument();
+    expect(screen.getByText('质amount Available')).toBeInTheDocument();
+    expect(screen.getByText('备useSource')).toBeInTheDocument();
     expect(screen.queryByText(/^Cache回退/)).not.toBeInTheDocument();
-    expect(screen.getByText('当前发酵')).toBeInTheDocument();
-    expect(screen.getByText('Text media热度 100.0，Phase 初次异动，核心shares China Online。')).toBeInTheDocument();
-    expect(screen.queryByText('DetailData已Fallback，Expand查看Reason')).not.toBeInTheDocument();
-    expect(screen.queryByText('热点明细RequestTimeout（20 秒）')).not.toBeInTheDocument();
+    expect(screen.getByText('currentSend酵')).toBeInTheDocument();
+    expect(screen.getByText('Text mediahot度 100.0, Phase 初times异Move, Coreshares China Online.')).toBeInTheDocument();
+    expect(screen.queryByText('DetailData Fallback, ExpandViewReason')).not.toBeInTheDocument();
+    expect(screen.queryByText('hot点detailRequestTimeout (20 sec) ')).not.toBeInTheDocument();
     expect(screen.getByText('Falling behind')).toBeInTheDocument();
     expect(screen.getByText(/暂无Quote/)).toBeInTheDocument();
     expect(screen.queryByText(/Current fermentation|quality status|available|DsaEastMoneyHotspotProvider|concept_constituents/)).not.toBeInTheDocument();
@@ -423,9 +423,9 @@ describe('StockScreeningPage', () => {
         topic: 'Robotics',
         name: 'Robotics',
         heatScore: 92,
-        stage: 'Accelerating主升',
+        stage: 'Acceleratingmain Rise',
         leaders: ['Topstar'],
-        leaderStocks: [{ code: '300607', name: 'Topstar', role: '核心龙头', hotStockScore: 86 }],
+        leaderStocks: [{ code: '300607', name: 'Topstar', role: 'Core leader', hotStockScore: 86 }],
         sampleStockCount: 1,
         qualityStatus: 'available',
       }],
@@ -439,8 +439,8 @@ describe('StockScreeningPage', () => {
     fireEvent.click(screen.getByRole('button', { name: /Expand热点题材/ }));
     fireEvent.click(await screen.findByRole('button', { name: /Robotics/ }));
 
-    expect(await screen.findByText('Robotics：热度 92.0，Phase Accelerating主升，核心shares Topstar。')).toBeInTheDocument();
-    expect(screen.getByText('正在补充Detail')).toBeInTheDocument();
+    expect(await screen.findByText('Robotics: hot度 92.0, Phase Acceleratingmain Rise, Coreshares Topstar.')).toBeInTheDocument();
+    expect(screen.getByText('In progress补充Detail')).toBeInTheDocument();
     expect(screen.getAllByText('Topstar').length).toBeGreaterThan(0);
 
     act(() => {
@@ -449,14 +449,14 @@ describe('StockScreeningPage', () => {
         provider: 'akshare',
         topic: 'Robotics',
         name: 'Robotics',
-        summary: 'RoboticsDetail已Update。',
-        route: [{ title: 'Intraday发酵', description: 'Themeshares活跃度提升。' }],
-        stocks: [{ code: '300607', name: 'Topstar', role: '核心龙头', hotStockScore: 86 }],
+        summary: 'RoboticsDetail Update.',
+        route: [{ title: 'IntradaySend酵', description: 'Themesharesactive度raise.' }],
+        stocks: [{ code: '300607', name: 'Topstar', role: 'Core leader', hotStockScore: 86 }],
         stockCount: 1,
       });
     });
-    await waitFor(() => expect(screen.queryByText('正在补充Detail')).not.toBeInTheDocument());
-    expect(screen.getByText('Intraday发酵')).toBeInTheDocument();
+    await waitFor(() => expect(screen.queryByText('In progress补充Detail')).not.toBeInTheDocument());
+    expect(screen.getByText('IntradaySend酵')).toBeInTheDocument();
   });
 
   it('localizes backend hotspot no-cache hint on initial load', async () => {
@@ -476,9 +476,9 @@ describe('StockScreeningPage', () => {
     render(<StockScreeningPage />);
 
     await waitFor(() => expect(getHotspots).toHaveBeenCalledTimes(1));
-    expect(screen.queryByText('暂无热点Cache')).not.toBeInTheDocument();
+    expect(screen.queryByText('暂 none hot点Cache')).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /Expand热点题材/ }));
-    expect(await screen.findByText('暂无热点Cache')).toBeInTheDocument();
+    expect(await screen.findByText('暂 none hot点Cache')).toBeInTheDocument();
     expect(screen.queryByText(/No cached Screening hotspot snapshot/)).not.toBeInTheDocument();
   });
 
@@ -494,14 +494,14 @@ describe('StockScreeningPage', () => {
       hotspots: [],
       hotspotCount: 0,
       sourceErrors: ['eastmoney_hotspot_unavailable', "RemoteDisconnected('Remote end closed connection without response')"],
-      message: '热点源Connect中断，暂无AvailableCache。',
+      message: 'hot点源ConnectIn progress断, 暂 none AvailableCache.',
     });
 
     render(<StockScreeningPage />);
 
     await waitFor(() => expect(getHotspots).toHaveBeenCalledTimes(1));
     fireEvent.click(screen.getByRole('button', { name: /Expand热点题材/ }));
-    expect(await screen.findByText('热点源Connect中断，暂无AvailableCache。')).toBeInTheDocument();
+    expect(await screen.findByText('hot点源ConnectIn progress断, 暂 none AvailableCache.')).toBeInTheDocument();
     expect(screen.queryByText(/RemoteDisconnected/)).not.toBeInTheDocument();
   });
 
@@ -514,7 +514,7 @@ describe('StockScreeningPage', () => {
       enabled: true,
       provider: 'akshare',
       providerUsed: 'akshare',
-      hotspots: [{ topic: 'AI computing', name: 'AI computing', heatScore: 88, stage: 'Accelerating主升' }],
+      hotspots: [{ topic: 'AI computing', name: 'AI computing', heatScore: 88, stage: 'Acceleratingmain Rise' }],
       hotspotCount: 1,
     });
     getHotspotDetail.mockResolvedValueOnce({
@@ -522,7 +522,7 @@ describe('StockScreeningPage', () => {
       provider: 'akshare',
       topic: 'AI computing',
       name: 'AI computing',
-      summary: 'AICompute 当前热点Detail。',
+      summary: 'AICompute currenthot点Detail.',
       route: [{ title: 'route-summary', description: 'compact route summary', source: 'news_search' }],
       timeline: [{ title: 'raw-timeline', description: 'full raw timeline text should stay hidden', source: 'raw_news' }],
       stocks: [],
@@ -592,13 +592,13 @@ describe('StockScreeningPage', () => {
           topic: 'AI computing',
           name: 'AI computing',
           heatScore: 88,
-          stage: 'Accelerating主升',
+          stage: 'Acceleratingmain Rise',
         },
         {
           topic: 'Robotics actuator',
           name: 'Robotics actuator',
           heatScore: 80,
-          stage: '轮动扩散',
+          stage: 'rotationspread',
         },
       ],
       hotspotCount: 2,
@@ -637,13 +637,13 @@ describe('StockScreeningPage', () => {
           topic: 'AI computing',
           name: 'AI computing',
           heatScore: 88,
-          stage: 'Accelerating主升',
+          stage: 'Acceleratingmain Rise',
         },
         {
           topic: 'Robotics actuator',
           name: 'Robotics actuator',
           heatScore: 80,
-          stage: '轮动扩散',
+          stage: 'rotationspread',
         },
       ],
       hotspotCount: 2,
@@ -656,9 +656,9 @@ describe('StockScreeningPage', () => {
         provider: 'akshare',
         topic: 'AI computing',
         name: 'AI computing',
-        summary: 'AICompute Intraday发酵。',
-        route: [{ title: 'Intraday发酵', description: '出现大笔Buy。', source: 'eastmoney_board_change' }],
-        stocks: [{ code: '300000', name: 'Innolight', role: '核心龙头', hotStockScore: 88 }],
+        summary: 'AICompute IntradaySend酵.',
+        route: [{ title: 'IntradaySend酵', description: 'showbig笔Buy.', source: 'eastmoney_board_change' }],
+        stocks: [{ code: '300000', name: 'Innolight', role: 'Core leader', hotStockScore: 88 }],
         stockCount: 1,
       })
       .mockImplementationOnce(({ topic }: { topic: string }) => {
@@ -673,7 +673,7 @@ describe('StockScreeningPage', () => {
     expect(await screen.findByText('Screening enabled')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /Expand热点题材/ }));
     fireEvent.click(await screen.findByRole('button', { name: /AI computing/ }));
-    expect(await screen.findByText('Intraday发酵')).toBeInTheDocument();
+    expect(await screen.findByText('IntradaySend酵')).toBeInTheDocument();
     expect(screen.getByText('Innolight')).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: /Robotics actuator/ }));
@@ -682,9 +682,9 @@ describe('StockScreeningPage', () => {
       expect(getHotspotDetail).toHaveBeenLastCalledWith({ topic: 'Robotics actuator', provider: 'akshare', refresh: false }),
     );
     expect(screen.getAllByText('Robotics actuator').length).toBeGreaterThan(0);
-    expect(screen.getByText('正在补充Detail')).toBeInTheDocument();
-    expect(screen.getByText('当前发酵')).toBeInTheDocument();
-    expect(screen.queryByText('Intraday发酵')).not.toBeInTheDocument();
+    expect(screen.getByText('In progress补充Detail')).toBeInTheDocument();
+    expect(screen.getByText('currentSend酵')).toBeInTheDocument();
+    expect(screen.queryByText('IntradaySend酵')).not.toBeInTheDocument();
     expect(screen.queryByText('Innolight')).not.toBeInTheDocument();
 
     await act(async () => {
@@ -693,15 +693,15 @@ describe('StockScreeningPage', () => {
         provider: 'akshare',
         topic: 'Robotics actuator',
         name: 'Robotics actuator',
-        summary: 'Robotics actuator Continue发酵。',
-        route: [{ title: 'Robotics发酵', description: '执行器链条扩散。', source: 'eastmoney_board_change' }],
-        stocks: [{ code: '300111', name: 'Robotics龙头', role: '核心龙头', hotStockScore: 86 }],
+        summary: 'Robotics actuator ContinueSend酵.',
+        route: [{ title: 'RoboticsSend酵', description: 'execute器链itemspread.', source: 'eastmoney_board_change' }],
+        stocks: [{ code: '300111', name: 'Roboticsleader', role: 'Core leader', hotStockScore: 86 }],
         stockCount: 1,
       });
     });
 
-    expect(await screen.findByText('Robotics发酵')).toBeInTheDocument();
-    expect(screen.getByText('Robotics龙头')).toBeInTheDocument();
+    expect(await screen.findByText('RoboticsSend酵')).toBeInTheDocument();
+    expect(screen.getByText('Roboticsleader')).toBeInTheDocument();
   });
 
   it('ignores stale hotspot detail responses when switching themes', async () => {
@@ -718,13 +718,13 @@ describe('StockScreeningPage', () => {
           topic: 'AI computing',
           name: 'AI computing',
           heatScore: 88,
-          stage: 'Accelerating主升',
+          stage: 'Acceleratingmain Rise',
         },
         {
           topic: 'Robotics actuator',
           name: 'Robotics actuator',
           heatScore: 80,
-          stage: '轮动扩散',
+          stage: 'rotationspread',
         },
       ],
       hotspotCount: 2,
@@ -760,14 +760,14 @@ describe('StockScreeningPage', () => {
         provider: 'akshare',
         topic: 'Robotics actuator',
         name: 'Robotics actuator',
-        summary: 'Robotics actuator Continue发酵。',
-        route: [{ title: 'Robotics发酵', description: '执行器链条扩散。', source: 'eastmoney_board_change' }],
-        stocks: [{ code: '300111', name: 'Robotics龙头', role: '核心龙头', hotStockScore: 86 }],
+        summary: 'Robotics actuator ContinueSend酵.',
+        route: [{ title: 'RoboticsSend酵', description: 'execute器链itemspread.', source: 'eastmoney_board_change' }],
+        stocks: [{ code: '300111', name: 'Roboticsleader', role: 'Core leader', hotStockScore: 86 }],
         stockCount: 1,
       });
     });
 
-    expect(await screen.findByText('Robotics发酵')).toBeInTheDocument();
+    expect(await screen.findByText('RoboticsSend酵')).toBeInTheDocument();
 
     await act(async () => {
       aiDetail.resolve({
@@ -775,16 +775,16 @@ describe('StockScreeningPage', () => {
         provider: 'akshare',
         topic: 'AI computing',
         name: 'AI computing',
-        summary: 'AICompute 旧Response。',
-        route: [{ title: 'AI旧发酵', description: '旧Request晚到。', source: 'eastmoney_board_change' }],
-        stocks: [{ code: '300000', name: 'Innolight', role: '核心龙头', hotStockScore: 88 }],
+        summary: 'AICompute old Response.',
+        route: [{ title: 'AIold Send酵', description: 'old Requestlateto.', source: 'eastmoney_board_change' }],
+        stocks: [{ code: '300000', name: 'Innolight', role: 'Core leader', hotStockScore: 88 }],
         stockCount: 1,
       });
     });
 
-    expect(screen.getByText('Robotics发酵')).toBeInTheDocument();
-    expect(screen.getByText('Robotics龙头')).toBeInTheDocument();
-    expect(screen.queryByText('AI旧发酵')).not.toBeInTheDocument();
+    expect(screen.getByText('RoboticsSend酵')).toBeInTheDocument();
+    expect(screen.getByText('Roboticsleader')).toBeInTheDocument();
+    expect(screen.queryByText('AIold Send酵')).not.toBeInTheDocument();
     expect(screen.queryByText('Innolight')).not.toBeInTheDocument();
   });
 
@@ -803,13 +803,13 @@ describe('StockScreeningPage', () => {
             topic: 'AI computing',
             name: 'AI computing',
             heatScore: 88,
-            stage: 'Accelerating主升',
+            stage: 'Acceleratingmain Rise',
           },
           {
             topic: 'Robotics actuator',
             name: 'Robotics actuator',
             heatScore: 80,
-            stage: '轮动扩散',
+            stage: 'rotationspread',
           },
         ],
         hotspotCount: 2,
@@ -823,7 +823,7 @@ describe('StockScreeningPage', () => {
             topic: 'AI computing',
             name: 'AI computing',
             heatScore: 91,
-            stage: '高位发酵',
+            stage: 'highSend酵',
           },
         ],
         hotspotCount: 1,
@@ -834,9 +834,9 @@ describe('StockScreeningPage', () => {
         provider: 'akshare',
         topic: 'AI computing',
         name: 'AI computing',
-        summary: 'AICompute Intraday发酵。',
-        route: [{ title: 'Intraday发酵', description: '出现大笔Buy。', source: 'eastmoney_board_change' }],
-        stocks: [{ code: '300000', name: 'Innolight', role: '核心龙头', hotStockScore: 88 }],
+        summary: 'AICompute IntradaySend酵.',
+        route: [{ title: 'IntradaySend酵', description: 'showbig笔Buy.', source: 'eastmoney_board_change' }],
+        stocks: [{ code: '300000', name: 'Innolight', role: 'Core leader', hotStockScore: 88 }],
         stockCount: 1,
       })
       .mockResolvedValueOnce({
@@ -844,9 +844,9 @@ describe('StockScreeningPage', () => {
         provider: 'akshare',
         topic: 'AI computing',
         name: 'AI computing',
-        summary: 'AICompute Refresh后发酵。',
-        route: [{ title: 'Refresh后发酵', description: '榜单与Detail来自同次Refresh。', source: 'eastmoney_board_change' }],
-        stocks: [{ code: '601138', name: 'Foxconn Industrial Internet', role: '核心龙头', hotStockScore: 92 }],
+        summary: 'AICompute RefreshafterSend酵.',
+        route: [{ title: 'RefreshafterSend酵', description: '榜formandDetail来自同timesRefresh.', source: 'eastmoney_board_change' }],
+        stocks: [{ code: '601138', name: 'Foxconn Industrial Internet', role: 'Core leader', hotStockScore: 92 }],
         stockCount: 1,
       });
 
@@ -865,9 +865,9 @@ describe('StockScreeningPage', () => {
       provider: 'akshare',
       refresh: true,
     }));
-    expect(await screen.findByText('Refresh后发酵')).toBeInTheDocument();
+    expect(await screen.findByText('RefreshafterSend酵')).toBeInTheDocument();
     expect(screen.getByText('Foxconn Industrial Internet')).toBeInTheDocument();
-    expect(screen.queryByText('Intraday发酵')).not.toBeInTheDocument();
+    expect(screen.queryByText('IntradaySend酵')).not.toBeInTheDocument();
     expect(screen.queryByText('Innolight')).not.toBeInTheDocument();
   });
 
@@ -889,7 +889,7 @@ describe('StockScreeningPage', () => {
             trendScore: 12,
             persistenceScore: 66,
             changePct: 4.2,
-            stage: 'Accelerating主升',
+            stage: 'Acceleratingmain Rise',
             sampleStockCount: 8,
             leaders: ['Innolight', 'Foxconn Industrial Internet'],
           },
@@ -902,14 +902,14 @@ describe('StockScreeningPage', () => {
 
     expect(await screen.findByText('Screening enabled')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /Expand热点题材/ }));
-    expect(await screen.findByText('强势领先')).toBeInTheDocument();
+    expect(await screen.findByText('strong领first')).toBeInTheDocument();
     expect(screen.getByText(/Innolight、Foxconn Industrial Internet/)).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: /Refresh热点题材/ }));
 
     await waitFor(() => expect(getHotspots).toHaveBeenCalledWith({ provider: 'akshare', top: 12, refresh: true }));
     expect(await screen.findByText(/manual refresh failed/)).toBeInTheDocument();
-    expect(screen.getByText('强势领先')).toBeInTheDocument();
+    expect(screen.getByText('strong领first')).toBeInTheDocument();
     expect(screen.getByText(/Innolight、Foxconn Industrial Internet/)).toBeInTheDocument();
     expect(screen.queryByText(/点击Refresh后会拉取热点Theme/)).not.toBeInTheDocument();
   });
@@ -947,10 +947,10 @@ describe('StockScreeningPage', () => {
       enabled: true,
       strategies: [
         { id: 'balanced_alpha', name: '平衡Screening', description: 'desc', category: 'Framework' },
-        { id: 'capital_heat', name: '资金热度', description: 'desc', category: 'Momentum' },
-        { id: 'dual_low', name: '双低', description: 'desc', category: 'Value' },
+        { id: 'capital_heat', name: 'fundshot度', description: 'desc', category: 'Momentum' },
+        { id: 'dual_low', name: '双low', description: 'desc', category: 'Value' },
         { id: 'oversold_reversal', name: 'Oversold', description: 'desc', category: 'Reversal' },
-        { id: 'shrink_pullback', name: '缩量回踩', description: 'desc', category: 'Trend' },
+        { id: 'shrink_pullback', name: 'volumepullback', description: 'desc', category: 'Trend' },
       ],
       strategyCount: 5,
     });
@@ -974,10 +974,10 @@ describe('StockScreeningPage', () => {
     const strategySelect = screen.getByLabelText('Strategy') as HTMLSelectElement;
     expect(Array.from(strategySelect.options).map((option) => option.textContent)).toEqual([
       '平衡Screening',
-      '资金热度',
-      '双低',
+      'fundshot度',
+      '双low',
       'Oversold',
-      '缩量回踩',
+      'volumepullback',
       'CustomStrategy…',
     ]);
 
@@ -999,8 +999,8 @@ describe('StockScreeningPage', () => {
     getStrategies.mockResolvedValueOnce({
       enabled: true,
       strategies: [
-        { id: 'dual_low', name: '双低Screening', description: 'desc', category: 'Value' },
-        { id: 'capital_heat', name: '资金热度', description: 'desc', category: 'Momentum' },
+        { id: 'dual_low', name: '双lowScreening', description: 'desc', category: 'Value' },
+        { id: 'capital_heat', name: 'fundshot度', description: 'desc', category: 'Momentum' },
       ],
       strategyCount: 2,
     });
@@ -1014,7 +1014,7 @@ describe('StockScreeningPage', () => {
         {
           rank: 1,
           code: '000001',
-          name: '旧Strategyshares票',
+          name: 'old Strategy stock ',
           score: 88.5,
           reason: 'old result',
           raw: {},
@@ -1028,12 +1028,12 @@ describe('StockScreeningPage', () => {
     expect(await screen.findByText('Screening enabled')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /运行Screening/ }));
 
-    expect(await screen.findByText('旧Strategyshares票')).toBeInTheDocument();
+    expect(await screen.findByText('old Strategy stock ')).toBeInTheDocument();
     expect(screen.getByText('ScreeningComplete')).toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText('Strategy'), { target: { value: 'capital_heat' } });
 
-    expect(screen.queryByText('旧Strategyshares票')).not.toBeInTheDocument();
+    expect(screen.queryByText('old Strategy stock ')).not.toBeInTheDocument();
     expect(screen.queryByText('ScreeningComplete')).not.toBeInTheDocument();
     expect(screen.getByLabelText('Strategy')).toHaveValue('capital_heat');
   });
@@ -1044,7 +1044,7 @@ describe('StockScreeningPage', () => {
       strategies: [
         {
           id: 'dual_low',
-          name: '双低Screening',
+          name: '双lowScreening',
           description: 'desc',
           category: 'Value',
           analysisSkills: ['growth_quality'],
@@ -1064,7 +1064,7 @@ describe('StockScreeningPage', () => {
           code: '600519',
           name: 'Kweichow Moutai',
           score: 88.5,
-          reason: '候选摘要',
+          reason: '候选Summary',
           raw: {},
         },
       ],
@@ -1076,11 +1076,11 @@ describe('StockScreeningPage', () => {
     expect(await screen.findByText('Screening enabled')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /运行Screening/ }));
     expect(await screen.findByText('Kweichow Moutai')).toBeInTheDocument();
-    const expandButton = screen.queryByRole('button', { name: 'Expand查看' });
+    const expandButton = screen.queryByRole('button', { name: 'ExpandView' });
     if (expandButton) {
       fireEvent.click(expandButton);
     }
-    fireEvent.click(screen.getByRole('button', { name: '进一步深度Analyze' }));
+    fireEvent.click(screen.getByRole('button', { name: '进一stepdeepAnalyze' }));
 
     expect(navigate).toHaveBeenCalledWith('/', {
       state: {
@@ -1104,7 +1104,7 @@ describe('StockScreeningPage', () => {
         {
           rank: 1,
           code: '000001',
-          name: 'Restore后的候选',
+          name: 'Restoreafter 候选',
           score: 88.5,
           reason: 'restored result',
           raw: {},
@@ -1118,7 +1118,7 @@ describe('StockScreeningPage', () => {
         traceId: 'screen-task-1',
         status: 'processing',
         progress: 35,
-        message: '正在执行 Screening Screening',
+        message: 'Executing Screening Screening',
         result: null,
       })
       .mockResolvedValueOnce({
@@ -1126,14 +1126,14 @@ describe('StockScreeningPage', () => {
         traceId: 'screen-task-1',
         status: 'completed',
         progress: 100,
-        message: '任务执行Complete',
+        message: 'TaskexecuteComplete',
         result: {
           enabled: true,
           candidates: [
             {
               rank: 1,
               code: '000001',
-              name: 'Restore后的候选',
+              name: 'Restoreafter 候选',
               score: 88.5,
               reason: 'restored result',
               raw: {},
@@ -1154,7 +1154,7 @@ describe('StockScreeningPage', () => {
     firstRender.unmount();
     render(<StockScreeningPage />);
 
-    expect(await screen.findByText('Restore后的候选')).toBeInTheDocument();
+    expect(await screen.findByText('Restoreafter 候选')).toBeInTheDocument();
     expect(screen.getByText('ScreeningComplete')).toBeInTheDocument();
     expect(window.sessionStorage.getItem('dsa.screening.activeScreenTask.v1')).toBeNull();
   });
@@ -1178,7 +1178,7 @@ describe('StockScreeningPage', () => {
 
     await waitFor(() => expect(getScreenTask).toHaveBeenCalledTimes(1));
     expect(screen.getByText('ScreeningRunning')).toBeInTheDocument();
-    expect(screen.getByText('Screening任务仍在后units运行，Status轮询暂时Timeout，将自动Retry。')).toBeInTheDocument();
+    expect(screen.getByText('ScreeningTask仍atafterunitsRun, Status轮询暂hourTimeout, willautoRetry.')).toBeInTheDocument();
     expect(screen.queryByText(/Connect上游服务Timeout/)).not.toBeInTheDocument();
     expect(window.sessionStorage.getItem('dsa.screening.activeScreenTask.v1')).toContain('screen-task-1');
   });
@@ -1196,7 +1196,7 @@ describe('StockScreeningPage', () => {
           code: '000001',
           name: 'Ping An Bank',
           score: 88.5,
-          reason: '本地后置Score: value_quality',
+          reason: 'LocalSuffixScore: value_quality',
           amount: 1042000000,
           factorScores: {
             value: 87.44,
@@ -1220,11 +1220,11 @@ describe('StockScreeningPage', () => {
     expect(await screen.findByText('Screening enabled')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /运行Screening/ }));
 
-    expect(await screen.findByText('当前使用因子Sort')).toBeInTheDocument();
+    expect(await screen.findByText('current使use因SubSort')).toBeInTheDocument();
     expect(screen.getByText(/缺少Available LLM API Key/)).toBeInTheDocument();
     expect(screen.queryByText(/Missing gemini_api_key/)).not.toBeInTheDocument();
     expect(screen.getByText(/Sort：OK性因子/)).toBeInTheDocument();
-    expect(screen.getByText('因子Sort')).toBeInTheDocument();
+    expect(screen.getByText('因SubSort')).toBeInTheDocument();
     expect(screen.getByText(/主要优势：流动性 93、Valuation 87/)).toBeInTheDocument();
     expect(screen.queryByText(/LLM 已Fallback/)).not.toBeInTheDocument();
   });
@@ -1240,7 +1240,7 @@ describe('StockScreeningPage', () => {
         {
           rank: 1,
           code: '601919',
-          name: '中远海控',
+          name: 'In progressfarHai控',
           score: 82.88,
           llmScore: 82,
           riskLevel: 'low',
@@ -1259,7 +1259,7 @@ describe('StockScreeningPage', () => {
     fireEvent.click(screen.getByRole('button', { name: /运行Screening/ }));
 
     expect(await screen.findByText('Screeninginfo')).toBeInTheDocument();
-    expect(screen.getAllByText('SourceFallback：tushare（交易日历暂无Available开市日）')).toHaveLength(1);
+    expect(screen.getAllByText('SourceFallback: tushare (tradeday历暂 none Available开marketday) ')).toHaveLength(1);
     expect(screen.queryByText(/trade_cal returned no open trading days/)).not.toBeInTheDocument();
   });
 
@@ -1292,11 +1292,11 @@ describe('StockScreeningPage', () => {
     expect(await screen.findByText('Screening enabled')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /运行Screening/ }));
 
-    const efinanceWarning = await screen.findByText('SourceFallback：efinance（NetworkConnect中断）');
+    const efinanceWarning = await screen.findByText('SourceFallback: efinance (NetworkConnectIn progress断) ');
     const alert = efinanceWarning.closest('[role="alert"]');
     expect(alert).toHaveClass('max-w-full');
     expect(efinanceWarning).toBeInTheDocument();
-    expect(screen.getByText('SourceFallback：akshare_em（NetworkConnect中断）')).toBeInTheDocument();
+    expect(screen.getByText('SourceFallback: akshare_em (NetworkConnectIn progress断) ')).toBeInTheDocument();
     expect(screen.queryByText(/HTTPConnectionPool/)).not.toBeInTheDocument();
     expect(screen.queryByText(/\/api\/qt\/clist\/get/)).not.toBeInTheDocument();
     expect(screen.queryByText(/RemoteDisconnected/)).not.toBeInTheDocument();
@@ -1338,11 +1338,11 @@ describe('StockScreeningPage', () => {
     expect(await screen.findByText('Screening enabled')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /运行Screening/ }));
 
-    expect(await screen.findByText('深度补充：1 / 1')).toBeInTheDocument();
+    expect(await screen.findByText('deep补充: 1 / 1')).toBeInTheDocument();
 
-    expect(screen.getByText('增强摘要')).toBeInTheDocument();
+    expect(screen.getByText('增强Summary')).toBeInTheDocument();
     expect(screen.getByText(/Quote：现价 1688/)).toBeInTheDocument();
-    expect(screen.getByText('相关新闻')).toBeInTheDocument();
+    expect(screen.getByText('relatednews')).toBeInTheDocument();
     expect(screen.getByText('Kweichow Moutai latest filing')).toBeInTheDocument();
     expect(screen.getByText('Data补充info')).toBeInTheDocument();
     expect(screen.getByText('stock_news_unavailable')).toBeInTheDocument();

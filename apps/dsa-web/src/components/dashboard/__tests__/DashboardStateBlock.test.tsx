@@ -4,7 +4,7 @@ import { DashboardStateBlock } from '../DashboardStateBlock';
 
 describe('DashboardStateBlock', () => {
   it('renders the title as a paragraph by default', () => {
-    const { container } = render(<DashboardStateBlock title="Start analysis" description="查看info文案" />);
+    const { container } = render(<DashboardStateBlock title="Start analysis" description="Viewinfo文案" />);
 
     const title = screen.getByText('Start analysis');
     expect(title.tagName).toBe('P');
@@ -12,7 +12,7 @@ describe('DashboardStateBlock', () => {
   });
 
   it('renders the title with the requested heading level', () => {
-    render(<DashboardStateBlock title="Start analysis" titleAs="h3" description="查看info文案" />);
+    render(<DashboardStateBlock title="Start analysis" titleAs="h3" description="Viewinfo文案" />);
 
     expect(screen.getByRole('heading', { name: 'Start analysis', level: 3 })).toBeInTheDocument();
   });
@@ -21,27 +21,27 @@ describe('DashboardStateBlock', () => {
     const { rerender } = render(
       <DashboardStateBlock
         title="Start analysis"
-        description="InputStock code进行Analyze"
+        description="InputStock code进rowAnalyze"
         icon={<span data-testid="icon">icon</span>}
         action={<button type="button">立即开始</button>}
       />,
     );
 
     expect(screen.getByTestId('icon')).toBeInTheDocument();
-    expect(screen.getByText('InputStock code进行Analyze')).toBeInTheDocument();
+    expect(screen.getByText('InputStock code进rowAnalyze')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '立即Start' })).toBeInTheDocument();
 
     rerender(
       <DashboardStateBlock
         title="Start analysis"
         titleAs="h3"
-        description="InputStock code进行Analyze"
+        description="InputStock code进rowAnalyze"
         loading
       />,
     );
 
     expect(screen.getByRole('heading', { name: 'Start analysis', level: 3 })).toBeInTheDocument();
-    expect(screen.getByText('InputStock code进行Analyze')).toBeInTheDocument();
+    expect(screen.getByText('InputStock code进rowAnalyze')).toBeInTheDocument();
     expect(document.querySelector('.home-spinner')).not.toBeNull();
     expect(screen.queryByTestId('icon')).not.toBeInTheDocument();
   });

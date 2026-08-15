@@ -6,7 +6,7 @@ import { RunFlowGraph } from '../RunFlowGraph';
 const lanes: RunFlowLane[] = [
   { id: 'entry', label: 'Entry', order: 1 },
   { id: 'data_source', label: 'DataSource', order: 2 },
-  { id: 'analysis', label: 'Analyze引擎', order: 3 },
+  { id: 'analysis', label: 'AnalyzeEngine', order: 3 },
 ];
 
 const nodes: RunFlowNode[] = [
@@ -21,7 +21,7 @@ const nodes: RunFlowNode[] = [
     id: 'news',
     lane: 'data_source',
     kind: 'data_source',
-    label: '新闻舆情',
+    label: 'News sentiment',
     status: 'fallback',
     provider: 'AkShare',
     startedAt: '2026-06-08T10:00:00',
@@ -77,7 +77,7 @@ describe('RunFlowGraph', () => {
     expect(screen.getByText('FallbackInput')).toBeInTheDocument();
     expect(screen.getByTestId('run-flow-node-news')).toHaveTextContent('Start');
     expect(screen.getByTestId('run-flow-node-news')).toHaveTextContent('2026');
-    expect(screen.getByRole('button', { name: '新闻舆情 节点，Status Fallback' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'News sentiment node, Status Fallback' })).toBeInTheDocument();
     const marker = container.querySelector('marker');
     expect(marker).toHaveAttribute('markerWidth', '4');
     expect(marker).toHaveAttribute('markerHeight', '4');
@@ -86,7 +86,7 @@ describe('RunFlowGraph', () => {
     fireEvent.mouseEnter(screen.getByTestId('run-flow-node-news'));
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: '新闻舆情 节点，Status Fallback' }));
+    fireEvent.click(screen.getByRole('button', { name: 'News sentiment node, Status Fallback' }));
 
     expect(onSelectNode).toHaveBeenCalledWith(expect.objectContaining({ id: 'news' }));
   });
@@ -175,7 +175,7 @@ describe('RunFlowGraph', () => {
         id: 'quote',
         lane: 'data_source',
         kind: 'data_source',
-        label: '实时Quote',
+        label: '实hourQuote',
         status: 'success',
       },
       {
@@ -251,7 +251,7 @@ describe('RunFlowGraph', () => {
             id: 'task_queue',
             lane: 'entry',
             kind: 'queue',
-            label: '任务Queue',
+            label: 'TaskQueue',
             status: 'success',
           },
         ]}
@@ -278,7 +278,7 @@ describe('RunFlowGraph', () => {
         id: 'quote',
         lane: 'data_source',
         kind: 'data_source',
-        label: '实时Quote',
+        label: '实hourQuote',
         status: 'success',
       },
     ];
@@ -386,7 +386,7 @@ describe('RunFlowGraph', () => {
         id: 'late-news',
         lane: 'data_source',
         kind: 'data_source',
-        label: '新闻舆情',
+        label: 'News sentiment',
         status: 'success',
         startedAt: '2026-06-08T10:00:05',
       },
@@ -394,7 +394,7 @@ describe('RunFlowGraph', () => {
         id: 'early-quote',
         lane: 'data_source',
         kind: 'data_source',
-        label: '实时Quote',
+        label: '实hourQuote',
         status: 'success',
         startedAt: '2026-06-08T10:00:01',
       },
@@ -437,7 +437,7 @@ describe('RunFlowGraph', () => {
         id: 'news',
         lane: 'data_source',
         kind: 'data_source',
-        label: '新闻舆情',
+        label: 'News sentiment',
         status: 'success',
         provider: 'TushareFetcher -> AkshareFetcher -> TushareFetcher -> AkshareFetcher',
       },
@@ -487,7 +487,7 @@ describe('RunFlowGraph', () => {
             id: 'topology_data_news_search',
             lane: 'data_source',
             kind: 'data_source',
-            label: '新闻舆情',
+            label: 'News sentiment',
             status: 'fallback',
             metadata: { topologyGroup: 'provider_attempts' },
           },
@@ -498,7 +498,7 @@ describe('RunFlowGraph', () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole('button', { name: 'Expand 新闻舆情 Run attempts' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Expand News sentiment Run attempts' }));
 
     expect(screen.getByTestId('run-flow-node-topology_data_news_search')).toHaveClass('pb-8');
     expect(onToggleExpanded).toHaveBeenCalledWith('topology_data_news_search');
@@ -539,14 +539,14 @@ describe('RunFlowGraph', () => {
             id: 'task_queue',
             lane: 'entry',
             kind: 'queue',
-            label: '任务Queue',
+            label: 'TaskQueue',
             status: 'success',
           },
           {
             id: 'topology_data_realtime_quote',
             lane: 'data_source',
             kind: 'data_source',
-            label: '实时Quote',
+            label: '实hourQuote',
             status: 'fallback',
             metadata: { topologyGroup: 'provider_attempts', data_type: 'realtime_quote', expanded: true },
           },
@@ -554,7 +554,7 @@ describe('RunFlowGraph', () => {
             id: 'provider_realtime_tushare_1',
             lane: 'data_source',
             kind: 'data_source',
-            label: '实时Quote · TushareFetcher',
+            label: '实hourQuote · TushareFetcher',
             provider: 'TushareFetcher',
             status: 'success',
             metadata: { data_type: 'realtime_quote' },
@@ -563,7 +563,7 @@ describe('RunFlowGraph', () => {
             id: 'provider_realtime_akshare_2',
             lane: 'data_source',
             kind: 'data_source',
-            label: '实时Quote · AkshareFetcher',
+            label: '实hourQuote · AkshareFetcher',
             provider: 'AkshareFetcher',
             status: 'success',
             metadata: { data_type: 'realtime_quote' },
@@ -638,7 +638,7 @@ describe('RunFlowGraph', () => {
             id: 'topology_data_realtime_quote',
             lane: 'data_source',
             kind: 'data_source',
-            label: '实时Quote',
+            label: '实hourQuote',
             status: 'fallback',
             startedAt: '2026-06-08T10:00:00',
             metadata: { topologyGroup: 'provider_attempts', data_type: 'realtime_quote', expanded: true },
@@ -655,7 +655,7 @@ describe('RunFlowGraph', () => {
             id: 'provider_realtime_tushare_1',
             lane: 'data_source',
             kind: 'data_source',
-            label: '实时Quote · TushareFetcher',
+            label: '实hourQuote · TushareFetcher',
             provider: 'TushareFetcher',
             status: 'success',
             startedAt: '2026-06-08T10:00:02',
@@ -665,7 +665,7 @@ describe('RunFlowGraph', () => {
             id: 'provider_realtime_akshare_2',
             lane: 'data_source',
             kind: 'data_source',
-            label: '实时Quote · AkshareFetcher',
+            label: '实hourQuote · AkshareFetcher',
             provider: 'AkshareFetcher',
             status: 'success',
             startedAt: '2026-06-08T10:00:03',
@@ -730,7 +730,7 @@ describe('RunFlowGraph', () => {
             id: 'topology_data_realtime_quote',
             lane: 'data_source',
             kind: 'data_source',
-            label: '实时Quote',
+            label: '实hourQuote',
             status: 'fallback',
             startedAt: '2026-06-08T10:00:00',
             metadata: {
@@ -744,7 +744,7 @@ describe('RunFlowGraph', () => {
             id: 'topology_data_news_search',
             lane: 'data_source',
             kind: 'data_source',
-            label: '新闻舆情',
+            label: 'News sentiment',
             status: 'fallback',
             startedAt: '2026-06-08T10:00:01',
             metadata: {
@@ -766,7 +766,7 @@ describe('RunFlowGraph', () => {
             id: 'provider_realtime_tushare_1',
             lane: 'data_source',
             kind: 'data_source',
-            label: '实时Quote · TushareFetcher',
+            label: '实hourQuote · TushareFetcher',
             status: 'success',
             startedAt: '2026-06-08T10:00:03',
             metadata: {
@@ -780,7 +780,7 @@ describe('RunFlowGraph', () => {
             id: 'provider_news_tavily_1',
             lane: 'data_source',
             kind: 'data_source',
-            label: '新闻舆情 · Tavily',
+            label: 'News sentiment · Tavily',
             status: 'success',
             startedAt: '2026-06-08T10:00:04',
             metadata: {
@@ -794,7 +794,7 @@ describe('RunFlowGraph', () => {
             id: 'provider_realtime_akshare_2',
             lane: 'data_source',
             kind: 'data_source',
-            label: '实时Quote · AkshareFetcher',
+            label: '实hourQuote · AkshareFetcher',
             status: 'success',
             startedAt: '2026-06-08T10:00:05',
             metadata: {
@@ -808,7 +808,7 @@ describe('RunFlowGraph', () => {
             id: 'provider_news_searxng_2',
             lane: 'data_source',
             kind: 'data_source',
-            label: '新闻舆情 · SearXNG',
+            label: 'News sentiment · SearXNG',
             status: 'failed',
             startedAt: '2026-06-08T10:00:06',
             metadata: {

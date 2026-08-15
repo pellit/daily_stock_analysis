@@ -53,11 +53,11 @@ const combinedMarketReviewPayload: MarketReviewPayload = {
       }],
       sectors: {
         top: [{ name: 'Semiconductors', changePct: 2.35 }],
-        bottom: [{ name: '煤炭', changePct: -1.1 }],
+        bottom: [{ name: 'Coal', changePct: -1.1 }],
       },
       concepts: {
         top: [{ name: 'RoboticsTheme', changePct: 4.2 }],
-        bottom: [{ name: '转基因', changePct: -2.05 }],
+        bottom: [{ name: 'Transfer基因', changePct: -2.05 }],
       },
     },
     hk: {
@@ -68,7 +68,7 @@ const combinedMarketReviewPayload: MarketReviewPayload = {
         limitUpCount: 0,
         limitDownCount: 0,
         totalAmount: 1180,
-        turnoverUnit: '100M港元',
+        turnoverUnit: '100MHKyuan',
       },
       indices: [{
         code: 'HSI',
@@ -123,8 +123,8 @@ describe('MarketReviewReportView', () => {
     expect(screen.getByText('No rotation view yet')).toBeInTheDocument();
     expect(screen.getByText('Risks & Watchlist')).toBeInTheDocument();
     expect(screen.getByText('No key observations yet')).toBeInTheDocument();
-    expect(screen.queryByText('复盘摘要')).not.toBeInTheDocument();
-    expect(screen.queryByText('暂无摘要')).not.toBeInTheDocument();
+    expect(screen.queryByText('复盘Summary')).not.toBeInTheDocument();
+    expect(screen.queryByText('暂 none Summary')).not.toBeInTheDocument();
   });
 
   it('renders structured data for every market in a combined market review payload', () => {
@@ -170,15 +170,15 @@ describe('MarketReviewReportView', () => {
       />,
     );
 
-    expect(screen.getByText('结构化MarketData')).toBeInTheDocument();
-    expect(screen.getAllByText('up家数')).toHaveLength(2);
-    expect(screen.getAllByText('down家数')).toHaveLength(2);
-    expect(screen.getAllByText('涨停/跌停')).toHaveLength(2);
-    expect(screen.getAllByText('成交额')).toHaveLength(2);
+    expect(screen.getByText('structChemicalMarketData')).toBeInTheDocument();
+    expect(screen.getAllByText('up家number')).toHaveLength(2);
+    expect(screen.getAllByText('down家number')).toHaveLength(2);
+    expect(screen.getAllByText('limit up/limit down')).toHaveLength(2);
+    expect(screen.getAllByText('volume额')).toHaveLength(2);
     expect(screen.getAllByText('Index')).toHaveLength(2);
     expect(screen.getAllByText('Latest')).toHaveLength(2);
     expect(screen.getAllByText('Change')).toHaveLength(2);
-    expect(screen.getAllByText('高/低')).toHaveLength(2);
+    expect(screen.getAllByText('high/low')).toHaveLength(2);
     expect(screen.queryByText('Structured Market Data')).not.toBeInTheDocument();
     expect(screen.queryByText('Advancers')).not.toBeInTheDocument();
     expect(screen.queryByText('Index')).not.toBeInTheDocument();
@@ -300,7 +300,7 @@ describe('MarketReviewReportView', () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole('button', { name: '查看History 7 RUN FLOW' }));
+    fireEvent.click(screen.getByRole('button', { name: 'ViewHistory 7 RUN FLOW' }));
 
     expect(onOpenRunFlow).toHaveBeenCalledWith(7);
   });

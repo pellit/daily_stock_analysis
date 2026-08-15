@@ -6,7 +6,7 @@ import { SidebarNav } from '../SidebarNav';
 const mockLogout = vi.fn().mockResolvedValue(undefined);
 const mockGetScreeningStatus = vi.fn().mockResolvedValue({ enabled: false, available: false });
 const mockThemeToggle = vi.fn(({ collapsed }: { collapsed?: boolean }) => (
-  <button type="button">{collapsed ? 'Toggle theme(折叠)' : 'Toggle theme'}</button>
+  <button type="button">{collapsed ? 'Toggle theme(Collapse)' : 'Toggle theme'}</button>
 ));
 
 const completionBadgeState = { value: true };
@@ -112,7 +112,7 @@ describe('SidebarNav', () => {
     expect(mockThemeToggle).toHaveBeenCalledWith(
       expect.objectContaining({ variant: 'nav', collapsed: true }),
     );
-    expect(screen.getByRole('button', { name: 'Toggle theme(折叠)' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Toggle theme(Collapse)' })).toBeInTheDocument();
   });
 
   it('renders the alerts navigation item and marks it active', () => {

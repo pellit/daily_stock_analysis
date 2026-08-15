@@ -68,7 +68,7 @@ describe('llmProviderTemplates', () => {
 
   it('uses volcengine as the default Volcengine Ark provider id', () => {
     expect(LLM_PROVIDER_TEMPLATE_BY_ID.volcengine).toMatchObject({
-      label: '火山方舟（Doubao）',
+      label: '火山方舟 (Doubao) ',
       protocol: 'openai',
       baseUrl: 'https://ark.cn-beijing.volces.com/api/v3',
       placeholderModels: 'doubao-seed-1-6-251015,doubao-seed-1-6-thinking-251015',
@@ -78,7 +78,7 @@ describe('llmProviderTemplates', () => {
   });
 
   it('keeps focused config hints on providers with common setup pitfalls', () => {
-    expect(LLM_PROVIDER_TEMPLATE_BY_ID.ollama.configHint).toContain('Ollama 服务');
+    expect(LLM_PROVIDER_TEMPLATE_BY_ID.ollama.configHint).toContain('Ollama Service');
     expect(LLM_PROVIDER_TEMPLATE_BY_ID.siliconflow.configHint).toContain('API Key');
     expect(LLM_PROVIDER_TEMPLATE_BY_ID.openrouter.configHint).toContain('API Key');
     expect(LLM_PROVIDER_TEMPLATE_BY_ID.openai.configHint).toBeUndefined();

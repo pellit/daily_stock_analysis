@@ -19,14 +19,14 @@ const diagnosticSummary: RunDiagnosticSummary = {
   triggerSource: 'web',
   status: 'degraded',
   statusLabel: 'Degraded',
-  reason: '实时Quote baostock Success，前置SourceFailure后已Continue',
+  reason: '实hourQuote baostock Success, PrefixSourceFailureafter Continue',
   copyText: 'trace_id: trace-1234567890abcdef\ndata_status: degraded',
   components: {
     realtimeQuote: {
       key: 'realtime_quote',
-      label: '实时Quote',
+      label: '实hourQuote',
       status: 'degraded',
-      message: '实时Quote baostock Success，前置SourceFailure后已Continue',
+      message: '实hourQuote baostock Success, PrefixSourceFailureafter Continue',
       details: {
         provider: 'baostock',
         attempts: 2,
@@ -36,7 +36,7 @@ const diagnosticSummary: RunDiagnosticSummary = {
       key: 'notification',
       label: 'Notification',
       status: 'not_configured',
-      message: 'Notification未Config或本次Skip',
+      message: 'Notificationnot ConfigorthisSkip',
     },
   },
 };
@@ -58,16 +58,16 @@ describe('ReportDiagnostics', () => {
     render(<ReportDiagnostics recordId={1} />);
 
     expect(historyApi.getDiagnostics).toHaveBeenCalledWith(1);
-    expect(await screen.findByText('运行Status')).toBeInTheDocument();
+    expect(await screen.findByText('RunStatus')).toBeInTheDocument();
     const panel = screen.getByTestId('run-diagnostics');
     expect(panel).not.toHaveAttribute('open');
     expect(screen.getByText('Degraded')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByText('运行Status'));
+    fireEvent.click(screen.getByText('RunStatus'));
 
     expect(panel).toHaveAttribute('open');
-    expect(screen.getByText('最近Failure后已Fallback')).toBeInTheDocument();
-    expect(screen.getByText('未Config')).toBeInTheDocument();
+    expect(screen.getByText('最nearFailureafter Fallback')).toBeInTheDocument();
+    expect(screen.getByText('not Config')).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'Copy排障Info' }));
 
@@ -75,7 +75,7 @@ describe('ReportDiagnostics', () => {
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(diagnosticSummary.copyText);
     });
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: '已Copy' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: ' Copy' })).toBeInTheDocument();
     });
   });
 
@@ -94,8 +94,8 @@ describe('ReportDiagnostics', () => {
 
     render(<ReportDiagnostics recordId={1} onOpenRunFlow={onOpenRunFlow} />);
 
-    fireEvent.click(await screen.findByText('运行Status'));
-    fireEvent.click(screen.getByRole('button', { name: '查看History 1 RUN FLOW' }));
+    fireEvent.click(await screen.findByText('RunStatus'));
+    fireEvent.click(screen.getByRole('button', { name: 'ViewHistory 1 RUN FLOW' }));
 
     expect(onOpenRunFlow).toHaveBeenCalledWith(1);
   });
@@ -112,6 +112,6 @@ describe('ReportDiagnostics', () => {
     await waitFor(() => {
       expect(historyApi.getDiagnostics).toHaveBeenCalledTimes(2);
     });
-    expect(await screen.findByText('运行Status')).toBeInTheDocument();
+    expect(await screen.findByText('RunStatus')).toBeInTheDocument();
   });
 });

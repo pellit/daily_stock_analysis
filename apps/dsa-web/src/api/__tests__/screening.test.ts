@@ -85,7 +85,7 @@ describe('screeningApi', () => {
       },
     });
 
-    await expect(screeningApi.enable()).rejects.toThrow('Screening功能不Available');
+    await expect(screeningApi.enable()).rejects.toThrow('Screeningfeaturenot Available');
 
     expect(updateConfig).toHaveBeenNthCalledWith(1, {
       configVersion: 'v1',
@@ -149,7 +149,7 @@ describe('screeningApi', () => {
             enabled: true,
             provider: 'akshare',
             topic: 'AI绠楀姏',
-            route: [{ title: 'Intraday发酵', description: '事件摘要' }],
+            route: [{ title: 'IntradaySend酵', description: 'EventSummary' }],
             stocks: [],
             stock_count: 0,
           },
@@ -210,10 +210,10 @@ describe('screeningApi', () => {
         enabled: true,
         provider: 'akshare',
         topic: 'Glass substrate',
-        summary: 'Glass substrateIntraday发酵',
-        route: [{ title: 'Intraday发酵', description: '出现大笔Buy' }],
-        stocks: [{ code: '920438', name: '戈碧迦', role: '异动核心' }],
-        leader_stocks: [{ code: '920438', name: '戈碧迦', role: '异动核心' }],
+        summary: 'Glass substrateIntradaySend酵',
+        route: [{ title: 'IntradaySend酵', description: 'showbig笔Buy' }],
+        stocks: [{ code: '920438', name: '戈碧迦', role: '异MoveCore' }],
+        leader_stocks: [{ code: '920438', name: '戈碧迦', role: '异MoveCore' }],
         stock_count: 1,
       },
     });
@@ -279,7 +279,7 @@ describe('screeningApi', () => {
         task_id: 'screen-task-1',
         trace_id: 'screen-task-1',
         status: 'pending',
-        message: 'Screening Screening任务已Submit',
+        message: 'Screening ScreeningTaskSubmitted',
         strategy: 'dual_low',
         market: 'cn',
         max_results: 3,
@@ -326,7 +326,7 @@ describe('screeningApi', () => {
           task_id: 'screen-task-storage-disabled',
           trace_id: 'screen-task-storage-disabled',
           status: 'pending',
-          message: 'Screening任务已Submit',
+          message: 'ScreeningTaskSubmitted',
           strategy: 'dual_low',
           market: 'cn',
           max_results: 3,
@@ -357,7 +357,7 @@ describe('screeningApi', () => {
         trace_id: 'screen-task-1',
         status: 'completed',
         progress: 100,
-        message: '任务执行Complete',
+        message: 'TaskexecuteComplete',
         result: {
           enabled: true,
           candidates: [],

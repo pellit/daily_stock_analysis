@@ -49,7 +49,7 @@ vi.mock('recharts', () => ({
 const baseSignal: DecisionSignalItem = {
   id: 1,
   stockCode: '600519',
-  stockName: '贵州茅units',
+  stockName: 'Kweichow Moutai',
   market: 'cn',
   sourceType: 'analysis',
   sourceReportId: 3001,

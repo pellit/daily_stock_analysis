@@ -22,7 +22,7 @@ const snapshot: RunFlowSnapshot = {
   taskId: 'task-1',
   traceId: 'trace-1',
   stockCode: '600519',
-  stockName: '贵州茅units',
+  stockName: 'Kweichow Moutai',
   status: 'degraded',
   generatedAt: '2026-06-08T08:00:00Z',
   summary: {
@@ -36,7 +36,7 @@ const snapshot: RunFlowSnapshot = {
   lanes: [
     { id: 'entry', label: 'Entry', order: 1 },
     { id: 'data_source', label: 'DataSource', order: 2 },
-    { id: 'analysis', label: 'Analyze引擎', order: 3 },
+    { id: 'analysis', label: 'AnalyzeEngine', order: 3 },
     { id: 'artifact', label: 'Output', order: 4 },
   ],
   nodes: [
@@ -46,19 +46,19 @@ const snapshot: RunFlowSnapshot = {
       kind: 'entry',
       label: 'UserRequest',
       status: 'success',
-      message: '任务Request已Create',
+      message: 'TaskRequest Create',
     },
     {
       id: 'news',
       lane: 'data_source',
       kind: 'data_source',
-      label: '新闻舆情',
+      label: 'News sentiment',
       provider: 'AkShare',
       status: 'fallback',
       durationMs: 1200,
       attempts: 2,
       recordCount: 8,
-      message: '主SourceFailure后FallbackSuccess',
+      message: 'main SourceFailureafterFallbackSuccess',
       metadata: {
         fallbackFrom: 'Tushare',
         fallbackTo: 'AkShare',
@@ -99,7 +99,7 @@ const snapshot: RunFlowSnapshot = {
       severity: 'info',
       type: 'task_created',
       nodeId: 'request',
-      title: '任务Create',
+      title: 'TaskCreate',
     },
     {
       id: 'evt-2',
@@ -107,8 +107,8 @@ const snapshot: RunFlowSnapshot = {
       severity: 'warning',
       type: 'provider_fallback',
       nodeId: 'news',
-      title: '新闻SourceFallback',
-      message: 'Retry后切换Source',
+      title: 'newsSourceFallback',
+      message: 'Retryafter切ExchangeSource',
     },
   ],
 };
@@ -120,14 +120,14 @@ const providerAttemptSnapshot: RunFlowSnapshot = {
       id: 'task_queue',
       lane: 'entry',
       kind: 'queue',
-      label: '任务Queue',
+      label: 'TaskQueue',
       status: 'success',
     },
     {
       id: 'provider_news_search_tavily_1',
       lane: 'data_source',
       kind: 'data_source',
-      label: '新闻舆情 · Tavily',
+      label: 'News sentiment · Tavily',
       provider: 'Tavily',
       status: 'failed',
       durationMs: 1200,
@@ -137,7 +137,7 @@ const providerAttemptSnapshot: RunFlowSnapshot = {
       id: 'provider_news_search_searxng_2',
       lane: 'data_source',
       kind: 'data_source',
-      label: '新闻舆情 · SearXNG',
+      label: 'News sentiment · SearXNG',
       provider: 'SearXNG',
       status: 'success',
       durationMs: 800,
@@ -182,7 +182,7 @@ const providerAttemptSnapshot: RunFlowSnapshot = {
       severity: 'warning',
       type: 'provider_run',
       nodeId: 'provider_news_search_tavily_1',
-      title: '新闻舆情Failure',
+      title: 'News sentimentFailure',
     },
   ],
 };
@@ -195,7 +195,7 @@ const contextBlockSnapshot: RunFlowSnapshot = {
       id: 'context_block_news',
       lane: 'data_source',
       kind: 'data_source',
-      label: '新闻',
+      label: 'news',
       status: 'success',
       recordCount: 6,
       metadata: { block_key: 'news' },
@@ -204,7 +204,7 @@ const contextBlockSnapshot: RunFlowSnapshot = {
       id: 'context_block_fundamental',
       lane: 'data_source',
       kind: 'data_source',
-      label: '基本面',
+      label: 'Fundamentals',
       status: 'degraded',
       metadata: { block_key: 'fundamental' },
     },
@@ -253,7 +253,7 @@ describe('RunFlowPanel', () => {
     vi.mocked(analysisApi.getTaskFlow).mockRejectedValue({
       response: {
         status: 404,
-        data: { message: 'RUN FLOW不存在' },
+        data: { message: 'RUN FLOWDoes not exist' },
       },
     });
 
@@ -281,22 +281,22 @@ describe('RunFlowPanel', () => {
   it('renders a successful graph, event stream, and selectable node details', async () => {
     vi.mocked(analysisApi.getTaskFlow).mockResolvedValue(snapshot);
 
-    render(<RunFlowPanel source={{ type: 'task', taskId: 'task-1' }} title="贵州茅unitsRUN FLOW" />);
+    render(<RunFlowPanel source={{ type: 'task', taskId: 'task-1' }} title="Kweichow MoutaiRUN FLOW" />);
 
     expect(await screen.findByTestId('run-flow-panel')).toBeInTheDocument();
-    expect(screen.getByText('贵州茅unitsRUN FLOW')).toBeInTheDocument();
+    expect(screen.getByText('Kweichow MoutaiRUN FLOW')).toBeInTheDocument();
     expect(screen.getByTestId('run-flow-layout')).toHaveClass('xl:grid-cols-[minmax(0,1fr)_19.25rem]');
     expect(screen.getByTestId('run-flow-events-column')).toHaveClass('xl:max-h-[calc(100vh-18rem)]');
     expect(screen.getByTestId('run-flow-graph')).toBeInTheDocument();
     expect(screen.getByTestId('run-flow-events')).toBeInTheDocument();
-    expect(await screen.findByTestId('run-flow-node-details')).toHaveTextContent('新闻舆情');
+    expect(await screen.findByTestId('run-flow-node-details')).toHaveTextContent('News sentiment');
 
-    fireEvent.click(screen.getByRole('button', { name: 'LLM Generation 节点，Status Success' }));
+    fireEvent.click(screen.getByRole('button', { name: 'LLM Generation node, Status Success' }));
 
     expect(screen.getByTestId('run-flow-node-details')).toHaveTextContent('LLM Generation');
     expect(screen.getByTestId('run-flow-node-details')).toHaveTextContent('DeepSeek');
 
-    fireEvent.click(screen.getByRole('button', { name: '新闻舆情 节点，Status Fallback' }));
+    fireEvent.click(screen.getByRole('button', { name: 'News sentiment node, Status Fallback' }));
 
     expect(screen.getByTestId('run-flow-node-details')).toHaveTextContent('fallbackFrom');
     expect(screen.getByTestId('run-flow-node-details')).toHaveTextContent('Tushare');
@@ -332,9 +332,9 @@ describe('RunFlowPanel', () => {
 
     render(<RunFlowPanel source={{ type: 'task', taskId: 'task-1' }} />);
 
-    expect(await screen.findByTestId('run-flow-node-details')).toHaveTextContent('新闻舆情');
+    expect(await screen.findByTestId('run-flow-node-details')).toHaveTextContent('News sentiment');
     expect(screen.getByText('Save')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '新闻舆情 节点，Status Fallback' })).toHaveAttribute('aria-pressed', 'false');
+    expect(screen.getByRole('button', { name: 'News sentiment node, Status Fallback' })).toHaveAttribute('aria-pressed', 'false');
   });
 
   it('expands provider attempt groups from node details', async () => {
@@ -367,7 +367,7 @@ describe('RunFlowPanel', () => {
           id: 'provider_realtime_quote_tickflowfetcher_1',
           lane: 'data_source',
           kind: 'data_source',
-          label: '实时Quote · TickFlowFetcher',
+          label: '实hourQuote · TickFlowFetcher',
           provider: 'TickFlowFetcher',
           status: 'failed',
           durationMs: 892,
@@ -377,7 +377,7 @@ describe('RunFlowPanel', () => {
           id: 'provider_realtime_quote_aksharefetcher_2',
           lane: 'data_source',
           kind: 'data_source',
-          label: '实时Quote · AkshareFetcher',
+          label: '实hourQuote · AkshareFetcher',
           provider: 'AkshareFetcher',
           status: 'success',
           durationMs: 8700,
@@ -463,8 +463,8 @@ describe('RunFlowPanel', () => {
 
     expect(details).toHaveTextContent('ContextPack');
     expect(details).toHaveTextContent('Context inputs');
-    expect(details).toHaveTextContent('新闻');
-    expect(details).toHaveTextContent('基本面');
+    expect(details).toHaveTextContent('news');
+    expect(details).toHaveTextContent('Fundamentals');
     expect(details).not.toHaveTextContent('context_status_counts');
   });
 

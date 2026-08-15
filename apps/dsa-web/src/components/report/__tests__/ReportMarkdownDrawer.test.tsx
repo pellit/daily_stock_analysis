@@ -7,7 +7,7 @@ const renderDrawer = async (onClose = vi.fn()) => {
   render(
     <ReportMarkdownDrawer
       recordId={1}
-      stockName="贵州茅units"
+      stockName="Kweichow Moutai"
       stockCode="600519"
       onClose={onClose}
     />,
@@ -38,7 +38,7 @@ describe('ReportMarkdownDrawer', () => {
       await renderDrawer(onClose);
 
       expect(screen.getByRole('dialog')).toBeInTheDocument();
-      expect(await screen.findByText('加载ReportFailure')).toBeInTheDocument();
+      expect(await screen.findByText('LoadingReportFailure')).toBeInTheDocument();
 
       fireEvent.click(screen.getByRole('button', { name: 'Close' }));
 
@@ -63,7 +63,7 @@ describe('ReportMarkdownDrawer', () => {
       await renderDrawer();
 
       expect(screen.getByRole('dialog')).toBeInTheDocument();
-      expect(await screen.findByText('加载ReportFailure')).toBeInTheDocument();
+      expect(await screen.findByText('LoadingReportFailure')).toBeInTheDocument();
     } finally {
       consoleError.mockRestore();
     }
@@ -88,7 +88,7 @@ describe('ReportMarkdownDrawer', () => {
     try {
       await renderDrawer();
 
-      expect(await screen.findByText('加载ReportFailure')).toBeInTheDocument();
+      expect(await screen.findByText('LoadingReportFailure')).toBeInTheDocument();
 
       cleanup();
       await renderDrawer();

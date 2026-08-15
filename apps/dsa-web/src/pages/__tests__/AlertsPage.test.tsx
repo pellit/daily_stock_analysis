@@ -42,9 +42,9 @@ vi.mock('../../api/portfolio', () => ({
 }));
 
 const parsedError = {
-  title: '加载Failure',
-  message: 'Alert API 不Available',
-  rawMessage: 'Alert API 不Available',
+  title: 'LoadingFailure',
+  message: 'Alert API not Available',
+  rawMessage: 'Alert API not Available',
   category: 'http_error' as const,
   status: 500,
 };
@@ -207,13 +207,13 @@ describe('AlertsPage', () => {
     fireEvent.change(screen.getByLabelText('Price threshold'), { target: { value: '200' } });
     fireEvent.click(screen.getByRole('button', { name: 'Create rule' }));
 
-    expect(await screen.findByText('加载Failure')).toBeInTheDocument();
+    expect(await screen.findByText('LoadingFailure')).toBeInTheDocument();
     expect(screen.getByLabelText('Symbol code')).toHaveValue('aapl');
     expect(screen.getByLabelText('Price threshold')).toHaveValue(200);
   });
 
   it('clamps rules pagination when a mutation leaves the current page empty', async () => {
-    const page2Rule = { ...rule, id: 2, name: '第二页规则', target: 'AAPL' };
+    const page2Rule = { ...rule, id: 2, name: '第二pagerule', target: 'AAPL' };
     listRules
       .mockResolvedValueOnce({ items: [rule], total: 21, page: 1, pageSize: 20 })
       .mockResolvedValueOnce({ items: [page2Rule], total: 21, page: 2, pageSize: 20 })
@@ -224,8 +224,8 @@ describe('AlertsPage', () => {
 
     expect(await screen.findByText('Moutai price breakout')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: '2' }));
-    expect(await screen.findByText('第二页规则')).toBeInTheDocument();
-    fireEvent.click(screen.getByLabelText('Delete 第二页规则'));
+    expect(await screen.findByText('第二pagerule')).toBeInTheDocument();
+    fireEvent.click(screen.getByLabelText('Delete 第二pagerule'));
     fireEvent.click(await screen.findByRole('button', { name: 'Delete' }));
 
     await waitFor(() => expect(deleteRule).toHaveBeenCalledWith(2));
@@ -243,8 +243,8 @@ describe('AlertsPage', () => {
   it('keeps the latest rules response when filter requests resolve out of order', async () => {
     const initialRequest = createDeferred<{ items: Array<typeof rule>; total: number; page: number; pageSize: number }>();
     const filteredRequest = createDeferred<{ items: Array<typeof rule>; total: number; page: number; pageSize: number }>();
-    const staleRule = { ...rule, id: 3, name: '旧Filter规则', enabled: true };
-    const filteredRule = { ...rule, id: 4, name: 'Disable规则', enabled: false };
+    const staleRule = { ...rule, id: 3, name: 'old Filterrule', enabled: true };
+    const filteredRule = { ...rule, id: 4, name: 'Disablerule', enabled: false };
     listRules
       .mockReset()
       .mockReturnValueOnce(initialRequest.promise)
@@ -256,11 +256,11 @@ describe('AlertsPage', () => {
     await waitFor(() => expect(listRules).toHaveBeenCalledTimes(2));
 
     filteredRequest.resolve({ items: [filteredRule], total: 1, page: 1, pageSize: 20 });
-    expect(await screen.findByText('Disable规则')).toBeInTheDocument();
+    expect(await screen.findByText('Disablerule')).toBeInTheDocument();
 
     initialRequest.resolve({ items: [staleRule], total: 1, page: 1, pageSize: 20 });
-    await waitFor(() => expect(screen.queryByText('旧Filter规则')).not.toBeInTheDocument());
-    expect(screen.getByText('Disable规则')).toBeInTheDocument();
+    await waitFor(() => expect(screen.queryByText('old Filterrule')).not.toBeInTheDocument());
+    expect(screen.getByText('Disablerule')).toBeInTheDocument();
   });
 
   it('renders API errors through ApiErrorAlert', async () => {
@@ -268,7 +268,7 @@ describe('AlertsPage', () => {
 
     render(<AlertsPage />);
 
-    expect(await screen.findByText('加载Failure')).toBeInTheDocument();
-    expect(screen.getByText('Alert API 不Available')).toBeInTheDocument();
+    expect(await screen.findByText('LoadingFailure')).toBeInTheDocument();
+    expect(screen.getByText('Alert API not Available')).toBeInTheDocument();
   });
 });

@@ -9,15 +9,15 @@ describe('RunFlowNodeDetails', () => {
       id: 'task_queue',
       lane: 'entry',
       kind: 'queue',
-      label: '任务Queue',
+      label: 'TaskQueue',
       status: 'success',
       startedAt: '2026-06-08T22:14:25',
-      message: '任务进入运行Queue',
+      message: 'TaskEnterRunQueue',
     };
 
     render(<RunFlowNodeDetails node={node} />);
 
-    expect(screen.getByText('任务Queue')).toBeInTheDocument();
+    expect(screen.getByText('TaskQueue')).toBeInTheDocument();
     expect(screen.getByText('Type')).toBeInTheDocument();
     expect(screen.getByText('Queue')).toBeInTheDocument();
     expect(screen.getByText('Start time')).toBeInTheDocument();
@@ -86,7 +86,7 @@ describe('RunFlowNodeDetails', () => {
       id: 'topology_data_realtime_quote',
       lane: 'data_source',
       kind: 'data_source',
-      label: '实时Quote',
+      label: '实hourQuote',
       provider: 'TushareFetcher -> AkshareFetcher',
       status: 'fallback',
       durationMs: 750,

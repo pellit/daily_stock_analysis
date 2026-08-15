@@ -9,7 +9,7 @@ const baseTask: TaskInfo = {
   stockName: 'Kweichow Moutai',
   status: 'processing',
   progress: 40,
-  message: '正在抓取LatestQuote',
+  message: 'FetchingLatestQuote',
   reportType: 'detailed',
   createdAt: '2026-03-21T08:00:00Z',
 };
@@ -36,7 +36,7 @@ describe('TaskPanel', () => {
     );
 
     expect(screen.getByLabelText('RequestPhase: Intraday')).toBeInTheDocument();
-    expect(screen.getByLabelText('RequestPhase: 自动Phase')).toBeInTheDocument();
+    expect(screen.getByLabelText('RequestPhase: autoPhase')).toBeInTheDocument();
   });
 
   it('renders active tasks with preserved dashboard panel styling', () => {
@@ -53,7 +53,7 @@ describe('TaskPanel', () => {
             stockCode: 'AAPL',
             stockName: 'Apple',
             status: 'pending',
-            message: '等待AnalyzeQueue',
+            message: 'waitAnalyzeQueue',
           },
         ]}
       />,
@@ -64,7 +64,7 @@ describe('TaskPanel', () => {
     expect(screen.getByText('1 Waiting')).toBeInTheDocument();
     expect(screen.getByText('Kweichow Moutai')).toBeInTheDocument();
     expect(screen.getByText('AAPL')).toBeInTheDocument();
-    expect(screen.getByLabelText('任务Status：Analyzing')).toBeInTheDocument();
+    expect(screen.getByLabelText('TaskStatus: Analyzing')).toBeInTheDocument();
     expect(screen.getByText('Diagnostics')).toBeInTheDocument();
     expect(screen.getAllByText('trace-task-1')).toHaveLength(2);
     expect(screen.queryByText(/RequestPhase:/)).not.toBeInTheDocument();
@@ -101,7 +101,7 @@ describe('TaskPanel', () => {
     expect(expandButton).toHaveAttribute('aria-expanded', 'false');
     expect(screen.getByTestId('task-panel-collapsed-summary')).toHaveTextContent('1 In progress');
     expect(screen.getByTestId('task-panel-collapsed-summary')).toHaveTextContent('1 Waiting');
-    expect(screen.getByTestId('task-panel-collapsed-summary')).toHaveTextContent('平均进度 40%');
+    expect(screen.getByTestId('task-panel-collapsed-summary')).toHaveTextContent('average进度 40%');
     expect(screen.queryByTestId('task-panel-item')).not.toBeInTheDocument();
 
     fireEvent.click(expandButton);
@@ -117,9 +117,9 @@ describe('TaskPanel', () => {
           {
             ...baseTask,
             stockCode: '601869.SH',
-            stockName: '长飞光纤',
+            stockName: 'long飞光纤',
             progress: 32,
-            message: '长飞光纤: RequestPhase: 自动Phase',
+            message: 'long飞光纤: RequestPhase: autoPhase',
             analysisPhase: 'auto',
             traceId: 'c5b9665a64e3b9f42ad9f',
           },
@@ -131,7 +131,7 @@ describe('TaskPanel', () => {
     const item = screen.getByTestId('task-panel-item');
     expect(item).toHaveClass('grid');
     expect(item).not.toHaveClass('flex');
-    expect(screen.getByText('长飞光纤')).toHaveClass('truncate');
+    expect(screen.getByText('long飞光纤')).toHaveClass('truncate');
     expect(screen.getByText('601869.SH')).toHaveClass('shrink-0');
     expect(screen.getByText('32%')).toBeInTheDocument();
 
@@ -139,7 +139,7 @@ describe('TaskPanel', () => {
     expect(diagnosticsSummary).toHaveClass('grid-cols-[auto_minmax(0,1fr)_auto]');
     expect(screen.getByText('Diagnostics')).toHaveClass('whitespace-nowrap');
     expect(screen.getByText('c5b9665a64...')).toHaveClass('truncate');
-    expect(screen.getByRole('button', { name: '查看 长飞光纤 RUN FLOW' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'View long飞光纤 RUN FLOW' })).toBeInTheDocument();
   });
 
   it('opens the run-flow view from an active task icon button', () => {
@@ -151,7 +151,7 @@ describe('TaskPanel', () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole('button', { name: '查看 Kweichow Moutai RUN FLOW' }));
+    fireEvent.click(screen.getByRole('button', { name: 'View Kweichow Moutai RUN FLOW' }));
 
     expect(onOpenRunFlow).toHaveBeenCalledWith(baseTask);
   });
@@ -163,14 +163,14 @@ describe('TaskPanel', () => {
           {
             ...baseTask,
             status: 'cancel_requested',
-            message: '正在Cancel requested',
+            message: 'In progressCancel requested',
           },
         ]}
       />,
     );
 
     expect(screen.getByText('Kweichow Moutai')).toBeInTheDocument();
-    expect(screen.getByLabelText('任务Status：Cancel requested')).toBeInTheDocument();
+    expect(screen.getByLabelText('TaskStatus: Cancel requested')).toBeInTheDocument();
     expect(screen.queryByText('Failure')).not.toBeInTheDocument();
   });
 

@@ -540,7 +540,7 @@ describe('SettingsPage', () => {
           category: 'base',
           required: true,
           status: 'configured',
-          message: 'ConfiguredWatchlist。',
+          message: 'ConfiguredWatchlist.',
           nextStep: null,
         },
         {
@@ -549,7 +549,7 @@ describe('SettingsPage', () => {
           category: 'ai_model',
           required: true,
           status: 'configured',
-          message: '已Configure modelsChannel。',
+          message: ' Configure modelsChannel.',
           nextStep: null,
         },
         {
@@ -558,7 +558,7 @@ describe('SettingsPage', () => {
           category: 'notification',
           required: false,
           status: 'optional',
-          message: 'NotificationOptional。',
+          message: 'NotificationOptional.',
           nextStep: null,
         },
       ],
@@ -684,7 +684,7 @@ describe('SettingsPage', () => {
           category: 'base',
           required: true,
           status: 'configured',
-          message: '初始ConfigStatus。',
+          message: '初始ConfigStatus.',
           nextStep: null,
         },
       ],
@@ -701,8 +701,8 @@ describe('SettingsPage', () => {
           category: 'ai_model',
           required: true,
           status: 'needs_action',
-          message: 'Expired的ConfigStatus。',
-          nextStep: '这条旧Response不应覆盖LatestStatus。',
+          message: 'Expired ConfigStatus.',
+          nextStep: 'thisitemold ResponseShould not覆盖LatestStatus.',
         },
       ],
     };
@@ -718,7 +718,7 @@ describe('SettingsPage', () => {
           category: 'base',
           required: true,
           status: 'configured',
-          message: 'LatestConfigStatus。',
+          message: 'LatestConfigStatus.',
           nextStep: null,
         },
       ],
@@ -786,7 +786,7 @@ describe('SettingsPage', () => {
       checks: [
         {
           key: 'llm_primary',
-          title: 'LLM 主Channel',
+          title: 'LLM main Channel',
           category: 'ai_model',
           required: true,
           status: 'configured',
@@ -808,7 +808,7 @@ describe('SettingsPage', () => {
           category: 'base',
           required: true,
           status: 'configured',
-          message: 'Configured 1 只shares票。',
+          message: 'Configured 1 只 stock .',
           nextStep: null,
         },
       ],
@@ -816,7 +816,7 @@ describe('SettingsPage', () => {
 
     render(<SettingsPage />);
 
-    await screen.findByText('还缺少 1 项：Agent Channel');
+    await screen.findByText('also缺few 1 item: Agent Channel');
     expect(screen.getByRole('button', { name: 'Brief smoke run' })).toBeEnabled();
 
     fireEvent.click(screen.getByRole('button', { name: 'Brief smoke run' }));
@@ -844,8 +844,8 @@ describe('SettingsPage', () => {
           category: 'ai_model',
           required: true,
           status: 'needs_action',
-          message: '还没有Configure modelsChannel。',
-          nextStep: '请先Configure modelsChannel。',
+          message: 'also没有Configure modelsChannel.',
+          nextStep: 'Please firstConfigure modelsChannel.',
         },
       ],
     });
@@ -854,7 +854,7 @@ describe('SettingsPage', () => {
     render(<SettingsPage />);
 
     expect(await screen.findByText('Some base setup still needs attention')).toBeInTheDocument();
-    expect(screen.getByText('还缺少 1 项：ModelChannel')).toBeInTheDocument();
+    expect(screen.getByText('also缺few 1 item: ModelChannel')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Brief smoke run' })).toBeDisabled();
 
     fireEvent.click(screen.getByRole('button', { name: 'Hide for now' }));
@@ -1113,9 +1113,9 @@ describe('SettingsPage', () => {
               isRequired: false,
               isEditable: true,
               options: [
-                { label: '成本优先', value: 'cost' },
-                { label: 'Balanced推荐', value: 'balanced' },
-                { label: '长上下文原文优先', value: 'long_context_raw_first' },
+                { label: 'costOptimizefirst', value: 'cost' },
+                { label: 'BalancedRecommend', value: 'balanced' },
+                { label: 'longup/down文原文Optimizefirst', value: 'long_context_raw_first' },
               ],
               validation: {
                 enum: ['cost', 'balanced', 'long_context_raw_first'],
@@ -1168,11 +1168,11 @@ describe('SettingsPage', () => {
     render(<SettingsPage />);
 
     expect(screen.getByText('AGENT_CONTEXT_COMPRESSION_PROFILE')).toBeInTheDocument();
-    expect(screen.getByText('成本优先')).toBeInTheDocument();
-    expect(screen.getByText('Balanced推荐')).toBeInTheDocument();
-    expect(screen.getByText('长上下文原文优先')).toBeInTheDocument();
-    expect(screen.getByText(/估算History token 超过该值时触发摘要/)).toHaveTextContent('留空则跟随当前Context compressionStrategy profile Default值');
-    expect(screen.getByText(/压缩时最近 N 个User轮次及其后的回复保持原文/)).toHaveTextContent('留空则跟随当前Context compressionStrategy profile Default值');
+    expect(screen.getByText('costOptimizefirst')).toBeInTheDocument();
+    expect(screen.getByText('BalancedRecommend')).toBeInTheDocument();
+    expect(screen.getByText('longup/down文原文Optimizefirst')).toBeInTheDocument();
+    expect(screen.getByText(/估算History token 超过该值时触发摘要/)).toHaveTextContent('留emptythenFollow随currentContext compressionStrategy profile Defaultvalue');
+    expect(screen.getByText(/压缩时最近 N 个User轮次及其后的回复保持原文/)).toHaveTextContent('留emptythenFollow随currentContext compressionStrategy profile Defaultvalue');
   });
 
   it('reset button semantic: discards local changes without network request', () => {
@@ -2614,14 +2614,14 @@ describe('SettingsPage', () => {
       currentVersion: '3.12.0',
       latestVersion: '3.13.0',
       releaseUrl: 'https://github.com/ZhuLinsen/daily_stock_analysis/releases/tag/v3.13.0',
-      message: '新Version 3.13.0 已Download，可重启ApplicationComplete安装。',
+      message: 'newVersion 3.13.0  Download, canrestartApplicationComplete安装.',
       downloadPercent: 100,
     });
     (window as { dsaDesktop?: unknown }).dsaDesktop = createDesktopRuntime();
 
     render(<SettingsPage />);
 
-    expect(await screen.findByText('Update downloaded:新Version 3.13.0 已Download，可重启ApplicationComplete安装。')).toBeInTheDocument();
+    expect(await screen.findByText('Update downloaded:newVersion 3.13.0  Download, canrestartApplicationComplete安装.')).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'Restart to install' }));
 

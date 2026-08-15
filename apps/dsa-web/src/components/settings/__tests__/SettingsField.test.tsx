@@ -67,7 +67,7 @@ describe('SettingsField', () => {
       />
     );
 
-    expect(screen.getByLabelText('TickFlow 日 K 优先级')).toBeInTheDocument();
+    expect(screen.getByLabelText('TickFlow day K Optimizefirst级')).toBeInTheDocument();
     expect(screen.getByText(/Control TickFlow 在 A shares日 K Source回退链中的尝试顺序/)).toBeInTheDocument();
     expect(screen.queryByText(/Priority for TickFlow daily K-line fetcher/)).not.toBeInTheDocument();
   });
@@ -221,7 +221,7 @@ describe('SettingsField', () => {
     );
 
     const select = screen.getByLabelText('MinimalNotification级别');
-    expect(screen.getByRole('option', { name: '未Settings' })).not.toBeDisabled();
+    expect(screen.getByRole('option', { name: 'not Settings' })).not.toBeDisabled();
     expect(screen.queryByRole('option', { name: 'Select' })).not.toBeInTheDocument();
 
     fireEvent.change(select, { target: { value: '' } });
@@ -259,7 +259,7 @@ describe('SettingsField', () => {
       />
     );
 
-    expect(screen.getByLabelText('AnalyzeGeneration方式')).toHaveValue('litellm');
+    expect(screen.getByLabelText('AnalyzeGeneration方form')).toHaveValue('litellm');
     expect(onChange).not.toHaveBeenCalled();
   });
 
@@ -269,7 +269,7 @@ describe('SettingsField', () => {
         key: 'NEWS_STRATEGY_PROFILE',
         category: 'data_source',
         options: ['ultra_short', 'short', 'medium', 'long'],
-        expectedLabels: ['超短线（1day）', '短期（3day）', '中期（7day）', 'Long term（30day）'],
+        expectedLabels: ['ultra short (1day) ', 'short期 (3day) ', 'In progress期 (7day) ', 'Long term (30day) '],
       },
       {
         key: 'REPORT_TYPE',
@@ -382,9 +382,9 @@ describe('SettingsField', () => {
             isRequired: false,
             isEditable: true,
             options: [
-              { label: '成本优先', value: 'cost' },
-              { label: 'Balanced推荐', value: 'balanced' },
-              { label: '长上下文原文优先', value: 'long_context_raw_first' },
+              { label: 'costOptimizefirst', value: 'cost' },
+              { label: 'BalancedRecommend', value: 'balanced' },
+              { label: 'longup/down文原文Optimizefirst', value: 'long_context_raw_first' },
             ],
             validation: {
               enum: ['cost', 'balanced', 'long_context_raw_first'],
@@ -398,9 +398,9 @@ describe('SettingsField', () => {
     );
 
     expect(screen.getByLabelText('Context compressionStrategy')).toBeInTheDocument();
-    expect(screen.getByRole('option', { name: '成本优先' })).toBeInTheDocument();
-    expect(screen.getByRole('option', { name: 'Balanced推荐' })).toBeInTheDocument();
-    expect(screen.getByRole('option', { name: '长上下文原文优先' })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'costOptimizefirst' })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'BalancedRecommend' })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'longup/down文原文Optimizefirst' })).toBeInTheDocument();
   });
 
   it('renders blank-value preset guidance for context compression numeric fields', () => {
@@ -455,10 +455,10 @@ describe('SettingsField', () => {
       </>
     );
 
-    expect(screen.getByLabelText('压缩触发Threshold（tokens）')).toBeInTheDocument();
-    expect(screen.getByLabelText('原文保护轮次')).toBeInTheDocument();
-    expect(screen.getByText(/估算History token 超过该值时触发摘要/)).toHaveTextContent('留空则跟随当前Context compressionStrategy profile Default值');
-    expect(screen.getByText(/压缩时最近 N 个User轮次及其后的回复保持原文/)).toHaveTextContent('留空则跟随当前Context compressionStrategy profile Default值');
+    expect(screen.getByLabelText('压缩TriggerThreshold (tokens) ')).toBeInTheDocument();
+    expect(screen.getByLabelText('原文Protected轮times')).toBeInTheDocument();
+    expect(screen.getByText(/估算History token 超过该值时触发摘要/)).toHaveTextContent('留emptythenFollow随currentContext compressionStrategy profile Defaultvalue');
+    expect(screen.getByText(/压缩时最近 N 个User轮次及其后的回复保持原文/)).toHaveTextContent('留emptythenFollow随currentContext compressionStrategy profile Defaultvalue');
   });
 
   it('renders localized custom webhook body template guidance', () => {
@@ -529,7 +529,7 @@ describe('SettingsField', () => {
       />
     );
 
-    fireEvent.click(screen.getByRole('button', { name: '查看 WatchlistList Configuration help' }));
+    fireEvent.click(screen.getByRole('button', { name: 'View WatchlistList Configuration help' }));
 
     expect(screen.getByRole('dialog', { name: 'WatchlistList' })).toBeInTheDocument();
     expect(screen.getByText('STOCK_LIST=600519,300750,002594')).toBeInTheDocument();
@@ -582,16 +582,16 @@ describe('SettingsField', () => {
       />
     );
 
-    fireEvent.click(screen.getByRole('button', { name: '查看 AnalyzeGeneration方式 Configuration help' }));
+    fireEvent.click(screen.getByRole('button', { name: 'View AnalyzeGeneration方form Configuration help' }));
 
-    const dialog = screen.getByRole('dialog', { name: 'AnalyzeGeneration方式' });
-    expect(dialog).toHaveTextContent('决定系统用哪种方式Generation');
+    const dialog = screen.getByRole('dialog', { name: 'AnalyzeGeneration方form' });
+    expect(dialog).toHaveTextContent('决定Systemuse哪种方formGeneration');
     expect(dialog).not.toHaveTextContent('GENERATION_BACKEND');
     expect(dialog).not.toHaveTextContent('Examples');
     expect(dialog).not.toHaveTextContent('Phase 1');
-    expect(dialog).toHaveTextContent('本机已安装并Sign in对应 CLI');
-    expect(dialog).toHaveTextContent('Default modelConfig会Continue使用现有 API Key');
-    expect(dialog).not.toHaveTextContent('Advanced说明');
+    expect(dialog).toHaveTextContent('thismachine 安装andSign inforShould CLI');
+    expect(dialog).toHaveTextContent('Default modelConfigwillContinue使use现有 API Key');
+    expect(dialog).not.toHaveTextContent('AdvancedDescription');
     expect(dialog).not.toHaveTextContent('LiteLLM');
   });
 
@@ -628,15 +628,15 @@ describe('SettingsField', () => {
       />
     );
 
-    fireEvent.click(screen.getByRole('button', { name: '查看 Ask-stock method Configuration help' }));
+    fireEvent.click(screen.getByRole('button', { name: 'View Ask-stock method Configuration help' }));
 
     const dialog = screen.getByRole('dialog', { name: 'Ask-stock method' });
-    expect(dialog).toHaveTextContent('系统会选择当前Available的方式');
-    expect(dialog).toHaveTextContent('如果不OK，选择“自动”即可');
-    expect(dialog).toHaveTextContent('这项Settings只影响Stock Q&A助手');
-    expect(dialog).not.toHaveTextContent('Advanced说明');
+    expect(dialog).toHaveTextContent('SystemwillSelectcurrentAvailable 方form');
+    expect(dialog).toHaveTextContent('如果not OK, Select“auto”即can');
+    expect(dialog).toHaveTextContent('thisitemSettings只ImpactStock Q&A助手');
+    expect(dialog).not.toHaveTextContent('AdvancedDescription');
     expect(dialog).not.toHaveTextContent('LiteLLM');
-    expect(dialog).not.toHaveTextContent('优先选择当前Available');
+    expect(dialog).not.toHaveTextContent('OptimizefirstSelectcurrentAvailable');
   });
 
   it('uses per-field schema titles even when helpKey is shared by multiple fields', () => {

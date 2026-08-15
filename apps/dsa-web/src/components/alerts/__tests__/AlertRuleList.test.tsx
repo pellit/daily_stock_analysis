@@ -118,7 +118,7 @@ describe('AlertRuleList', () => {
     expect(screen.getAllByText('MACD cross').length).toBeGreaterThan(0);
     expect(screen.getByText('MACD(12,26,9) golden cross')).toBeInTheDocument();
     expect(screen.getByText('KDJ(9,3,3) death cross')).toBeInTheDocument();
-    expect(screen.getByText('冷却中')).toBeInTheDocument();
+    expect(screen.getByText('cold却In progress')).toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText('启停Status'), { target: { value: 'enabled' } });
     fireEvent.change(screen.getByLabelText('Rule type'), { target: { value: 'price_cross' } });
@@ -140,7 +140,7 @@ describe('AlertRuleList', () => {
       ],
     });
 
-    expect(screen.getByText('未冷却')).toBeInTheDocument();
+    expect(screen.getByText('Not cooled')).toBeInTheDocument();
   });
 
   it('renders portfolio scope labels and child-target cooldown hint', () => {
@@ -174,7 +174,7 @@ describe('AlertRuleList', () => {
     });
 
     expect(screen.getByText('Portfolio holdings')).toBeInTheDocument();
-    expect(screen.getByText('子Target见Trigger history')).toBeInTheDocument();
+    expect(screen.getByText('SubTarget见Trigger history')).toBeInTheDocument();
     expect(screen.getByText('Account 9')).toBeInTheDocument();
     expect(screen.getAllByText('Portfolio stop loss').length).toBeGreaterThan(0);
     expect(screen.getByText('stop loss triggered')).toBeInTheDocument();
@@ -224,7 +224,7 @@ describe('AlertRuleList', () => {
         },
         {
           id: 7,
-          name: 'USScore下降',
+          name: 'USScoredecline',
           targetScope: 'market',
           target: 'us',
           alertType: 'market_light_score_drop',
@@ -242,7 +242,7 @@ describe('AlertRuleList', () => {
     expect(screen.getAllByText('Market').length).toBeGreaterThan(0);
     expect(screen.getAllByText('Market traffic light status').length).toBeGreaterThan(0);
     expect(screen.getByText('red / yellow')).toBeInTheDocument();
-    expect(screen.getByText('Score 下降 >= 15')).toBeInTheDocument();
+    expect(screen.getByText('Score decline >= 15')).toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText('Rule type'), { target: { value: 'market_light_score_drop' } });
 
@@ -263,7 +263,7 @@ describe('AlertRuleList', () => {
     renderList({ busyRule: { id: 1, action: 'toggle' } });
 
     expect(screen.getAllByRole('button', { name: 'Test' })[0]).toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Disable中' })).toHaveAttribute('aria-busy', 'true');
+    expect(screen.getByRole('button', { name: 'DisableIn progress' })).toHaveAttribute('aria-busy', 'true');
     expect(screen.queryByRole('button', { name: 'Testing' })).not.toBeInTheDocument();
   });
 
@@ -271,7 +271,7 @@ describe('AlertRuleList', () => {
     renderList();
 
     fireEvent.click(screen.getByLabelText('Delete Moutai price breakout'));
-    expect(await screen.findByRole('heading', { name: 'DeleteAlert规则' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'DeleteAlertrule' })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Delete' }));
 
     expect(onDelete).toHaveBeenCalledWith(rules[0]);
@@ -280,6 +280,6 @@ describe('AlertRuleList', () => {
   it('shows an empty state for no rules', () => {
     renderList({ rules: [], total: 0 });
 
-    expect(screen.getByText('暂无Alert规则')).toBeInTheDocument();
+    expect(screen.getByText('暂 none Alertrule')).toBeInTheDocument();
   });
 });

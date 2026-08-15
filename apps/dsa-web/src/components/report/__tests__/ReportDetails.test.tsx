@@ -41,7 +41,7 @@ describe('ReportDetails', () => {
     );
 
     fireEvent.click(screen.getByRole('button', { name: '原始Result' }));
-    fireEvent.click(screen.getByRole('button', { name: 'Analyze快照' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Analyzefast照' }));
 
     const [rawCopyButton, snapshotCopyButton] = screen.getAllByRole('button', { name: 'Copy' });
 
@@ -51,7 +51,7 @@ describe('ReportDetails', () => {
     });
 
     expect(writeTextMock).toHaveBeenNthCalledWith(1, JSON.stringify(details.rawResult, null, 2));
-    expect(screen.getByRole('button', { name: '已Copy' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: ' Copy' })).toBeInTheDocument();
     expect(screen.getAllByRole('button', { name: 'Copy' })).toHaveLength(1);
 
     await act(async () => {
@@ -60,7 +60,7 @@ describe('ReportDetails', () => {
     });
 
     expect(writeTextMock).toHaveBeenNthCalledWith(2, JSON.stringify(details.contextSnapshot, null, 2));
-    expect(screen.getAllByRole('button', { name: '已Copy' })).toHaveLength(2);
+    expect(screen.getAllByRole('button', { name: ' Copy' })).toHaveLength(2);
 
     act(() => {
       vi.advanceTimersByTime(2000);

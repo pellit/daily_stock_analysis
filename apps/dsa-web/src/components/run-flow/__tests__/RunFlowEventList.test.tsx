@@ -10,7 +10,7 @@ const events: RunFlowEvent[] = [
     severity: 'info',
     type: 'task_created',
     nodeId: 'request',
-    title: '任务Create',
+    title: 'TaskCreate',
   },
   {
     id: 'evt-2',
@@ -27,7 +27,7 @@ const events: RunFlowEvent[] = [
     severity: 'danger',
     type: 'task_cancelled',
     nodeId: 'queue',
-    title: '任务Cancel',
+    title: 'TaskCancel',
   },
 ];
 
@@ -35,19 +35,19 @@ describe('RunFlowEventList', () => {
   it('filters fallback and cancellation events with visible text labels', () => {
     render(<RunFlowEventList events={events} />);
 
-    expect(screen.getByText('任务Create')).toBeInTheDocument();
+    expect(screen.getByText('TaskCreate')).toBeInTheDocument();
     expect(screen.getByText('DailyFallback')).toBeInTheDocument();
-    expect(screen.getByText('任务Cancel')).toBeInTheDocument();
+    expect(screen.getByText('TaskCancel')).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'Fallback/retry' }));
 
     expect(screen.getByText('DailyFallback')).toBeInTheDocument();
-    expect(screen.queryByText('任务Create')).not.toBeInTheDocument();
-    expect(screen.queryByText('任务Cancel')).not.toBeInTheDocument();
+    expect(screen.queryByText('TaskCreate')).not.toBeInTheDocument();
+    expect(screen.queryByText('TaskCancel')).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
 
-    expect(screen.getByText('任务Cancel')).toBeInTheDocument();
+    expect(screen.getByText('TaskCancel')).toBeInTheDocument();
     expect(screen.queryByText('DailyFallback')).not.toBeInTheDocument();
     expect(screen.getByText('Danger')).toBeInTheDocument();
   });
@@ -56,7 +56,7 @@ describe('RunFlowEventList', () => {
     const onSelectNode = vi.fn();
     render(<RunFlowEventList events={events} onSelectNode={onSelectNode} />);
 
-    fireEvent.click(screen.getByRole('button', { name: '查看事件 DailyFallback 关联节点' }));
+    fireEvent.click(screen.getByRole('button', { name: 'ViewEvent DailyFallback 关Liannode' }));
 
     expect(onSelectNode).toHaveBeenCalledWith('daily_data');
   });

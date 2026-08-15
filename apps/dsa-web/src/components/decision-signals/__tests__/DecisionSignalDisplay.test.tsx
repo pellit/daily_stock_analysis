@@ -7,7 +7,7 @@ import { DecisionSignalCard, DecisionSignalDetails, PortfolioSignalSummary } fro
 const signal: DecisionSignalItem = {
   id: 7,
   stockCode: '600519',
-  stockName: '贵州茅units',
+  stockName: 'Kweichow Moutai',
   market: 'cn',
   sourceType: 'analysis',
   sourceReportId: 3001,
@@ -23,11 +23,11 @@ const signal: DecisionSignalItem = {
   entryHigh: 1620,
   stopLoss: 1550,
   targetPrice: 1700,
-  invalidation: '跌破 1550',
-  watchConditions: 'Watch成交量',
-  reason: 'Trend保持',
-  riskSummary: '放量downRisk',
-  catalystSummary: '业绩窗口',
+  invalidation: 'breakdown 1550',
+  watchConditions: 'Watchvolumeamount',
+  reason: 'Trendmaintain',
+  riskSummary: 'volumedownRisk',
+  catalystSummary: 'performanceWindow',
   evidence: { technical: 'ma' },
   dataQualitySummary: { freshness: 'ok' },
   planQuality: 'complete',
@@ -52,13 +52,13 @@ describe('DecisionSignalCard', () => {
     const onSelect = vi.fn();
     renderCard(onSelect);
 
-    expect(screen.getByText('贵州茅units').closest('button')).toBeNull();
+    expect(screen.getByText('Kweichow Moutai').closest('button')).toBeNull();
     expect(screen.getByText('72%')).toBeInTheDocument();
     expect(screen.getByText('Profile: Aggressive')).toBeInTheDocument();
     expect(screen.getByText('1600 - 1620')).toBeInTheDocument();
-    expect(screen.getByText('业绩窗口')).toBeInTheDocument();
-    expect(screen.getByText('跌破 1550')).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: '查看 贵州茅units AI 建议Detail' }));
+    expect(screen.getByText('performanceWindow')).toBeInTheDocument();
+    expect(screen.getByText('breakdown 1550')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'View Kweichow Moutai AI RecommendDetail' }));
 
     expect(onSelect).toHaveBeenCalledWith(signal);
     expect(screen.getByText('3 days')).toBeInTheDocument();
@@ -72,8 +72,8 @@ describe('DecisionSignalCard', () => {
   it('renders non-interactive cards without a details button', () => {
     renderCard();
 
-    expect(screen.getByText('贵州茅units')).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: '查看 贵州茅units AI 建议Detail' })).not.toBeInTheDocument();
+    expect(screen.getByText('Kweichow Moutai')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'View Kweichow Moutai AI RecommendDetail' })).not.toBeInTheDocument();
   });
 
   it('hides missing optional plan text for sparse legacy signals', () => {
@@ -217,9 +217,9 @@ describe('DecisionSignalDetails', () => {
     expect(screen.getByText('Hit')).toBeInTheDocument();
     expect(screen.getByText('5%')).toBeInTheDocument();
     expect(screen.getByText('Catalyst')).toBeInTheDocument();
-    expect(screen.getByText('业绩窗口')).toBeInTheDocument();
+    expect(screen.getByText('performanceWindow')).toBeInTheDocument();
     expect(screen.getByText('Invalidation')).toBeInTheDocument();
-    expect(screen.getByText('跌破 1550')).toBeInTheDocument();
+    expect(screen.getByText('breakdown 1550')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Not useful' }));
     expect(onFeedbackSubmit).toHaveBeenCalledWith('not_useful');
   });

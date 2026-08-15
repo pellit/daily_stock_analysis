@@ -12,7 +12,7 @@ function renderDialog(overrides: Partial<React.ComponentProps<typeof ConfirmDial
       <ConfirmDialog
         isOpen
         title="ConfirmAction"
-        message="ConfirmContinue吗？"
+        message="ConfirmContinue吗?"
         confirmText="OK"
         cancelText="Cancel"
         onConfirm={onConfirm}

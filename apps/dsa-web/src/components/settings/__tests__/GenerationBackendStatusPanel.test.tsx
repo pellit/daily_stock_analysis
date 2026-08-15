@@ -50,7 +50,7 @@ const localCliStatus: GenerationBackendStatusResponse = {
 const smokePassed: TestGenerationBackendResponse = {
   success: true,
   mode: 'json',
-  message: 'Generation后端Smoke test passed',
+  message: 'GenerationBackendSmoke test passed',
   status: localCliStatus.primary,
 };
 

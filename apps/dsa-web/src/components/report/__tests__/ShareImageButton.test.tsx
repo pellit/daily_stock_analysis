@@ -33,7 +33,7 @@ describe('ShareImageButton', () => {
     render(
       <ShareImageButton
         recordId={17}
-        reportTitle="中钨高新-000657"
+        reportTitle="In progress钨highnew-000657"
         reportLanguage="zh"
       />,
     );
@@ -42,7 +42,7 @@ describe('ShareImageButton', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Share' }));
     await waitFor(() => expect(mockedGetShareImage).toHaveBeenCalledWith(17));
     await waitFor(() => expect(HTMLAnchorElement.prototype.click).toHaveBeenCalled());
-    expect(screen.getByRole('button', { name: '已Generation' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: ' Generation' })).toBeInTheDocument();
   });
 
   it('prepares the PNG on the first click and invokes native sharing synchronously on the second click', async () => {
@@ -68,17 +68,17 @@ describe('ShareImageButton', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Share' }));
     expect(mockedGetShareImage).toHaveBeenCalledWith(18);
-    expect(screen.getByRole('button', { name: 'Generation中...' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'GenerationIn progress...' })).toBeDisabled();
     expect(nativeShare).not.toHaveBeenCalled();
 
     await act(async () => {
       resolveImage?.(new Blob(['png'], { type: 'image/png' }));
     });
 
-    expect(screen.getByRole('button', { name: '再次点击Share' })).toBeEnabled();
+    expect(screen.getByRole('button', { name: '再times点击Share' })).toBeEnabled();
     expect(nativeShare).not.toHaveBeenCalled();
 
-    fireEvent.click(screen.getByRole('button', { name: '再次点击Share' }));
+    fireEvent.click(screen.getByRole('button', { name: '再times点击Share' }));
     expect(nativeShare).toHaveBeenCalledTimes(1);
     const sharePayload = nativeShare.mock.calls[0][0];
     expect(sharePayload.title).toBe('AsharesMarket复盘');
@@ -103,14 +103,14 @@ describe('ShareImageButton', () => {
     expect(mockedGetShareImage).not.toHaveBeenCalled();
     fireEvent.click(await screen.findByRole('button', { name: 'Share' }));
 
-    expect(await screen.findByRole('button', { name: '再次点击Share' })).toBeEnabled();
+    expect(await screen.findByRole('button', { name: '再times点击Share' })).toBeEnabled();
     expect(nativeShare).not.toHaveBeenCalled();
     expect(HTMLAnchorElement.prototype.click).not.toHaveBeenCalled();
 
-    fireEvent.click(screen.getByRole('button', { name: '再次点击Share' }));
+    fireEvent.click(screen.getByRole('button', { name: '再times点击Share' }));
     await waitFor(() => expect(nativeShare).toHaveBeenCalledTimes(1));
     await waitFor(() => expect(HTMLAnchorElement.prototype.click).toHaveBeenCalledTimes(1));
-    expect(screen.getByRole('button', { name: '已Generation' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: ' Generation' })).toBeInTheDocument();
   });
 
   it('shows a retryable error state when image generation fails', async () => {
@@ -119,7 +119,7 @@ describe('ShareImageButton', () => {
     render(
       <ShareImageButton
         recordId={19}
-        reportTitle="中钨高新"
+        reportTitle="In progress钨highnew"
         reportLanguage="zh"
       />,
     );
@@ -170,7 +170,7 @@ describe('ShareImageButton', () => {
     await waitFor(() => expect(renderShareImage).toHaveBeenCalledWith(24));
     await waitFor(() => expect(HTMLAnchorElement.prototype.click).toHaveBeenCalled());
     expect(mockedGetShareImage).not.toHaveBeenCalled();
-    expect(screen.getByRole('button', { name: '已Generation' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: ' Generation' })).toBeInTheDocument();
   });
 
   it('clears the previous success reset timer when switching to another record', async () => {
@@ -204,15 +204,15 @@ describe('ShareImageButton', () => {
 
     expect(mockedGetShareImage).toHaveBeenCalledWith(21);
     expect(nativeShare).not.toHaveBeenCalled();
-    expect(screen.getByRole('button', { name: '再次点击Share' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '再times点击Share' })).toBeInTheDocument();
 
     await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: '再次点击Share' }));
+      fireEvent.click(screen.getByRole('button', { name: '再times点击Share' }));
       await Promise.resolve();
     });
 
     expect(nativeShare).toHaveBeenCalledTimes(1);
-    expect(screen.getByRole('button', { name: '已Generation' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: ' Generation' })).toBeInTheDocument();
 
     rerender(
       <ShareImageButton
@@ -225,23 +225,23 @@ describe('ShareImageButton', () => {
     expect(screen.getByRole('button', { name: 'Share' })).toBeEnabled();
     expect(mockedGetShareImage).not.toHaveBeenCalledWith(22);
     fireEvent.click(screen.getByRole('button', { name: 'Share' }));
-    expect(screen.getByRole('button', { name: 'Generation中...' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'GenerationIn progress...' })).toBeDisabled();
     await act(async () => {
       resolveSecondImage?.(new Blob(['b'], { type: 'image/png' }));
       await Promise.resolve();
     });
 
     expect(mockedGetShareImage).toHaveBeenCalledWith(22);
-    expect(screen.getByRole('button', { name: '再次点击Share' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '再times点击Share' })).toBeInTheDocument();
     expect(clearTimeoutSpy).toHaveBeenCalled();
 
     await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: '再次点击Share' }));
+      fireEvent.click(screen.getByRole('button', { name: '再times点击Share' }));
       await Promise.resolve();
     });
 
     expect(nativeShare).toHaveBeenCalledTimes(2);
-    expect(screen.getByRole('button', { name: '已Generation' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: ' Generation' })).toBeInTheDocument();
 
     await act(async () => {
       vi.advanceTimersByTime(2300);

@@ -469,7 +469,7 @@ describe('stockIndexLoader', () => {
           nameZh: 'Test·公司',
           pinyinFull: 'test-gongsi',
           pinyinAbbr: 'test',
-          aliases: ['Test(集团)'],
+          aliases: ['Test(Group)'],
           market: 'US',
           assetType: 'stock',
           active: true,
@@ -479,7 +479,7 @@ describe('stockIndexLoader', () => {
 
       const compressed = compressIndex(specialChars);
       expect(compressed[0][2]).toBe('Test·公司');
-      expect(compressed[0][5]).toEqual(['Test(集团)']);
+      expect(compressed[0][5]).toEqual(['Test(Group)']);
     });
   });
 });

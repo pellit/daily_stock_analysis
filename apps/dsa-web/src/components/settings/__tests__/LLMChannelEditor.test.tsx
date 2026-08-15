@@ -95,7 +95,7 @@ describe('LLMChannelEditor', () => {
     fireEvent.change(screen.getByLabelText('API Key'), {
       target: { value: 'sk-draft' },
     });
-    fireEvent.change(screen.getByLabelText('Model（逗号分隔）'), {
+    fireEvent.change(screen.getByLabelText('Model (逗号min隔) '), {
       target: { value: 'gpt-4o-mini,gpt-4o' },
     });
 
@@ -201,7 +201,7 @@ describe('LLMChannelEditor', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /OpenAI/i }));
     expect(await screen.findByLabelText('API Surface')).toHaveValue('respones');
-    expect(screen.getByRole('option', { name: '无效Config：respones' })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'invalidConfig: respones' })).toBeInTheDocument();
     fireEvent.change(screen.getByLabelText('Base URL'), {
       target: { value: 'https://proxy.example.com/v1' },
     });
@@ -332,23 +332,23 @@ describe('LLMChannelEditor', () => {
     );
 
     fireEvent.click(screen.getByRole('button', { name: /DeepSeek 官方/i }));
-    fireEvent.click(await screen.findByRole('button', { name: '查看 Base URL Configuration help' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'View Base URL Configuration help' }));
 
     expect(screen.getByRole('dialog', { name: 'Base URL' })).toBeInTheDocument();
-    expect(screen.getByText('该Channel的接口根地址。')).toBeInTheDocument();
+    expect(screen.getByText('该Channel Interface根address.')).toBeInTheDocument();
     expect(screen.getByText('LLM_DEEPSEEK_BASE_URL=https://api.deepseek.com')).toBeInTheDocument();
 
     fireEvent.keyDown(document, { key: 'Escape' });
     fireEvent.click(await screen.findByRole('button', { name: 'View Temperature configuration help' }));
 
     expect(screen.getByRole('dialog', { name: 'Temperature' })).toBeInTheDocument();
-    expect(screen.getByText('运行时统一采样温度。')).toBeInTheDocument();
+    expect(screen.getByText('Runhour统一采sample温度.')).toBeInTheDocument();
 
     fireEvent.keyDown(document, { key: 'Escape' });
-    fireEvent.click(await screen.findByRole('button', { name: '查看 运行时能力检测 Configuration help' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'View RunhourCapabilityDetect Configuration help' }));
 
-    expect(screen.getByRole('dialog', { name: '运行时能力检测' })).toBeInTheDocument();
-    expect(screen.getByText('选择能力后点击检测；检测会发起真实 LLM Request。')).toBeInTheDocument();
+    expect(screen.getByRole('dialog', { name: 'RunhourCapabilityDetect' })).toBeInTheDocument();
+    expect(screen.getByText('SelectCapabilityafter点击Detect; DetectwillSendstart真实 LLM Request.')).toBeInTheDocument();
   });
 
   it('hides LiteLLM wording when advanced YAML routing is enabled', () => {
@@ -392,8 +392,8 @@ describe('LLMChannelEditor', () => {
       />
     );
 
-    expect(selectOptionValues('主Model')).toContain('openai/hermes-agent');
-    expect(selectOptionValues('Agent 主Model')).not.toContain('openai/hermes-agent');
+    expect(selectOptionValues('main Model')).toContain('openai/hermes-agent');
+    expect(selectOptionValues('Agent main Model')).not.toContain('openai/hermes-agent');
     expect(selectOptionValues('Vision Model')).not.toContain('openai/hermes-agent');
   });
 
@@ -424,9 +424,9 @@ describe('LLMChannelEditor', () => {
       />
     );
 
-    expect(selectOptionValues('主Model')).not.toContain('openai/shared-route');
-    expect(selectOptionValues('主Model')).toContain('openai/pure-route');
-    expect(selectOptionValues('Agent 主Model')).toContain('openai/shared-route');
+    expect(selectOptionValues('main Model')).not.toContain('openai/shared-route');
+    expect(selectOptionValues('main Model')).toContain('openai/pure-route');
+    expect(selectOptionValues('Agent main Model')).toContain('openai/shared-route');
     expect(selectOptionValues('Vision Model')).not.toContain('openai/shared-route');
   });
 
@@ -479,9 +479,9 @@ describe('LLMChannelEditor', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /Hermes/i }));
     fireEvent.click(screen.getByRole('button', { name: 'TestConnect' }));
-    fireEvent.click(screen.getByRole('button', { name: '获取Model' }));
+    fireEvent.click(screen.getByRole('button', { name: 'GetModel' }));
     fireEvent.click(screen.getByLabelText('JSON'));
-    fireEvent.click(screen.getByRole('button', { name: '检测能力' }));
+    fireEvent.click(screen.getByRole('button', { name: 'DetectCapability' }));
 
     const messages = await screen.findAllByText(/运行时注入的 Hermes Key 不会回传/i);
     expect(messages.length).toBeGreaterThanOrEqual(3);
@@ -506,8 +506,8 @@ describe('LLMChannelEditor', () => {
       />
     );
 
-    expect(selectOptionValues('主Model')).toContain('openai/gpt-4o-mini');
-    expect(selectOptionValues('Agent 主Model')).toContain('openai/gpt-4o-mini');
+    expect(selectOptionValues('main Model')).toContain('openai/gpt-4o-mini');
+    expect(selectOptionValues('Agent main Model')).toContain('openai/gpt-4o-mini');
     expect(selectOptionValues('Vision Model')).toContain('openai/gpt-4o-mini');
   });
 
@@ -529,8 +529,8 @@ describe('LLMChannelEditor', () => {
       />
     );
 
-    const primaryModelSelect = screen.getByRole('combobox', { name: '主Model' });
-    const agentModelSelect = screen.getByRole('combobox', { name: 'Agent 主Model' });
+    const primaryModelSelect = screen.getByRole('combobox', { name: 'main Model' });
+    const agentModelSelect = screen.getByRole('combobox', { name: 'Agent main Model' });
     const visionModelSelect = screen.getByRole('combobox', { name: 'Vision Model' });
 
     expect(within(primaryModelSelect).getByRole('option', { name: 'minimax/MiniMax-M1' })).toBeInTheDocument();
@@ -553,7 +553,7 @@ describe('LLMChannelEditor', () => {
 
     await screen.findByRole('button', { name: /DeepSeek 官方/i });
     expect(screen.getByLabelText('Base URL')).toHaveValue('https://api.deepseek.com');
-    expect(screen.getByLabelText('Model（逗号分隔）')).toHaveValue('deepseek-v4-flash,deepseek-v4-pro');
+    expect(screen.getByLabelText('Model (逗号min隔) ')).toHaveValue('deepseek-v4-flash,deepseek-v4-pro');
   });
 
   it.each([
@@ -577,7 +577,7 @@ describe('LLMChannelEditor', () => {
       select instanceof HTMLSelectElement && select.value === 'openai'
     ))).toBe(true);
     expect(screen.getByLabelText('Base URL')).toHaveValue(baseUrl);
-    expect(screen.getByLabelText('Model（逗号分隔）')).toHaveValue(models);
+    expect(screen.getByLabelText('Model (逗号min隔) ')).toHaveValue(models);
   });
 
   it('shows provider capability badges, official sources, and config hints', async () => {
@@ -599,10 +599,10 @@ describe('LLMChannelEditor', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /OpenRouter/i }));
 
-    expect(await screen.findByText('Config参考')).toBeInTheDocument();
-    expect(screen.getByText('OpenAI 兼容')).toBeInTheDocument();
-    expect(screen.getByText('聚合平units')).toBeInTheDocument();
-    expect(screen.getByText('可获取Model')).toBeInTheDocument();
+    expect(await screen.findByText('ConfigReference')).toBeInTheDocument();
+    expect(screen.getByText('OpenAI compatible')).toBeInTheDocument();
+    expect(screen.getByText('aggregate平units')).toBeInTheDocument();
+    expect(screen.getByText('canGetModel')).toBeInTheDocument();
     expect(screen.getByText(/ModelList和Model可见性依赖账号Permission与 API Key/i)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'OpenRouter Models API' })).toHaveAttribute(
       'href',
@@ -630,7 +630,7 @@ describe('LLMChannelEditor', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /SiliconFlow/i }));
 
-    expect(await screen.findByText('可获取Model')).toBeInTheDocument();
+    expect(await screen.findByText('canGetModel')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'SiliconFlow Models' })).toBeInTheDocument();
   });
 
@@ -653,7 +653,7 @@ describe('LLMChannelEditor', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /my_proxy/i }));
 
-    expect(screen.queryByText('Config参考')).not.toBeInTheDocument();
+    expect(screen.queryByText('ConfigReference')).not.toBeInTheDocument();
     expect(screen.queryByText(/官方Source/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/能力Tag仅用于Config参考/i)).not.toBeInTheDocument();
   });
@@ -675,7 +675,7 @@ describe('LLMChannelEditor', () => {
     fireEvent.change(screen.getByLabelText('Base URL'), {
       target: { value: 'https://proxy.example.com/v1' },
     });
-    fireEvent.change(screen.getByLabelText('Model（逗号分隔）'), {
+    fireEvent.change(screen.getByLabelText('Model (逗号min隔) '), {
       target: { value: 'custom-model-a,custom-model-b' },
     });
     fireEvent.change(screen.getByLabelText('ChannelName'), {
@@ -684,7 +684,7 @@ describe('LLMChannelEditor', () => {
 
     await screen.findByRole('button', { name: /MiniMax 官方/i });
     expect(screen.getByLabelText('Base URL')).toHaveValue('https://proxy.example.com/v1');
-    expect(screen.getByLabelText('Model（逗号分隔）')).toHaveValue('custom-model-a,custom-model-b');
+    expect(screen.getByLabelText('Model (逗号min隔) ')).toHaveValue('custom-model-a,custom-model-b');
   });
 
   it('uses the selected preset defaults when adding a duplicate provider channel', async () => {
@@ -711,7 +711,7 @@ describe('LLMChannelEditor', () => {
       'https://api.minimax.io/v1',
       'https://api.minimax.io/v1',
     ]);
-    expect(screen.getAllByLabelText('Model（逗号分隔）').map((input) => (input as HTMLInputElement).value)).toEqual([
+    expect(screen.getAllByLabelText('Model (逗号min隔) ').map((input) => (input as HTMLInputElement).value)).toEqual([
       'MiniMax-M3,MiniMax-M2.7,MiniMax-M2.7-highspeed',
       'MiniMax-M3,MiniMax-M2.7,MiniMax-M2.7-highspeed',
     ]);
@@ -790,7 +790,7 @@ describe('LLMChannelEditor', () => {
     );
 
     fireEvent.click(screen.getByRole('button', { name: /Hermes/i }));
-    fireEvent.change(screen.getByLabelText('Model（逗号分隔）'), { target: { value: 'hermes-agent,hermes-agent-2' } });
+    fireEvent.change(screen.getByLabelText('Model (逗号min隔) '), { target: { value: 'hermes-agent,hermes-agent-2' } });
     fireEvent.click(screen.getByRole('button', { name: 'Save AI Config' }));
 
     await waitFor(() => {
@@ -836,7 +836,7 @@ describe('LLMChannelEditor', () => {
     );
 
     fireEvent.click(screen.getByRole('button', { name: /my_proxy/i }));
-    fireEvent.change(screen.getByLabelText('Model（逗号分隔）'), { target: { value: 'gpt-4o-mini,gpt-4o' } });
+    fireEvent.change(screen.getByLabelText('Model (逗号min隔) '), { target: { value: 'gpt-4o-mini,gpt-4o' } });
     fireEvent.click(screen.getByRole('button', { name: 'Save AI Config' }));
 
     await waitFor(() => {
@@ -1051,7 +1051,7 @@ describe('LLMChannelEditor', () => {
     );
 
     fireEvent.click(screen.getByRole('button', { name: /DeepSeek 官方/i }));
-    fireEvent.change(screen.getByLabelText('Model（逗号分隔）'), {
+    fireEvent.change(screen.getByLabelText('Model (逗号min隔) '), {
       target: { value: 'deepseek-v4-flash,deepseek-v4-pro' },
     });
     fireEvent.click(screen.getByRole('button', { name: 'Save AI Config' }));
@@ -1353,12 +1353,12 @@ describe('LLMChannelEditor', () => {
     );
 
     fireEvent.click(screen.getByRole('button', { name: /DeepSeek 官方/i }));
-    fireEvent.change(screen.getByLabelText('Model（逗号分隔）'), {
+    fireEvent.change(screen.getByLabelText('Model (逗号min隔) '), {
       target: { value: 'deepseek-v4-flash,deepseek-v4-pro' },
     });
     fireEvent.click(screen.getByRole('button', { name: 'Save AI Config' }));
 
-    expect(await screen.findByText('Save后info')).toBeInTheDocument();
+    expect(await screen.findByText('Saveafterinfo')).toBeInTheDocument();
     expect(screen.getByText(/已同步清理失效的运行时Model引用/i)).toBeInTheDocument();
     expect(screen.getByText(/桌面端ExportBackup或Manual \.env Revert/i)).toBeInTheDocument();
   });
@@ -1405,12 +1405,12 @@ describe('LLMChannelEditor', () => {
     render(<Component />);
 
     fireEvent.click(screen.getByRole('button', { name: /DeepSeek 官方/i }));
-    fireEvent.change(screen.getByLabelText('Model（逗号分隔）'), {
+    fireEvent.change(screen.getByLabelText('Model (逗号min隔) '), {
       target: { value: 'deepseek-v4-flash,deepseek-v4-pro' },
     });
     fireEvent.click(screen.getByRole('button', { name: 'Save AI Config' }));
 
-    expect(await screen.findByText('Save后info')).toBeInTheDocument();
+    expect(await screen.findByText('Saveafterinfo')).toBeInTheDocument();
     expect(screen.getByText(warningMessage)).toBeInTheDocument();
   });
 
@@ -1501,7 +1501,7 @@ describe('LLMChannelEditor', () => {
     );
 
     fireEvent.click(screen.getByRole('button', { name: /DeepSeek 官方/i }));
-    fireEvent.change(screen.getByLabelText('Model（逗号分隔）'), {
+    fireEvent.change(screen.getByLabelText('Model (逗号min隔) '), {
       target: { value: 'deepseek-chat,deepseek-old' },
     });
 
@@ -1541,12 +1541,12 @@ describe('LLMChannelEditor', () => {
       />
     );
 
-    const primaryModelSelect = screen.getByRole('combobox', { name: '主Model' });
-    const agentModelSelect = screen.getByRole('combobox', { name: 'Agent 主Model' });
+    const primaryModelSelect = screen.getByRole('combobox', { name: 'main Model' });
+    const agentModelSelect = screen.getByRole('combobox', { name: 'Agent main Model' });
     const visionModelSelect = screen.getByRole('combobox', { name: 'Vision Model' });
 
     fireEvent.click(screen.getByRole('button', { name: /DeepSeek 官方/i }));
-    const modelInput = screen.getByLabelText('Model（逗号分隔）');
+    const modelInput = screen.getByLabelText('Model (逗号min隔) ');
     fireEvent.change(modelInput, {
       target: { value: 'deepseek-v4-flash' },
     });
@@ -1648,14 +1648,14 @@ describe('LLMChannelEditor', () => {
     );
 
     fireEvent.click(screen.getByRole('button', { name: /Tongyi Qianwen/i }));
-    fireEvent.click(screen.getByRole('button', { name: '获取Model' }));
+    fireEvent.click(screen.getByRole('button', { name: 'GetModel' }));
 
     const checkbox = await screen.findByLabelText('MiniMax-M1');
     expect(checkbox).toBeChecked();
 
     fireEvent.click(checkbox);
     await waitFor(() => {
-      expect(screen.getByLabelText('ManualModel（逗号分隔）')).toHaveValue('');
+      expect(screen.getByLabelText('ManualModel (逗号min隔) ')).toHaveValue('');
     });
   });
 
@@ -1686,11 +1686,11 @@ describe('LLMChannelEditor', () => {
     );
 
     fireEvent.click(screen.getByRole('button', { name: /Tongyi Qianwen/i }));
-    fireEvent.click(screen.getByRole('button', { name: '获取Model' }));
+    fireEvent.click(screen.getByRole('button', { name: 'GetModel' }));
 
     const checkbox = await screen.findByLabelText('MiniMax-M1');
     expect(checkbox).not.toBeChecked();
-    expect(screen.getByLabelText('ManualModel（逗号分隔）')).toHaveValue('minimax/MiniMax-M1');
+    expect(screen.getByLabelText('ManualModel (逗号min隔) ')).toHaveValue('minimax/MiniMax-M1');
   });
 
   it('discovers models and writes selected values back to channel config', async () => {
@@ -1729,13 +1729,13 @@ describe('LLMChannelEditor', () => {
     );
 
     fireEvent.click(screen.getByRole('button', { name: /Dashscope/i }));
-    fireEvent.click(screen.getByRole('button', { name: '获取Model' }));
+    fireEvent.click(screen.getByRole('button', { name: 'GetModel' }));
 
     const qwenPlusCheckbox = await screen.findByLabelText('qwen-plus');
     fireEvent.click(qwenPlusCheckbox);
 
     await waitFor(() => {
-      expect(screen.getByLabelText('ManualModel（逗号分隔）')).toHaveValue('qwen-old,qwen-plus');
+      expect(screen.getByLabelText('ManualModel (逗号min隔) ')).toHaveValue('qwen-old,qwen-plus');
     });
 
     expect(discoverLLMChannelModels).toHaveBeenCalledWith(
@@ -2002,10 +2002,10 @@ describe('LLMChannelEditor', () => {
     fireEvent.click(screen.getByRole('button', { name: /OpenAI 官方/i }));
     fireEvent.click(screen.getByLabelText('JSON'));
     fireEvent.click(screen.getByLabelText('Tools'));
-    fireEvent.click(screen.getByRole('button', { name: '检测能力' }));
+    fireEvent.click(screen.getByRole('button', { name: 'DetectCapability' }));
 
     expect(await screen.findByText(/能力检测Complete：1 通过 \\/ 1 Failure \\/ 0 Skip/i)).toBeInTheDocument();
-    expect(screen.getByText('JSON 通过')).toBeInTheDocument();
+    expect(screen.getByText('JSON Through过')).toBeInTheDocument();
     expect(screen.getByText('Tools Failure')).toBeInTheDocument();
     expect(screen.getByText(/当前Model或兼容层不支持该能力/i)).toBeInTheDocument();
     expect(testLLMChannel).toHaveBeenCalledWith(expect.objectContaining({ capabilityChecks: ['json', 'tools'] }));
@@ -2046,12 +2046,12 @@ describe('LLMChannelEditor', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /OpenAI 官方/i }));
     fireEvent.click(screen.getByLabelText('JSON'));
-    fireEvent.click(screen.getByRole('button', { name: '检测能力' }));
+    fireEvent.click(screen.getByRole('button', { name: 'DetectCapability' }));
 
     expect(await screen.findByText(/能力检测Complete：0 通过 \\/ 0 Failure \\/ 1 Skip/i)).toBeInTheDocument();
     expect(screen.getByText('JSON Skip')).toBeInTheDocument();
     expect(screen.getByText(/服务商拒绝了当前 API Key/i)).toBeInTheDocument();
-    expect(screen.getByLabelText('Model（逗号分隔）')).toBeEnabled();
+    expect(screen.getByLabelText('Model (逗号min隔) ')).toBeEnabled();
   });
 
   it('keeps manual model input available when discovery fails', async () => {
@@ -2085,12 +2085,12 @@ describe('LLMChannelEditor', () => {
     );
 
     fireEvent.click(screen.getByRole('button', { name: /Gemini 官方/i }));
-    fireEvent.click(screen.getByRole('button', { name: '获取Model' }));
+    fireEvent.click(screen.getByRole('button', { name: 'GetModel' }));
 
     await screen.findByText(/Model发现 · 协议暂不支持：Model discovery is not supported for this protocol/i);
     expect(screen.getByText(/当前仅对 OpenAI Compatible \\/ DeepSeek Channel提供自动Model发现/i)).toBeInTheDocument();
 
-    const manualInput = screen.getByLabelText('Model（逗号分隔）');
+    const manualInput = screen.getByLabelText('Model (逗号min隔) ');
     fireEvent.change(manualInput, { target: { value: 'gemini-2.5-flash' } });
     expect(manualInput).toHaveValue('gemini-2.5-flash');
   });
@@ -2126,7 +2126,7 @@ describe('LLMChannelEditor', () => {
     );
 
     fireEvent.click(screen.getByRole('button', { name: /OpenAI 官方/i }));
-    fireEvent.click(screen.getByRole('button', { name: '获取Model' }));
+    fireEvent.click(screen.getByRole('button', { name: 'GetModel' }));
 
     expect(await screen.findByText(/ResponseParse · 格式Exception：Failed to parse \\/models response/i)).toBeInTheDocument();
     expect(screen.getByText(/该Channel返回的 \\/models Response格式不兼容，请改为Manual填写ModelList。/i)).toBeInTheDocument();
@@ -2163,7 +2163,7 @@ describe('LLMChannelEditor', () => {
     );
 
     fireEvent.click(screen.getByRole('button', { name: /OpenAI 官方/i }));
-    fireEvent.click(screen.getByRole('button', { name: '获取Model' }));
+    fireEvent.click(screen.getByRole('button', { name: 'GetModel' }));
 
     expect(await screen.findByText(/Model发现 · 空Response：No model IDs returned from \\/models response/i)).toBeInTheDocument();
     expect(screen.getByText(/该Channel的 \\/models 接口未返回AvailableModel ID/i)).toBeInTheDocument();
@@ -2209,7 +2209,7 @@ describe('LLMChannelEditor', () => {
     );
 
     fireEvent.click(screen.getByRole('button', { name: /OpenAI 官方/i }));
-    fireEvent.click(screen.getByRole('button', { name: '获取Model' }));
+    fireEvent.click(screen.getByRole('button', { name: 'GetModel' }));
 
     renderResult.rerender(
       <LLMChannelEditor
@@ -2228,12 +2228,12 @@ describe('LLMChannelEditor', () => {
     );
 
     fireEvent.click(screen.getByRole('button', { name: /Tongyi Qianwen/i }));
-    fireEvent.click(screen.getByRole('button', { name: '获取Model' }));
+    fireEvent.click(screen.getByRole('button', { name: 'GetModel' }));
 
     const dashModelCheckbox = await screen.findByLabelText('dashscope-plus');
     fireEvent.click(dashModelCheckbox);
 
-    expect(screen.getByLabelText('ManualModel（逗号分隔）')).toHaveValue('dash-old,dashscope-plus');
+    expect(screen.getByLabelText('ManualModel (逗号min隔) ')).toHaveValue('dash-old,dashscope-plus');
 
     resolvePendingFirst({
       success: true,
@@ -2245,7 +2245,7 @@ describe('LLMChannelEditor', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByLabelText('ManualModel（逗号分隔）')).toHaveValue('dash-old,dashscope-plus');
+      expect(screen.getByLabelText('ManualModel (逗号min隔) ')).toHaveValue('dash-old,dashscope-plus');
     });
     expect(screen.queryByLabelText('stale-openai')).not.toBeInTheDocument();
   });
@@ -2275,7 +2275,7 @@ describe('LLMChannelEditor', () => {
     );
 
     fireEvent.click(screen.getByRole('button', { name: /Dashscope/i }));
-    fireEvent.click(screen.getByRole('button', { name: '获取Model' }));
+    fireEvent.click(screen.getByRole('button', { name: 'GetModel' }));
 
     const baseUrlInput = screen.getByLabelText('Base URL');
     fireEvent.change(baseUrlInput, {
@@ -2292,7 +2292,7 @@ describe('LLMChannelEditor', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByLabelText('Model（逗号分隔）')).toHaveValue('qwen-old');
+      expect(screen.getByLabelText('Model (逗号min隔) ')).toHaveValue('qwen-old');
       expect(screen.queryByLabelText('stale-openai')).not.toBeInTheDocument();
     });
   });

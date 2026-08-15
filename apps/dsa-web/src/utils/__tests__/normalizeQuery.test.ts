@@ -39,7 +39,7 @@ describe('normalizeQuery', () => {
     });
 
     test('normalizes full-width latin characters to ASCII', () => {
-      expect(normalizeQuery('万科Ａ')).toBe('万科a');
+      expect(normalizeQuery('10k科Ａ')).toBe('10k科a');
       expect(normalizeQuery('wkＡ')).toBe('wka');
     });
 
@@ -272,7 +272,7 @@ describe('normalizeQuery', () => {
 
     test('rejects Chinese characters', () => {
       expect(isPinyinLike('Moutaimaotai')).toBe(false);
-      expect(isPinyinLike('贵州')).toBe(false);
+      expect(isPinyinLike('Kweichow州')).toBe(false);
     });
 
     test('handles empty strings', () => {
@@ -298,7 +298,7 @@ describe('normalizeQuery', () => {
     });
 
     test('special Unicode characters', () => {
-      expect(normalizeQuery('shares票🚀')).toBe('shares票🚀');
+      expect(normalizeQuery(' stock 🚀')).toBe(' stock 🚀');
       expect(normalizeQuery('©2023')).toBe('©2023');
     });
   });

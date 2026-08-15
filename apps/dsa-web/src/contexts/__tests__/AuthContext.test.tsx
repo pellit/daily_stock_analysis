@@ -147,7 +147,7 @@ describe('AuthContext', () => {
     logout.mockRejectedValue(
       createApiError(
         createParsedApiError({
-          title: '未Sign in',
+          title: 'not Sign in',
           message: 'Login required',
           rawMessage: 'Login required',
           status: 401,

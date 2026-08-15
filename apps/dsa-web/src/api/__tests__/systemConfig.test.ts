@@ -159,11 +159,11 @@ describe('systemConfigApi', () => {
         checks: [
           {
             key: 'llm_primary',
-            title: 'LLM 主Channel',
+            title: 'LLM main Channel',
             category: 'ai_model',
             required: true,
             status: 'needs_action',
-            message: '缺少主ModelConfig',
+            message: '缺fewmain ModelConfig',
             next_step: 'OpenSystem settings',
           },
         ],

@@ -112,7 +112,7 @@ describe('HomeStockWorkspace', () => {
       }],
     });
 
-    const row = screen.getByRole('button', { name: '暂无 AAPL 的AnalyzeDetail，可先Analyze' });
+    const row = screen.getByRole('button', { name: '暂 none  AAPL  AnalyzeDetail, canfirstAnalyze' });
     fireEvent.click(row);
 
     expect(await screen.findByRole('alert')).toHaveTextContent('No analysis details yet. Run an analysis first.');
@@ -128,7 +128,7 @@ describe('HomeStockWorkspace', () => {
       }],
     });
 
-    const row = screen.getByRole('button', { name: '正在查找 AAPL 的LatestAnalyzeDetail' });
+    const row = screen.getByRole('button', { name: 'Searching AAPL  LatestAnalyzeDetail' });
     fireEvent.click(row);
 
     expect(await screen.findByRole('alert')).toHaveTextContent('Looking up the latest analysis details. Please wait.');
@@ -145,7 +145,7 @@ describe('HomeStockWorkspace', () => {
       }],
     });
 
-    const row = screen.getByRole('button', { name: 'AAPL 的LatestAnalyzeDetail暂时无法Confirm，请稍后Retry' });
+    const row = screen.getByRole('button', { name: 'AAPL  LatestAnalyzeDetail暂hour none FRConfirm, Please waitRetry' });
     fireEvent.click(row);
 
     expect(await screen.findByRole('alert')).toHaveTextContent('Latest analysis details are temporarily unavailable. Please retry shortly.');
@@ -229,7 +229,7 @@ describe('HomeStockWorkspace', () => {
       }],
     });
 
-    fireEvent.click(screen.getByRole('button', { name: '暂无 AAPL 的AnalyzeDetail，可先Analyze' }));
+    fireEvent.click(screen.getByRole('button', { name: '暂 none  AAPL  AnalyzeDetail, canfirstAnalyze' }));
     expect(await screen.findByRole('alert')).toHaveTextContent('No analysis details yet. Run an analysis first.');
 
     rerenderWatchlistRows([{
@@ -298,7 +298,7 @@ describe('HomeStockWorkspace', () => {
       }],
     });
 
-    fireEvent.click(screen.getByRole('button', { name: '从WatchlistRemove 600519' }));
+    fireEvent.click(screen.getByRole('button', { name: 'fromWatchlistRemove 600519' }));
 
     expect(onRemoveFromWatchlist).toHaveBeenCalledWith('600519');
     expect(onHistoryItemClick).not.toHaveBeenCalled();

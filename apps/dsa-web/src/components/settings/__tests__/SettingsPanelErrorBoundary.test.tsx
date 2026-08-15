@@ -34,7 +34,7 @@ describe('SettingsPanelErrorBoundary', () => {
     );
 
     expect(screen.getByRole('alert')).toBeInTheDocument();
-    expect(screen.getByText('Notification settings加载Failure')).toBeInTheDocument();
+    expect(screen.getByText('Notification settingsLoadingFailure')).toBeInTheDocument();
     expect(screen.getByText('desktop.log')).toBeInTheDocument();
     expect(screen.getByText(/release Version、Windows Version和触发Entry/)).toBeInTheDocument();
     expect(screen.getByText(/Error摘要：mock settings panel crash/)).toBeInTheDocument();
@@ -68,7 +68,7 @@ describe('SettingsPanelErrorBoundary', () => {
       </SettingsPanelErrorBoundary>
     );
 
-    expect(screen.getByText('Agent Settings加载Failure')).toBeInTheDocument();
+    expect(screen.getByText('Agent SettingsLoadingFailure')).toBeInTheDocument();
 
     rerender(
       <SettingsPanelErrorBoundary title="Agent settings" resetKey="agent:v2">
@@ -77,8 +77,8 @@ describe('SettingsPanelErrorBoundary', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('Agent Settings已Restore')).toBeInTheDocument();
+      expect(screen.getByText('Agent Settings Restore')).toBeInTheDocument();
     });
-    expect(screen.queryByText('Agent Settings加载Failure')).not.toBeInTheDocument();
+    expect(screen.queryByText('Agent SettingsLoadingFailure')).not.toBeInTheDocument();
   });
 });

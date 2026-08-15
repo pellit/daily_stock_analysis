@@ -54,8 +54,8 @@ const context: MarketStructureContext = {
     stockRole: 'follower',
     themePhase: 'accelerating',
     riskTags: [
-      { code: 'theme_data_partial', message: '题材主线Data不Complete' },
-      { code: 'stock_theme_evidence_partial', message: '个sharesSector未匹配到Market题材榜单，个shares位置按FallbackEvidence处理' },
+      { code: 'theme_data_partial', message: 'topicmain 线Datanot Complete' },
+      { code: 'stock_theme_evidence_partial', message: '个sharesSectornot 匹配toMarkettopic榜form, 个shares位PlacebyFallbackEvidenceprocess' },
     ],
     missingFields: ['hotspot_constituents', 'leader_stocks'],
   },
@@ -65,14 +65,14 @@ describe('MarketStructureCard', () => {
   it('renders market layer and stock layer in Chinese', () => {
     render(<MarketStructureCard context={context} language="zh" />);
 
-    expect(screen.getByRole('region', { name: '题材主线与个shares位置' })).toBeInTheDocument();
-    expect(screen.getByText('Market题材层')).toBeVisible();
-    expect(screen.getByText('个shares位置层')).toBeVisible();
+    expect(screen.getByRole('region', { name: 'topicmain 线and个shares位Place' })).toBeInTheDocument();
+    expect(screen.getByText('Markettopiclayer')).toBeVisible();
+    expect(screen.getByText('个shares位Placelayer')).toBeVisible();
     expect(screen.getAllByText('PartialAvailable')).toHaveLength(3);
     expect(screen.getAllByText(/RoboticsTheme/)).toHaveLength(3);
     expect(screen.getByText('Accelerating')).toBeVisible();
-    expect(screen.getByText('跟随')).toBeVisible();
-    expect(screen.getByText('题材主线Data不Complete')).toBeVisible();
+    expect(screen.getByText('Follow随')).toBeVisible();
+    expect(screen.getByText('topicmain 线Datanot Complete')).toBeVisible();
     expect(screen.getByText('leader_stocks')).toBeVisible();
   });
 
@@ -87,7 +87,7 @@ describe('MarketStructureCard', () => {
     expect(screen.getByText('Missing Evidence')).toBeVisible();
     expect(screen.getByText('Market theme data is incomplete')).toBeVisible();
     expect(screen.getByText('Stock board did not match theme rankings')).toBeVisible();
-    expect(screen.queryByText('题材主线Data不Complete')).not.toBeInTheDocument();
+    expect(screen.queryByText('topicmain 线Datanot Complete')).not.toBeInTheDocument();
   });
 
   it('renders Korean labels', () => {

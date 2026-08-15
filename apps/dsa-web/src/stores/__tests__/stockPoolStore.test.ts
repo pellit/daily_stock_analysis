@@ -61,9 +61,9 @@ const historyReport = {
     createdAt: '2026-03-18T08:00:00Z',
   },
   summary: {
-    analysisSummary: 'Trend维持强势',
-    operationAdvice: 'ContinueWatch买点',
-    trendPrediction: '短线Range偏强',
+    analysisSummary: 'Trendmaintainstrong',
+    operationAdvice: 'ContinueWatchentry point',
+    trendPrediction: 'short-termRangerelatively strong',
     sentimentScore: 78,
   },
 };
@@ -331,7 +331,7 @@ describe('stockPoolStore', () => {
       stockCode: 'MARKET',
       stockName: 'Market review',
       reportType: 'market_review' as const,
-      operationAdvice: '查看复盘',
+      operationAdvice: 'View复盘',
       sentimentScore: 50,
     };
     vi.mocked(historyApi.getList).mockResolvedValue({
@@ -503,7 +503,7 @@ describe('stockPoolStore', () => {
 
   it('surfaces duplicate task errors without replacing the dashboard error state', async () => {
     vi.mocked(analysisApi.analyzeAsync).mockRejectedValue(
-      new DuplicateTaskError('600519', 'task-1', 'shares票 600519 正在Analyzing'),
+      new DuplicateTaskError('600519', 'task-1', ' stock  600519 In progressAnalyzing'),
     );
 
     useStockPoolStore.getState().setQuery('600519');
@@ -1097,7 +1097,7 @@ describe('stockPoolStore', () => {
 
   it('upserts pending and processing tasks from the backend snapshot', async () => {
     const existingTask = createTask({ taskId: 'task-existing', progress: 30 });
-    const updatedTask = createTask({ taskId: 'task-existing', progress: 80, message: 'LLM 正在GenerationResult' });
+    const updatedTask = createTask({ taskId: 'task-existing', progress: 80, message: 'LLM In progressGenerationResult' });
     const newTask = createTask({
       taskId: 'task-new',
       stockCode: '000001',
@@ -1168,7 +1168,7 @@ describe('stockPoolStore', () => {
       taskId: 'task-cancel-requested',
       status: 'cancel_requested',
       progress: 60,
-      message: '正在Cancel任务',
+      message: 'In progressCancelTask',
     });
     useStockPoolStore.getState().syncTaskCreated(staleTask);
     vi.mocked(analysisApi.getTasks).mockResolvedValue(

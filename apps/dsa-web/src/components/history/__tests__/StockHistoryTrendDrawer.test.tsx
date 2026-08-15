@@ -10,12 +10,12 @@ const report: AnalysisReport = {
     id: 1,
     queryId: 'q-1',
     stockCode: '600519',
-    stockName: '贵州茅units',
+    stockName: 'Kweichow Moutai',
     reportType: 'detailed',
     createdAt: '2026-03-20T08:00:00Z',
   },
   summary: {
-    analysisSummary: '等待Confirm',
+    analysisSummary: 'waitConfirm',
     operationAdvice: 'Buy',
     action: 'avoid',
     actionLabel: 'Avoid',
@@ -29,7 +29,7 @@ const items: HistoryItem[] = [
     id: 1,
     queryId: 'q-1',
     stockCode: '600519',
-    stockName: '贵州茅units',
+    stockName: 'Kweichow Moutai',
     sentimentScore: 35,
     operationAdvice: 'Buy',
     action: 'avoid',
@@ -73,7 +73,7 @@ describe('StockHistoryTrendDrawer', () => {
           ...report,
           summary: {
             ...report.summary,
-            operationAdvice: 'ContinueHold，等待Breakout',
+            operationAdvice: 'ContinueHold, waitBreakout',
             action: null,
             actionLabel: null,
           },
@@ -81,7 +81,7 @@ describe('StockHistoryTrendDrawer', () => {
         items={[
           {
             ...items[0],
-            operationAdvice: 'ContinueHold，等待Breakout',
+            operationAdvice: 'ContinueHold, waitBreakout',
             action: null,
             actionLabel: null,
           },
@@ -99,7 +99,7 @@ describe('StockHistoryTrendDrawer', () => {
       />,
     );
 
-    expect(screen.getAllByText('ContinueHold，等待Breakout').length).toBeGreaterThanOrEqual(2);
+    expect(screen.getAllByText('ContinueHold, waitBreakout').length).toBeGreaterThanOrEqual(2);
     expect(screen.queryByText('Hold')).not.toBeInTheDocument();
   });
 

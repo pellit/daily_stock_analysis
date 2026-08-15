@@ -17,10 +17,10 @@ const mockIndex: StockIndexItem[] = [
   {
     canonicalCode: '600519.SH',
     displayCode: '600519',
-    nameZh: '贵州茅units',
+    nameZh: 'Kweichow Moutai',
     pinyinFull: 'guizhoumaotai',
     pinyinAbbr: 'gzmt',
-    aliases: ['茅units'],
+    aliases: ['Moutai'],
     market: 'CN',
     assetType: 'stock',
     active: true,
@@ -64,7 +64,7 @@ describe('useAutocomplete', () => {
       {
         canonicalCode: '600519.SH',
         displayCode: '600519',
-        nameZh: '贵州茅units',
+        nameZh: 'Kweichow Moutai',
         market: 'CN',
         matchType: 'exact',
         matchField: 'code',

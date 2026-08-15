@@ -19,7 +19,7 @@ describe('ReportNews', () => {
       total: 1,
       items: [
         {
-          title: '茅units发布Latest经营Data',
+          title: 'MoutaiSend布LatestOperatingData',
           snippet: 'The company disclosed quarterly operating updates, raising market attention.',
           url: 'https://example.com/news',
         },
@@ -28,10 +28,10 @@ describe('ReportNews', () => {
 
     const { container } = render(<ReportNews recordId={1} />);
 
-    expect(await screen.findByText('茅units发布Latest经营Data')).toBeInTheDocument();
+    expect(await screen.findByText('MoutaiSend布LatestOperatingData')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Go to' })).toHaveAttribute('href', 'https://example.com/news');
-    expect(screen.getByText('相关资讯/后续检索')).toBeVisible();
-    expect(screen.getByText('Source：Report页补充资讯；Whether用于Analyze以InputData块为准。')).toBeVisible();
+    expect(screen.getByText('related资讯/afterContinue检索')).toBeVisible();
+    expect(screen.getByText('Source: Reportpage补充资讯; WhetheruseatAnalyze以InputDatablock为准.')).toBeVisible();
     expect(container.querySelector('.home-panel-card')).toBeTruthy();
     expect(container.querySelector('.home-subpanel')).toBeTruthy();
 
@@ -50,8 +50,8 @@ describe('ReportNews', () => {
 
     render(<ReportNews recordId={1} />);
 
-    expect(await screen.findByText('暂无相关资讯')).toBeInTheDocument();
-    expect(screen.getByText('可稍后Refresh以获取Latest资讯。')).toBeInTheDocument();
+    expect(await screen.findByText('暂 none related资讯')).toBeInTheDocument();
+    expect(screen.getByText('can稍afterRefresh以GetLatest资讯.')).toBeInTheDocument();
   });
 
   it('localizes the empty state description for english reports', async () => {
@@ -75,7 +75,7 @@ describe('ReportNews', () => {
         items: [
           {
             title: 'RetrySuccess',
-            snippet: '第二次RequestSuccess返回。',
+            snippet: '2ndRequestSuccessReturn.',
             url: 'https://example.com/retry',
           },
         ],

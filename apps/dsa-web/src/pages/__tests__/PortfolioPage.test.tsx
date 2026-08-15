@@ -251,9 +251,9 @@ function makeDecisionSignal(overrides: Partial<DecisionSignalItem> = {}): Decisi
     stopLoss: null,
     targetPrice: null,
     invalidation: null,
-    watchConditions: 'Watch量能',
-    reason: 'Trend延续',
-    riskSummary: '短线回撤Risk',
+    watchConditions: 'Watchamountcan',
+    reason: 'Trendcontinue',
+    riskSummary: 'short-termpullbackRisk',
     catalystSummary: null,
     evidence: undefined,
     dataQualitySummary: undefined,
@@ -330,7 +330,7 @@ describe('PortfolioPage FX refresh', () => {
       taskId: 'task-portfolio-1',
       traceId: 'task-portfolio-1',
       status: 'pending',
-      message: 'Analysis tasks已加入Queue: HK00700',
+      message: 'Analysis tasks CA入Queue: HK00700',
       analysisPhase: 'auto',
     });
     getLatestDecisionSignals.mockResolvedValue({ items: [], total: 0, page: 1, pageSize: 1 });
@@ -391,7 +391,7 @@ describe('PortfolioPage FX refresh', () => {
     expect(screen.getByText('Scope')).toBeInTheDocument();
     expect(screen.getByText('AI risk signals')).toBeInTheDocument();
     expect(screen.getByText('No defensive signals')).toBeInTheDocument();
-    expect(screen.queryByText('回撤监控')).not.toBeInTheDocument();
+    expect(screen.queryByText('pullbackMonitor')).not.toBeInTheDocument();
   });
 
   it('renders portfolio decision signal risk summary', async () => {
@@ -421,7 +421,7 @@ describe('PortfolioPage FX refresh', () => {
 
     await waitForInitialLoad();
 
-    expect(screen.getByText('AI Risk信号')).toBeInTheDocument();
+    expect(screen.getByText('AI Risksignal')).toBeInTheDocument();
     expect(screen.getByText(/Risk信号: 2/)).toBeInTheDocument();
     expect(screen.getByText(/Sell: 1 · Reduce position: 0 · Alert: 1/)).toBeInTheDocument();
     expect(screen.getByText('600519 · Sell')).toBeInTheDocument();
@@ -471,7 +471,7 @@ describe('PortfolioPage FX refresh', () => {
 
     await waitForInitialLoad();
 
-    expect(screen.getByText('信号Risk暂不Available')).toBeInTheDocument();
+    expect(screen.getByText('signalRisk暂not Available')).toBeInTheDocument();
   });
 
   it('refreshes FX for a single selected account and only reloads snapshot/risk', async () => {
@@ -498,7 +498,7 @@ describe('PortfolioPage FX refresh', () => {
     fireEvent.click(screen.getByRole('button', { name: 'RefreshExchange rate' }));
 
     await waitFor(() => expect(refreshFx).toHaveBeenCalledWith({ accountId: 1 }));
-    expect(await screen.findByText('Exchange rate已Refresh，共Update 1 对。')).toBeInTheDocument();
+    expect(await screen.findByText('Exchange rateRefreshed, 共Update 1 for.')).toBeInTheDocument();
     await waitFor(() => expect(getSnapshot).toHaveBeenCalledTimes(snapshotCallsBeforeRefresh + 1));
     await waitFor(() => expect(getRisk).toHaveBeenCalledTimes(riskCallsBeforeRefresh + 1));
     expect(listTrades).toHaveBeenCalledTimes(tradeCallsBeforeRefresh);
@@ -526,7 +526,7 @@ describe('PortfolioPage FX refresh', () => {
     fireEvent.click(screen.getByRole('button', { name: 'RefreshExchange rate' }));
 
     await waitFor(() => expect(refreshFx).toHaveBeenCalledWith({ accountId: undefined }));
-    expect(await screen.findByText('当前Scope无可Refresh的Exchange rate对。')).toBeInTheDocument();
+    expect(await screen.findByText('currentScope none canRefresh Exchange ratefor.')).toBeInTheDocument();
   });
 
   it('shows disabled feedback when FX online refresh is disabled even without a disabled reason', async () => {
@@ -546,7 +546,7 @@ describe('PortfolioPage FX refresh', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'RefreshExchange rate' }));
 
-    expect(await screen.findByText('Exchange rate在线Refresh已被禁用。')).toBeInTheDocument();
+    expect(await screen.findByText('Exchange rateat线Refresh 被Disable.')).toBeInTheDocument();
   });
 
   it('renders backend-provided position valuation fields and stale missing-price hint', async () => {
@@ -563,7 +563,7 @@ describe('PortfolioPage FX refresh', () => {
     expect(screen.getByText('420.0000')).toBeInTheDocument();
     expect(screen.getByText('HKD 4,200.00')).toBeInTheDocument();
     expect(screen.getByText('+5.00%')).toBeInTheDocument();
-    expect(screen.getByText('收盘价 · 2026-03-18')).toBeInTheDocument();
+    expect(screen.getByText('close价 · 2026-03-18')).toBeInTheDocument();
     expect(screen.getByText('Missing price')).toBeInTheDocument();
     expect(screen.getAllByText('--').length).toBeGreaterThanOrEqual(2);
 
@@ -585,15 +585,15 @@ describe('PortfolioPage FX refresh', () => {
     const latestSignal = makeDecisionSignal({
       id: 101,
       stockCode: '600519',
-      riskSummary: '分页后的Risk摘要',
-      watchConditions: '分页后的Watch conditions',
+      riskSummary: 'paginationafter RiskSummary',
+      watchConditions: 'paginationafter Watch conditions',
     });
     getLatestDecisionSignals.mockResolvedValueOnce({ items: [latestSignal], total: 1, page: 1, pageSize: 1 });
 
     render(<PortfolioPage />);
 
     expect(await screen.findByText('600519')).toBeInTheDocument();
-    expect(await screen.findByText('分页后的Risk摘要')).toBeInTheDocument();
+    expect(await screen.findByText('paginationafter RiskSummary')).toBeInTheDocument();
     expect(decisionSignalsApi.getLatest).toHaveBeenCalledWith('600519', {
       market: 'cn',
       limit: 1,
@@ -606,13 +606,13 @@ describe('PortfolioPage FX refresh', () => {
     getSnapshot.mockResolvedValue(makeSnapshot({ positions: [position] }));
     getLatestDecisionSignals
       .mockResolvedValueOnce({
-        items: [makeDecisionSignal({ stockCode: '600519', riskSummary: '旧 AI Risk' })],
+        items: [makeDecisionSignal({ stockCode: '600519', riskSummary: 'old  AI Risk' })],
         total: 1,
         page: 1,
         pageSize: 1,
       })
       .mockResolvedValueOnce({
-        items: [makeDecisionSignal({ stockCode: '600519', riskSummary: '新 AI Risk' })],
+        items: [makeDecisionSignal({ stockCode: '600519', riskSummary: 'new AI Risk' })],
         total: 1,
         page: 1,
         pageSize: 1,
@@ -620,12 +620,12 @@ describe('PortfolioPage FX refresh', () => {
 
     render(<PortfolioPage />);
 
-    expect(await screen.findByText('旧 AI Risk')).toBeInTheDocument();
+    expect(await screen.findByText('old  AI Risk')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'RefreshData' }));
 
-    expect(await screen.findByText('新 AI Risk')).toBeInTheDocument();
+    expect(await screen.findByText('new AI Risk')).toBeInTheDocument();
     await waitFor(() => expect(getLatestDecisionSignals).toHaveBeenCalledTimes(2));
-    expect(screen.queryByText('旧 AI Risk')).not.toBeInTheDocument();
+    expect(screen.queryByText('old  AI Risk')).not.toBeInTheDocument();
   });
 
   it('waits for the selected-account snapshot before loading account-scoped holding signals', async () => {
@@ -643,7 +643,7 @@ describe('PortfolioPage FX refresh', () => {
       }))
       .mockReturnValueOnce(accountTwoSnapshot.promise);
     getLatestDecisionSignals.mockResolvedValue({
-      items: [makeDecisionSignal({ stockCode: '600519', riskSummary: '账号信号' })],
+      items: [makeDecisionSignal({ stockCode: '600519', riskSummary: '账号signal' })],
       total: 1,
       page: 1,
       pageSize: 1,
@@ -651,7 +651,7 @@ describe('PortfolioPage FX refresh', () => {
 
     render(<PortfolioPage />);
 
-    expect(await screen.findByText('账号信号')).toBeInTheDocument();
+    expect(await screen.findByText('账号signal')).toBeInTheDocument();
     const signalCallsBeforeSwitch = getLatestDecisionSignals.mock.calls.length;
 
     const accountSelect = screen.getAllByRole('combobox')[0];
@@ -660,7 +660,7 @@ describe('PortfolioPage FX refresh', () => {
     await waitFor(() => {
       expect(getSnapshot).toHaveBeenLastCalledWith({ accountId: 2, costMethod: 'fifo', includeRealtime: false });
     });
-    expect(screen.queryByText('账号信号')).not.toBeInTheDocument();
+    expect(screen.queryByText('账号signal')).not.toBeInTheDocument();
     expect(getLatestDecisionSignals).toHaveBeenCalledTimes(signalCallsBeforeSwitch);
 
     await act(async () => {
@@ -708,7 +708,7 @@ describe('PortfolioPage FX refresh', () => {
     getLatestDecisionSignals
       .mockReturnValueOnce(oldSignals.promise)
       .mockResolvedValueOnce({
-        items: [makeDecisionSignal({ stockCode: '600519', riskSummary: '新账号信号' })],
+        items: [makeDecisionSignal({ stockCode: '600519', riskSummary: 'new账号signal' })],
         total: 1,
         page: 1,
         pageSize: 1,
@@ -721,11 +721,11 @@ describe('PortfolioPage FX refresh', () => {
     const accountSelect = screen.getAllByRole('combobox')[0];
     fireEvent.change(accountSelect, { target: { value: '2' } });
 
-    expect(await screen.findByText('新账号信号')).toBeInTheDocument();
+    expect(await screen.findByText('new账号signal')).toBeInTheDocument();
 
     await act(async () => {
       oldSignals.resolve({
-        items: [makeDecisionSignal({ stockCode: '600519', riskSummary: '旧账号晚返回信号' })],
+        items: [makeDecisionSignal({ stockCode: '600519', riskSummary: 'old 账号lateReturnsignal' })],
         total: 1,
         page: 1,
         pageSize: 1,
@@ -733,8 +733,8 @@ describe('PortfolioPage FX refresh', () => {
       await oldSignals.promise;
     });
 
-    expect(screen.getByText('新账号信号')).toBeInTheDocument();
-    expect(screen.queryByText('旧账号晚返回信号')).not.toBeInTheDocument();
+    expect(screen.getByText('new账号signal')).toBeInTheDocument();
+    expect(screen.queryByText('old 账号lateReturnsignal')).not.toBeInTheDocument();
   });
 
   it('matches holding signals by stock-code equivalence and leaves unmatched rows empty', async () => {
@@ -755,7 +755,7 @@ describe('PortfolioPage FX refresh', () => {
       }
       if (stockCode.includes('00700')) {
         return {
-          items: [makeDecisionSignal({ id: 2, stockCode: 'HK00700', market: 'hk', riskSummary: 'HKRisk', watchConditions: 'Watch回购' })],
+          items: [makeDecisionSignal({ id: 2, stockCode: 'HK00700', market: 'hk', riskSummary: 'HKRisk', watchConditions: 'WatchReturn购' })],
           total: 1,
           page: 1,
           pageSize: 1,
@@ -787,7 +787,7 @@ describe('PortfolioPage FX refresh', () => {
     ] }));
     getLatestDecisionSignals
       .mockResolvedValueOnce({
-        items: [makeDecisionSignal({ stockCode: '600519', riskSummary: '已加载Risk' })],
+        items: [makeDecisionSignal({ stockCode: '600519', riskSummary: 'LoadedRisk' })],
         total: 1,
         page: 1,
         pageSize: 1,
@@ -796,7 +796,7 @@ describe('PortfolioPage FX refresh', () => {
 
     render(<PortfolioPage />);
 
-    expect(await screen.findByText('已加载Risk')).toBeInTheDocument();
+    expect(await screen.findByText('LoadedRisk')).toBeInTheDocument();
     expect(await screen.findByText('AI signals degraded')).toBeInTheDocument();
     expect(screen.getByText(/latest AAPL failed/)).toBeInTheDocument();
   });
@@ -888,8 +888,8 @@ describe('PortfolioPage FX refresh', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'RefreshExchange rate' }));
 
-    expect(await screen.findByText('Exchange rate在线Refresh已被禁用。')).toBeInTheDocument();
-    expect(screen.queryByText('当前Scope无可Refresh的Exchange rate对。')).not.toBeInTheDocument();
+    expect(await screen.findByText('Exchange rateat线Refresh 被Disable.')).toBeInTheDocument();
+    expect(screen.queryByText('currentScope none canRefresh Exchange ratefor.')).not.toBeInTheDocument();
   });
 
   it('shows warning feedback when FX refresh still falls back to stale rates', async () => {
@@ -944,7 +944,7 @@ describe('PortfolioPage FX refresh', () => {
       createApiError(
         createParsedApiError({
           title: 'RefreshFailure',
-          message: 'Exchange rate服务暂时不Available',
+          message: 'Exchange rateService暂hournot Available',
         }),
       ),
     );
@@ -957,7 +957,7 @@ describe('PortfolioPage FX refresh', () => {
     fireEvent.click(refreshButton);
 
     const fxAlertTitle = await screen.findByText('RefreshFailure');
-    expect(fxAlertTitle.closest('[role="alert"]')).toHaveTextContent('Exchange rate服务暂时不Available');
+    expect(fxAlertTitle.closest('[role="alert"]')).toHaveTextContent('Exchange rateService暂hournot Available');
     await waitFor(() => expect(screen.getByRole('button', { name: 'RefreshExchange rate' })).not.toBeDisabled());
   });
 
@@ -967,8 +967,8 @@ describe('PortfolioPage FX refresh', () => {
       .mockRejectedValueOnce(
         createApiError(
           createParsedApiError({
-            title: '快照RefreshFailure',
-            message: '无法加载LatestPortfolio快照',
+            title: 'fast照RefreshFailure',
+            message: ' none FRLoadingLatestPortfoliofast照',
           }),
         ),
       );
@@ -979,9 +979,9 @@ describe('PortfolioPage FX refresh', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'RefreshExchange rate' }));
 
-    const fxAlertTitle = await screen.findByText('快照RefreshFailure');
-    expect(fxAlertTitle.closest('[role="alert"]')).toHaveTextContent('无法加载LatestPortfolio快照');
-    await waitFor(() => expect(screen.queryByText('Exchange rate已Refresh，共Update 1 对。')).not.toBeInTheDocument());
+    const fxAlertTitle = await screen.findByText('fast照RefreshFailure');
+    expect(fxAlertTitle.closest('[role="alert"]')).toHaveTextContent(' none FRLoadingLatestPortfoliofast照');
+    await waitFor(() => expect(screen.queryByText('Exchange rateRefreshed, 共Update 1 for.')).not.toBeInTheDocument());
     await waitFor(() => expect(screen.getByRole('button', { name: 'RefreshExchange rate' })).not.toBeDisabled());
   });
 
@@ -1036,7 +1036,7 @@ describe('PortfolioPage FX refresh', () => {
 
     expect(getSnapshot).toHaveBeenCalledTimes(snapshotCallsAfterSwitch);
     expect(getRisk).toHaveBeenCalledTimes(riskCallsAfterSwitch);
-    expect(screen.queryByText('Exchange rate已Refresh，共Update 1 对。')).not.toBeInTheDocument();
+    expect(screen.queryByText('Exchange rateRefreshed, 共Update 1 for.')).not.toBeInTheDocument();
   });
 
   it('drops late FX refresh results after switching cost method', async () => {
@@ -1080,7 +1080,7 @@ describe('PortfolioPage FX refresh', () => {
 
     expect(getSnapshot).toHaveBeenCalledTimes(snapshotCallsAfterSwitch);
     expect(getRisk).toHaveBeenCalledTimes(riskCallsAfterSwitch);
-    expect(screen.queryByText('Exchange rate已Refresh，共Update 1 对。')).not.toBeInTheDocument();
+    expect(screen.queryByText('Exchange rateRefreshed, 共Update 1 for.')).not.toBeInTheDocument();
   });
 
   it('deactivates the selected account from the account toolbar and reloads accounts', async () => {
@@ -1100,7 +1100,7 @@ describe('PortfolioPage FX refresh', () => {
 
     const dialog = await screen.findByText('DeletePortfolio account');
     expect(dialog.closest('[role="dialog"]') ?? document.body).toHaveTextContent(
-      'Delete后该Account会从DefaultList、快照、Risk和录入EntryHide',
+      'Deleteafter该AccountwillfromDefaultList, fast照, Risk & 录入EntryHide',
     );
     fireEvent.click(screen.getByRole('button', { name: 'Confirm delete' }));
 

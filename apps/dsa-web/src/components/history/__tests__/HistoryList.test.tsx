@@ -31,7 +31,7 @@ const longChineseNameItem: HistoryItem = {
   id: 2,
   queryId: 'q-2',
   stockCode: '600519',
-  stockName: 'Kweichow Moutaishares票shares份有限公司',
+  stockName: 'Kweichow Moutai Co., Ltd.',
   sentimentScore: 75,
   operationAdvice: 'Hold',
   createdAt: '2026-03-16T08:00:00Z',
@@ -67,7 +67,7 @@ describe('HistoryList', () => {
       />,
     );
 
-    expect(screen.getByText('已选 1')).toBeInTheDocument();
+    expect(screen.getByText(' 选 1')).toBeInTheDocument();
     expect(screen.getByText('Buy 82')).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: /Kweichow Moutai/i }));
@@ -106,7 +106,7 @@ describe('HistoryList', () => {
             ...items[0],
             action: null,
             actionLabel: null,
-            operationAdvice: '不建议Buy，等待Confirm',
+            operationAdvice: 'not RecommendBuy, waitConfirm',
             sentimentScore: 28,
           },
         ]}
@@ -208,7 +208,7 @@ describe('HistoryList', () => {
             ...items[0],
             action: null,
             actionLabel: null,
-            operationAdvice: '买盘增强，ContinueWatch',
+            operationAdvice: 'Buy盘增强, ContinueWatch',
             sentimentScore: 32,
           },
           {
@@ -217,7 +217,7 @@ describe('HistoryList', () => {
             queryId: 'q-2',
             action: null,
             actionLabel: null,
-            operationAdvice: '卖压缓解，ContinueWatch',
+            operationAdvice: 'Sell压缓解, ContinueWatch',
             sentimentScore: 34,
           },
         ]}
@@ -281,9 +281,9 @@ describe('HistoryList', () => {
       />,
     );
 
-    // 'Kweichow Moutaishares票shares份有限公司' (12 Chinese chars) should be truncated to 'Kweichow Moutaishares票shares份.' (8 chars + dot)
-    expect(screen.getByText('Kweichow Moutaishares票shares份.')).toBeInTheDocument();
-    expect(screen.queryByText('Kweichow Moutaishares票shares份有限公司')).not.toBeInTheDocument();
+    // 'Kweichow Moutai Co., Ltd.' (12 Chinese chars) should be truncated to 'Kweichow Moutai Co..' (8 chars + dot)
+    expect(screen.getByText('Kweichow Moutai Co..')).toBeInTheDocument();
+    expect(screen.queryByText('Kweichow Moutai Co., Ltd.')).not.toBeInTheDocument();
     expect(
       screen.getByRole('button', {
         name: /^Kweichow Moutaishares票shares份有限公司 600519 History$/,
@@ -292,8 +292,8 @@ describe('HistoryList', () => {
 
     const actions = screen.getByTestId('history-card-actions');
     const meta = screen.getByTestId('history-card-meta');
-    expect(within(actions).queryByText('CN · 非交易日')).not.toBeInTheDocument();
-    expect(within(meta).getByText('CN · 非交易日')).toBeVisible();
+    expect(within(actions).queryByText('CN · 非tradeday')).not.toBeInTheDocument();
+    expect(within(meta).getByText('CN · 非tradeday')).toBeVisible();
   });
 
   it('generates unique select-all ids across multiple instances', () => {

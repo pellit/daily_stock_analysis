@@ -12,9 +12,9 @@ const baseMeta = {
 };
 
 const baseSummary = {
-  analysisSummary: 'Trend维持强势',
-  operationAdvice: 'ContinueWatch买点',
-  trendPrediction: '短线Range偏强',
+  analysisSummary: 'Trendmaintainstrong',
+  operationAdvice: 'ContinueWatchentry point',
+  trendPrediction: 'short-termRangerelatively strong',
   sentimentScore: 78,
 };
 
@@ -46,7 +46,7 @@ describe('ReportOverview', () => {
 
     expect(screen.getByLabelText('MarketPhase: CN · Intraday')).toBeInTheDocument();
     expect(screen.getByText('MarketPhase: CN · Intraday')).toBeVisible();
-    expect(screen.getByLabelText('Daily未Complete')).toBeInTheDocument();
+    expect(screen.getByLabelText('Dailynot Complete')).toBeInTheDocument();
   });
 
   it('renders English final market phase and partial-bar labels', () => {
@@ -105,14 +105,14 @@ describe('ReportOverview', () => {
     );
 
     expect(screen.getByText('MarketPhase: PhaseUnknown')).toBeVisible();
-    expect(screen.queryByText('Daily未Complete')).not.toBeInTheDocument();
+    expect(screen.queryByText('Dailynot Complete')).not.toBeInTheDocument();
   });
 
   it('does not render a market phase placeholder for legacy reports', () => {
     render(<ReportOverview meta={baseMeta} summary={baseSummary} />);
 
     expect(screen.queryByText(/MarketPhase/)).not.toBeInTheDocument();
-    expect(screen.queryByText('Daily未Complete')).not.toBeInTheDocument();
+    expect(screen.queryByText('Dailynot Complete')).not.toBeInTheDocument();
   });
 
   it('renders related boards with leading and lagging markers', () => {
@@ -138,7 +138,7 @@ describe('ReportOverview', () => {
       />,
     );
 
-    expect(screen.getByText('关联Sector')).toBeInTheDocument();
+    expect(screen.getByText('关LianSector')).toBeInTheDocument();
     expect(screen.getByText('Liquor')).toBeInTheDocument();
     expect(screen.getAllByText('Leading')).toHaveLength(2);
     expect(screen.getByText('+2.31%')).toBeInTheDocument();
@@ -168,16 +168,16 @@ describe('ReportOverview', () => {
     );
 
     expect(screen.getByText('Liquor')).toBeInTheDocument();
-    expect(screen.getByText('关联Sector')).toBeInTheDocument();
+    expect(screen.getByText('关LianSector')).toBeInTheDocument();
     expect(screen.getByText('Lagging')).toBeInTheDocument();
     expect(screen.getByText('-3.20%')).toBeInTheDocument();
     expect(screen.queryByText('+2.31%')).not.toBeInTheDocument();
   });
 
   it('renders untyped boards in a single related-board row with ranking matches', () => {
-    const conceptRankingBoard = '榜单样例甲';
-    const fallbackConceptBoard = '未标注Sector';
-    const sectorRankingBoard = '榜单样例乙';
+    const conceptRankingBoard = '榜formsampleexample甲';
+    const fallbackConceptBoard = 'not 标NoteSector';
+    const sectorRankingBoard = '榜formsampleexample乙';
 
     render(
       <ReportOverview
@@ -201,7 +201,7 @@ describe('ReportOverview', () => {
       />,
     );
 
-    const relatedBoardsRegion = screen.getByRole('region', { name: '关联Sector' });
+    const relatedBoardsRegion = screen.getByRole('region', { name: '关LianSector' });
 
     expect(within(relatedBoardsRegion).getByText(sectorRankingBoard)).toBeInTheDocument();
     expect(within(relatedBoardsRegion).getByText(conceptRankingBoard)).toBeInTheDocument();
@@ -218,20 +218,20 @@ describe('ReportOverview', () => {
           belongBoards: [
             { name: 'Liquor', type: 'Sector' },
             { name: 'Consumer', type: 'Theme' },
-            { name: '高端制造' },
-            { name: '沪shares通' },
+            { name: 'high端制造' },
+            { name: '沪sharesThrough' },
           ],
         }}
       />,
     );
 
-    const actionAdviceTitle = screen.getByText('Action建议');
-    const relatedBoardsRegion = screen.getByRole('region', { name: '关联Sector' });
+    const actionAdviceTitle = screen.getByText('ActionRecommend');
+    const relatedBoardsRegion = screen.getByRole('region', { name: '关LianSector' });
     const boardLists = container.querySelectorAll('.home-related-board-list');
 
     expect(actionAdviceTitle.compareDocumentPosition(relatedBoardsRegion) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    expect(screen.getByText('关联Sector')).toBeInTheDocument();
-    expect(screen.getByText('沪shares通')).toBeInTheDocument();
+    expect(screen.getByText('关LianSector')).toBeInTheDocument();
+    expect(screen.getByText('沪sharesThrough')).toBeInTheDocument();
     expect(boardLists[0]).toHaveClass(
       'flex-nowrap',
       'overflow-x-auto',
@@ -253,7 +253,7 @@ describe('ReportOverview', () => {
       />,
     );
 
-    expect(screen.getByText('关联Sector')).toBeInTheDocument();
+    expect(screen.getByText('关LianSector')).toBeInTheDocument();
     expect(screen.getByText('Semiconductors')).toBeInTheDocument();
     expect(screen.queryByText('neutral')).not.toBeInTheDocument();
     expect(screen.queryByText('Leading')).not.toBeInTheDocument();
@@ -275,7 +275,7 @@ describe('ReportOverview', () => {
       />,
     );
 
-    expect(screen.getByText('关联Sector')).toBeInTheDocument();
+    expect(screen.getByText('关LianSector')).toBeInTheDocument();
     expect(screen.getByText('Liquor')).toBeInTheDocument();
     expect(screen.queryByText('Sector')).not.toBeInTheDocument();
     expect(screen.queryByText('Leading')).not.toBeInTheDocument();
@@ -285,7 +285,7 @@ describe('ReportOverview', () => {
   it('hides related boards section when no boards are available', () => {
     render(<ReportOverview meta={baseMeta} summary={baseSummary} details={{ belongBoards: [] }} />);
 
-    expect(screen.queryByText('Sector联动')).not.toBeInTheDocument();
+    expect(screen.queryByText('Sectorlinked')).not.toBeInTheDocument();
   });
 
   it('fails open on malformed ranking payloads', () => {
@@ -303,7 +303,7 @@ describe('ReportOverview', () => {
       />,
     );
 
-    expect(screen.getByText('关联Sector')).toBeInTheDocument();
+    expect(screen.getByText('关LianSector')).toBeInTheDocument();
     expect(screen.getByText('Liquor')).toBeInTheDocument();
     expect(screen.getByText('Lagging')).toBeInTheDocument();
     expect(screen.getByText('-2.50%')).toBeInTheDocument();

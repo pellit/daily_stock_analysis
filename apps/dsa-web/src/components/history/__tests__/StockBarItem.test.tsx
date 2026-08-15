@@ -6,7 +6,7 @@ import type { StockBarItem } from '../../../types/analysis';
 const issue1600Item: StockBarItem = {
   id: 1,
   stockCode: '600519',
-  stockName: 'Kweichow Moutaishares票shares份有限公司',
+  stockName: 'Kweichow Moutai Co., Ltd.',
   sentimentScore: 62,
   operationAdvice: 'Watch',
   analysisCount: 2,
@@ -34,10 +34,10 @@ describe('StockBarItemComponent', () => {
 
     expect(within(actions).getByText('Watch 62')).toBeInTheDocument();
     expect(within(actions).getByRole('button', { name: /Delete Kweichow Moutaishares票shares份有限公司 History/ })).toBeInTheDocument();
-    expect(within(actions).queryByText('CN · 非交易日')).not.toBeInTheDocument();
-    expect(within(meta).getByText('CN · 非交易日')).toBeVisible();
+    expect(within(actions).queryByText('CN · 非tradeday')).not.toBeInTheDocument();
+    expect(within(meta).getByText('CN · 非tradeday')).toBeVisible();
 
-    expect(screen.getByText('Kweichow Moutaishares票shares份.')).toBeVisible();
+    expect(screen.getByText('Kweichow Moutai Co..')).toBeVisible();
     expect(
       screen.getByRole('button', {
         name: /^Kweichow Moutaishares票shares份有限公司 600519 History$/,
@@ -72,7 +72,7 @@ describe('StockBarItemComponent', () => {
           ...issue1600Item,
           action: null,
           actionLabel: null,
-          operationAdvice: '不建议Buy，等待Confirm',
+          operationAdvice: 'not RecommendBuy, waitConfirm',
           sentimentScore: 28,
         }}
         isViewing={false}
@@ -169,7 +169,7 @@ describe('StockBarItemComponent', () => {
           ...issue1600Item,
           action: null,
           actionLabel: null,
-          operationAdvice: '买盘增强，ContinueWatch',
+          operationAdvice: 'Buy盘增强, ContinueWatch',
           sentimentScore: 32,
         }}
         isViewing={false}
@@ -187,7 +187,7 @@ describe('StockBarItemComponent', () => {
           ...issue1600Item,
           action: null,
           actionLabel: null,
-          operationAdvice: '卖压缓解，ContinueWatch',
+          operationAdvice: 'Sell压缓解, ContinueWatch',
           sentimentScore: 34,
         }}
         isViewing={false}

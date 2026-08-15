@@ -53,7 +53,7 @@ const basePerformance = {
 const baseResultItem = {
   analysisHistoryId: 101,
   code: '600519',
-  stockName: '贵州茅units',
+  stockName: 'Kweichow Moutai',
   analysisDate: '2026-03-20',
   evalWindowDays: 10,
   engineVersion: 'test-engine',
@@ -103,7 +103,7 @@ describe('BacktestPage', () => {
   it('renders shared surface inputs and prediction tracking outputs', async () => {
     render(<BacktestPage />);
 
-    const filterInput = await screen.findByPlaceholderText('按Stock codeFilter（留空表示All）');
+    const filterInput = await screen.findByPlaceholderText('byStock codeFilter (留emptytable示All) ');
     const windowInput = screen.getByPlaceholderText('10');
 
     expect(filterInput).toHaveClass('input-surface');
@@ -114,7 +114,7 @@ describe('BacktestPage', () => {
     expect(await screen.findByText('win')).toBeInTheDocument();
     expect(screen.getByText('Completed')).toBeInTheDocument();
     expect(screen.getByText('600519')).toBeInTheDocument();
-    expect(screen.getByText('贵州茅units')).toBeInTheDocument();
+    expect(screen.getByText('Kweichow Moutai')).toBeInTheDocument();
     const resultRow = screen.getByText('600519').closest('tr');
     expect(resultRow).not.toBeNull();
     const rowScope = within(resultRow as HTMLElement);
@@ -122,12 +122,12 @@ describe('BacktestPage', () => {
     expect(rowScope.getByText('RangeBullish')).toBeInTheDocument();
     expect(rowScope.getByText('ContinueHold')).toBeInTheDocument();
     expect(screen.getByText('up')).toBeInTheDocument();
-    expect(screen.getByText('窗口Return')).toBeInTheDocument();
+    expect(screen.getByText('WindowReturn')).toBeInTheDocument();
     expect(screen.getByText('Direction匹配')).toBeInTheDocument();
     expect(screen.getByText('long')).toBeInTheDocument();
     expect(screen.getAllByLabelText('Yes').length).toBeGreaterThan(0);
     expect(screen.getByText('Direction准确率')).toBeInTheDocument();
-    expect(screen.getByText('平均模拟Return')).toBeInTheDocument();
+    expect(screen.getByText('averagesimulationReturn')).toBeInTheDocument();
   });
 
   it('falls back to the taxonomy label when backtest actionLabel is missing', async () => {
@@ -218,18 +218,18 @@ describe('BacktestPage', () => {
     expect(screen.getByText('Window return')).toBeInTheDocument();
     expect(screen.getByText('Direction match')).toBeInTheDocument();
     expect(screen.getByText('Direction accuracy')).toBeInTheDocument();
-    expect(screen.queryByText('运行Backtest')).not.toBeInTheDocument();
-    expect(screen.queryByText('窗口Return')).not.toBeInTheDocument();
+    expect(screen.queryByText('RunBacktest')).not.toBeInTheDocument();
+    expect(screen.queryByText('WindowReturn')).not.toBeInTheDocument();
   });
 
   it('filters results with stock code, window, phase, and analysis date range when clicking Filter', async () => {
     render(<BacktestPage />);
 
-    const filterInput = await screen.findByPlaceholderText('按Stock codeFilter（留空表示All）');
+    const filterInput = await screen.findByPlaceholderText('byStock codeFilter (留emptytable示All) ');
     const windowInput = screen.getByPlaceholderText('10');
     const phaseSelect = screen.getByDisplayValue('All phases');
     const fromInput = screen.getByLabelText('AnalyzeStartDate');
-    const toInput = screen.getByLabelText('Analyze结束Date');
+    const toInput = screen.getByLabelText('AnalyzeendDate');
 
     fireEvent.change(filterInput, { target: { value: 'aapl' } });
     fireEvent.change(windowInput, { target: { value: '20' } });
@@ -264,21 +264,21 @@ describe('BacktestPage', () => {
       completed: 0,
       insufficient: 0,
       errors: 0,
-      message: '未找到符合条件的Historical analysis records',
+      message: 'Not found符合item件 Historical analysis records',
       diagnostics: { emptyReason: 'no_matching_analysis' },
     });
     render(<BacktestPage />);
 
-    const filterInput = await screen.findByPlaceholderText('按Stock codeFilter（留空表示All）');
+    const filterInput = await screen.findByPlaceholderText('byStock codeFilter (留emptytable示All) ');
     const windowInput = screen.getByPlaceholderText('10');
     const fromInput = screen.getByLabelText('AnalyzeStartDate');
-    const toInput = screen.getByLabelText('Analyze结束Date');
+    const toInput = screen.getByLabelText('AnalyzeendDate');
 
     fireEvent.change(filterInput, { target: { value: '600519.SH' } });
     fireEvent.change(windowInput, { target: { value: '15' } });
     fireEvent.change(fromInput, { target: { value: '2026-03-01' } });
     fireEvent.change(toInput, { target: { value: '2026-03-31' } });
-    fireEvent.click(screen.getByRole('button', { name: '运行Backtest' }));
+    fireEvent.click(screen.getByRole('button', { name: 'RunBacktest' }));
 
     await waitFor(() => {
       expect(mockRun).toHaveBeenCalledWith({
@@ -309,9 +309,9 @@ describe('BacktestPage', () => {
       });
     });
 
-    expect(await screen.findByText('已处理:')).toBeInTheDocument();
-    expect(screen.getByText('已Save:')).toBeInTheDocument();
-    expect(screen.getByText('未找到符合条件的Historical analysis records')).toBeInTheDocument();
+    expect(await screen.findByText(' process:')).toBeInTheDocument();
+    expect(screen.getByText('Saved:')).toBeInTheDocument();
+    expect(screen.getByText('Not found符合item件 Historical analysis records')).toBeInTheDocument();
   });
 
   it('uses backend-applied eval window when run input is empty', async () => {
@@ -322,21 +322,21 @@ describe('BacktestPage', () => {
       insufficient: 0,
       errors: 0,
       appliedEvalWindowDays: 10,
-      message: '未找到符合条件的Historical analysis records',
+      message: 'Not found符合item件 Historical analysis records',
       diagnostics: { emptyReason: 'no_matching_analysis' },
     });
     render(<BacktestPage />);
 
-    const filterInput = await screen.findByPlaceholderText('按Stock codeFilter（留空表示All）');
+    const filterInput = await screen.findByPlaceholderText('byStock codeFilter (留emptytable示All) ');
     const windowInput = screen.getByPlaceholderText('10');
     const fromInput = screen.getByLabelText('AnalyzeStartDate');
-    const toInput = screen.getByLabelText('Analyze结束Date');
+    const toInput = screen.getByLabelText('AnalyzeendDate');
 
     fireEvent.change(filterInput, { target: { value: '600519.SH' } });
     fireEvent.change(windowInput, { target: { value: '' } });
     fireEvent.change(fromInput, { target: { value: '2026-03-01' } });
     fireEvent.change(toInput, { target: { value: '2026-03-31' } });
-    fireEvent.click(screen.getByRole('button', { name: '运行Backtest' }));
+    fireEvent.click(screen.getByRole('button', { name: 'RunBacktest' }));
 
     await waitFor(() => {
       expect(mockRun).toHaveBeenCalledWith({
@@ -374,14 +374,14 @@ describe('BacktestPage', () => {
       });
     });
 
-    expect(await screen.findByText('未找到符合条件的Historical analysis records')).toBeInTheDocument();
+    expect(await screen.findByText('Not found符合item件 Historical analysis records')).toBeInTheDocument();
   });
 
   it('switches to next-day validation with the 1D shortcut', async () => {
     render(<BacktestPage />);
 
-    await screen.findByPlaceholderText('按Stock codeFilter（留空表示All）');
-    fireEvent.click(screen.getByRole('button', { name: '1 日验证' }));
+    await screen.findByPlaceholderText('byStock codeFilter (留emptytable示All) ');
+    fireEvent.click(screen.getByRole('button', { name: '1 dayverify' }));
 
     await waitFor(() => {
       expect(mockGetResults).toHaveBeenLastCalledWith({
@@ -401,8 +401,8 @@ describe('BacktestPage', () => {
       });
     });
 
-    expect(screen.getByText('实际表现')).toBeInTheDocument();
+    expect(screen.getByText('actualtable现')).toBeInTheDocument();
     expect(screen.getByText('准确性')).toBeInTheDocument();
-    expect(screen.getByText('1 日验证模式会用下一个交易日收盘表现校验 AI 预测。')).toBeInTheDocument();
+    expect(screen.getByText('1 dayverify模formwillusedown一个tradedayclosetable现validate AI forecast.')).toBeInTheDocument();
   });
 });

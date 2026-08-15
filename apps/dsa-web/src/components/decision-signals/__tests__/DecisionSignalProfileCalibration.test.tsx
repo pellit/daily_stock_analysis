@@ -117,7 +117,7 @@ describe('DecisionSignalProfileCalibration', () => {
     expect(balancedButton).toHaveAttribute('aria-pressed', 'true');
     expect(screen.getAllByText('0%').length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText('No calculable result').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByText('另有 2 条History样本缺少决策Profile标记，未计入三类Profile。')).toBeInTheDocument();
+    expect(screen.getByText('另有 2 itemHistorysamplethis缺few决策Profile标记, not 计入三ClassProfile.')).toBeInTheDocument();
 
     const horizonCard = screen.getByRole('heading', { name: '3 days' }).closest('article');
     expect(horizonCard).not.toBeNull();

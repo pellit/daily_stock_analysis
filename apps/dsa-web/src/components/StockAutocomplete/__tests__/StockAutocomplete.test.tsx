@@ -83,7 +83,7 @@ const hkSuggestion = {
 const bseSuggestion = {
   canonicalCode: "920493.BJ",
   displayCode: "920493",
-  nameZh: "示例BSEshares票",
+  nameZh: "示exampleBSE stock ",
   market: "BSE" as const,
   matchType: "exact" as const,
   matchField: "code" as const,
@@ -161,7 +161,7 @@ describe('StockAutocomplete', () => {
         value=""
         onChange={mockOnChange}
         onSubmit={mockOnSubmit}
-        placeholder="请Input代码"
+        placeholder="Please Input代码"
       />
     );
 
@@ -565,7 +565,7 @@ describe('StockAutocomplete', () => {
       fireEvent.keyDown(input, { key: 'Enter' });
 
       expect(mockOnChange).toHaveBeenCalledWith('920493');
-      expect(mockOnSubmit).toHaveBeenCalledWith('920493.BJ', '示例BSEshares票', 'autocomplete', {
+      expect(mockOnSubmit).toHaveBeenCalledWith('920493.BJ', '示exampleBSE stock ', 'autocomplete', {
         market: 'BSE',
         displayCode: '920493',
       });
