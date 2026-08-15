@@ -98,7 +98,7 @@ def _history_share_image_input(
             status_code=404,
             detail={
                 "error": "not_found",
-                "message": f"未找到 id/query_id={record_id} 的分析记录",
+                "message": f"No analysis record found for id/query_id={record_id}",
             },
         )
 
@@ -110,7 +110,7 @@ def _history_share_image_input(
             status_code=500,
             detail={
                 "error": "generation_failed",
-                "message": f"生成分享图片所需报告失败: {exc.message}",
+                "message": f"Failed to generate the report required for the share image: {exc.message}",
             },
         ) from exc
 
@@ -119,7 +119,7 @@ def _history_share_image_input(
             status_code=404,
             detail={
                 "error": "not_found",
-                "message": f"未找到 id/query_id={record_id} 的报告内容",
+                "message": f"No report content found for id/query_id={record_id}",
             },
         )
     return result, markdown_content
@@ -210,16 +210,16 @@ def _extract_guardrail_reason(raw_result: Any) -> Optional[str]:
         200: {"description": "历史记录列表"},
         500: {"description": "服务器错误", "model": ErrorResponse},
     },
-    summary="获取历史分析列表",
-    description="分页获取历史分析记录摘要，支持按股票代码和日期范围筛选"
+    summary="List historical analyses",
+    description="Paginated summary of historical analysis records with optional stock-code and date-range filters."
 )
 def get_history_list(
-    stock_code: Optional[str] = Query(None, description="股票代码筛选"),
-    report_type: Optional[str] = Query(None, description="报告类型筛选，如 market_review"),
-    start_date: Optional[str] = Query(None, description="开始日期 (YYYY-MM-DD)"),
-    end_date: Optional[str] = Query(None, description="结束日期 (YYYY-MM-DD)"),
-    page: int = Query(1, ge=1, description="页码（从 1 开始）"),
-    limit: int = Query(20, ge=1, le=100, description="每页数量"),
+    stock_code: Optional[str] = Query(None, description="Filter by stock code"),
+    report_type: Optional[str] = Query(None, description="Filter by report type (e.g. market_review)"),
+    start_date: Optional[str] = Query(None, description="Start date (YYYY-MM-DD)"),
+    end_date: Optional[str] = Query(None, description="End date (YYYY-MM-DD)"),
+    page: int = Query(1, ge=1, description="Page number (1-based)"),
+    limit: int = Query(20, ge=1, le=100, description="Items per page"),
     db_manager: DatabaseManager = Depends(get_database_manager)
 ) -> HistoryListResponse:
     """
@@ -291,7 +291,7 @@ def get_history_list(
             status_code=500,
             detail={
                 "error": "internal_error",
-                "message": f"查询历史列表失败: {str(e)}"
+                "message": f"Failed to query history list: {str(e)}"
             }
         )
 
@@ -305,8 +305,8 @@ def get_history_list(
         404: {"description": "未找到记录", "model": ErrorResponse},
         500: {"description": "服务器错误", "model": ErrorResponse},
     },
-    summary="按股票代码删除历史分析记录",
-    description="删除指定股票代码的所有分析历史记录（支持代码变体归一化匹配）",
+    summary="Delete history by stock code",
+    description="Delete all analysis history for a given stock code (supports code-variant normalized matching).",
 )
 def delete_history_by_code(
     stock_code: str,
@@ -317,7 +317,7 @@ def delete_history_by_code(
         if not candidates:
             raise HTTPException(
                 status_code=400,
-                detail={"error": "invalid_request", "message": "stock_code 不能为空"},
+                detail={"error": "invalid_request", "message": "stock_code cannot be empty"},
             )
 
         deleted = 0
@@ -345,7 +345,7 @@ def delete_history_by_code(
         logger.error(f"按股票代码删除历史记录失败: {e}", exc_info=True)
         raise HTTPException(
             status_code=500,
-            detail={"error": "internal_error", "message": f"删除失败: {str(e)}"},
+            detail={"error": "internal_error", "message": f"Delete failed: {str(e)}"},
         )
 
 
@@ -357,8 +357,8 @@ def delete_history_by_code(
         400: {"description": "请求参数错误", "model": ErrorResponse},
         500: {"description": "服务器错误", "model": ErrorResponse},
     },
-    summary="删除历史分析记录",
-    description="按历史记录主键 ID 批量删除分析历史"
+    summary="Delete history records",
+    description="Bulk-delete analysis history by primary-key IDs."
 )
 def delete_history_records(
     request: DeleteHistoryRequest = Body(...),
@@ -373,7 +373,7 @@ def delete_history_records(
             status_code=400,
             detail={
                 "error": "invalid_request",
-                "message": "record_ids 不能为空"
+                "message": "record_ids cannot be empty"
             }
         )
 
@@ -389,7 +389,7 @@ def delete_history_records(
             status_code=500,
             detail={
                 "error": "internal_error",
-                "message": f"删除历史记录失败: {str(e)}"
+                "message": f"Failed to delete history records: {str(e)}"
             }
         )
 
@@ -401,13 +401,13 @@ def delete_history_records(
         200: {"description": "不重复个股列表"},
         500: {"description": "服务器错误", "model": ErrorResponse},
     },
-    summary="获取不重复个股列表",
-    description="返回历史记录中每只股票的最新一条分析摘要，不包含大盘复盘（code=MARKET）。",
+    summary="Get unique stock list",
+    description="Return the latest analysis summary for each stock in history, excluding market reviews (code=MARKET).",
 )
 def get_stock_bar(
-    start_date: Optional[str] = Query(None, description="开始日期 (YYYY-MM-DD)"),
-    end_date: Optional[str] = Query(None, description="结束日期 (YYYY-MM-DD)"),
-    limit: int = Query(200, ge=1, le=500, description="最大返回数量"),
+    start_date: Optional[str] = Query(None, description="Start date (YYYY-MM-DD)"),
+    end_date: Optional[str] = Query(None, description="End date (YYYY-MM-DD)"),
+    limit: int = Query(200, ge=1, le=500, description="Maximum number of items to return"),
     db_manager: DatabaseManager = Depends(get_database_manager),
 ) -> StockBarResponse:
     try:
@@ -494,7 +494,7 @@ def get_stock_bar(
             status_code=500,
             detail={
                 "error": "internal_error",
-                "message": f"查询个股栏失败: {str(e)}",
+                "message": f"Failed to query stock bar: {str(e)}",
             },
         )
 
@@ -507,8 +507,8 @@ def get_stock_bar(
         404: {"description": "报告不存在", "model": ErrorResponse},
         500: {"description": "服务器错误", "model": ErrorResponse},
     },
-    summary="获取历史报告详情",
-    description="根据分析历史记录 ID 或 query_id 获取完整的历史分析报告"
+    summary="Get history report detail",
+    description="Retrieve the full historical analysis report by record ID or query_id."
 )
 def get_history_detail(
     record_id: str,
@@ -541,7 +541,7 @@ def get_history_detail(
                 status_code=404,
                 detail={
                     "error": "not_found",
-                    "message": f"未找到 id/query_id={record_id} 的分析记录"
+                    "message": f"No analysis record found for id/query_id={record_id}"
                 }
             )
         
@@ -663,7 +663,7 @@ def get_history_detail(
             status_code=500,
             detail={
                 "error": "internal_error",
-                "message": f"查询历史详情失败: {str(e)}"
+                "message": f"Failed to query history detail: {str(e)}"
             }
         )
 
@@ -676,8 +676,8 @@ def get_history_detail(
         404: {"description": "报告不存在", "model": ErrorResponse},
         500: {"description": "服务器错误", "model": ErrorResponse},
     },
-    summary="获取历史报告运行诊断摘要",
-    description="根据分析历史记录 ID 或 query_id 获取用户可读诊断摘要和脱敏复制文本。",
+    summary="Get history run-diagnostics summary",
+    description="Retrieve the user-readable diagnostics summary and redacted copy text for a record by record ID or query_id.",
 )
 def get_history_diagnostics(
     record_id: str,
@@ -694,7 +694,7 @@ def get_history_diagnostics(
                 status_code=404,
                 detail={
                     "error": "not_found",
-                    "message": f"未找到 id/query_id={record_id} 的分析记录",
+                    "message": f"No analysis record found for id/query_id={record_id}",
                 },
             )
         return RunDiagnosticSummaryResponse.model_validate(summary)
@@ -706,7 +706,7 @@ def get_history_diagnostics(
             status_code=500,
             detail={
                 "error": "internal_error",
-                "message": f"查询运行诊断摘要失败: {str(e)}",
+                "message": f"Failed to query run diagnostics summary: {str(e)}",
             },
         )
 
@@ -719,8 +719,8 @@ def get_history_diagnostics(
         404: {"description": "报告不存在", "model": ErrorResponse},
         500: {"description": "服务器错误", "model": ErrorResponse},
     },
-    summary="获取历史报告运行流",
-    description="根据分析历史记录 ID 或 query_id 获取数据流/信息流快照。",
+    summary="Get history run flow",
+    description="Retrieve the data/info-flow snapshot for a record by record ID or query_id.",
 )
 def get_history_run_flow(
     record_id: str,
@@ -737,7 +737,7 @@ def get_history_run_flow(
                 status_code=404,
                 detail={
                     "error": "not_found",
-                    "message": f"未找到 id/query_id={record_id} 的分析记录",
+                    "message": f"No analysis record found for id/query_id={record_id}",
                 },
             )
         return snapshot
@@ -749,7 +749,7 @@ def get_history_run_flow(
             status_code=500,
             detail={
                 "error": "internal_error",
-                "message": f"查询运行流快照失败: {str(e)}",
+                "message": f"Failed to query run flow snapshot: {str(e)}",
             },
         )
 
@@ -761,12 +761,12 @@ def get_history_run_flow(
         200: {"description": "新闻情报列表"},
         500: {"description": "服务器错误", "model": ErrorResponse},
     },
-    summary="获取历史报告关联新闻",
-    description="根据分析历史记录 ID 获取关联的新闻情报列表（为空也返回 200）"
+    summary="Get history news intelligence",
+    description="Retrieve the news intelligence list linked to an analysis history record (returns 200 even when empty).",
 )
 def get_history_news(
     record_id: str,
-    limit: int = Query(20, ge=1, le=100, description="返回数量限制"),
+    limit: int = Query(20, ge=1, le=100, description="Maximum number of items to return"),
     db_manager: DatabaseManager = Depends(get_database_manager)
 ) -> NewsIntelResponse:
     """
@@ -807,7 +807,7 @@ def get_history_news(
             status_code=500,
             detail={
                 "error": "internal_error",
-                "message": f"查询新闻情报失败: {str(e)}"
+                "message": f"Failed to query news intelligence: {str(e)}"
             }
         )
 
@@ -821,8 +821,8 @@ def get_history_news(
         413: {"description": "报告内容超过分享图长度上限", "model": ErrorResponse},
         500: {"description": "报告生成失败", "model": ErrorResponse},
     },
-    summary="获取历史报告分享图 HTML",
-    description="根据历史报告与持久化结构化数据生成只供桌面端本地截图的确定性 HTML",
+    summary="Get history share-image HTML",
+    description="Generate a deterministic HTML snapshot of a history report for local desktop capture.",
 )
 def get_history_share_image_html(
     record_id: str,
@@ -836,7 +836,7 @@ def get_history_share_image_html(
             status_code=413,
             detail={
                 "error": "share_image_too_large",
-                "message": f"报告内容超过分享图片上限 {max_chars} 字符",
+                "message": f"Report content exceeds the share image limit of {max_chars} characters",
             },
         )
 
@@ -852,7 +852,7 @@ def get_history_share_image_html(
             status_code=500,
             detail={
                 "error": "generation_failed",
-                "message": "生成桌面分享图片内容失败",
+                "message": "Failed to generate the desktop share image content",
             },
         ) from exc
 
@@ -875,8 +875,8 @@ def get_history_share_image_html(
         500: {"description": "报告生成失败", "model": ErrorResponse},
         503: {"description": "图片渲染器不可用", "model": ErrorResponse},
     },
-    summary="生成历史报告分享图片",
-    description="根据历史报告 Markdown 与持久化结构化数据生成确定性的 PNG 分享图片",
+    summary="Generate history share image",
+    description="Generate a deterministic PNG share image from a history Markdown report plus the persisted structured data.",
 )
 def get_history_share_image(
     record_id: str,
@@ -896,7 +896,7 @@ def get_history_share_image(
             status_code=503,
             detail={
                 "error": "share_image_unavailable",
-                "message": f"分享图片生成失败，请检查 {engine} 转图工具是否已安装并可用",
+                "message": f"Share image generation failed. Please verify that the {engine} HTML-to-image tool is installed and available.",
             },
         )
 
@@ -920,8 +920,8 @@ def get_history_share_image(
         404: {"description": "报告不存在", "model": ErrorResponse},
         500: {"description": "服务器错误", "model": ErrorResponse},
     },
-    summary="获取历史报告 Markdown 格式",
-    description="根据分析历史记录 ID 获取 Markdown 格式的完整分析报告"
+    summary="Get history Markdown report",
+    description="Retrieve the full Markdown analysis report for a history record by record ID.",
 )
 def get_history_markdown(
     record_id: str,
@@ -953,7 +953,7 @@ def get_history_markdown(
             status_code=500,
             detail={
                 "error": "generation_failed",
-                "message": f"生成 Markdown 报告失败: {e.message}"
+                "message": f"Markdown report generation failed: {e.message}"
             }
         )
     except Exception as e:
@@ -962,7 +962,7 @@ def get_history_markdown(
             status_code=500,
             detail={
                 "error": "internal_error",
-                "message": f"获取 Markdown 报告失败: {str(e)}"
+                "message": f"Failed to fetch Markdown report: {str(e)}"
             }
         )
 
@@ -971,7 +971,7 @@ def get_history_markdown(
             status_code=404,
             detail={
                 "error": "not_found",
-                "message": f"未找到 id/query_id={record_id} 的分析记录"
+                "message": f"No analysis record found for id/query_id={record_id}"
             }
         )
 

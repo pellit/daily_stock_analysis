@@ -107,7 +107,7 @@ def _guardrail_blocked(exc: DecisionSignalReassessGuardrailBlockedError) -> HTTP
         422: {"model": ErrorResponse, "description": "请求体或路径参数校验失败"},
         500: {"model": ErrorResponse, "description": "创建失败"},
     },
-    summary="创建或去重决策信号",
+    summary="Create or deduplicate decision signal",
     description=(
         "显式写入 DecisionSignal。未传 horizon/expires_at 时由服务补默认生命周期；"
         "命中同源去重键或窄 relaxed 去重时返回已有记录和 created=false；"
@@ -139,7 +139,7 @@ def create_signal(request: DecisionSignalCreateRequest) -> DecisionSignalMutatio
         422: {"model": ErrorResponse, "description": "查询参数校验失败"},
         500: {"model": ErrorResponse, "description": "查询失败"},
     },
-    summary="查询决策信号列表",
+    summary="List decision signals",
     description=(
         "分页查询 DecisionSignal；读取前会懒过期已到 expires_at 的 active 信号。"
         "当 source_type=analysis 且只传 source_report_id 查询时，若无命中信号会尝试基于该历史报告一次性懒回填 "
@@ -217,7 +217,7 @@ def list_signals(
         422: {"model": ErrorResponse, "description": "请求体校验失败"},
         500: {"model": ErrorResponse, "description": "后验计算失败"},
     },
-    summary="触发决策信号后验评估",
+    summary="Trigger decision-signal backtest evaluation",
     description=(
         "显式触发 signal-level outcome 计算；默认跳过 completed 和终态 unable，"
         "但会重算缺少行情数据等可恢复 unable；force=true 会重算并覆盖同一 "
@@ -258,8 +258,8 @@ def run_outcomes(request: DecisionSignalOutcomeRunRequest) -> DecisionSignalOutc
         422: {"model": ErrorResponse, "description": "查询参数校验失败"},
         500: {"model": ErrorResponse, "description": "查询失败"},
     },
-    summary="查询决策信号后验结果",
-    description="分页查询 signal-level outcome；默认只查当前 signal 后验 engine_version。",
+    summary="List decision-signal backtest outcomes",
+    description="Paginate signal-level outcomes; by default only returns results for the current signal-backtest engine_version.",
     operation_id="listDecisionSignalOutcomes",
 )
 def list_outcomes(
@@ -299,8 +299,8 @@ def list_outcomes(
         422: {"model": ErrorResponse, "description": "查询参数校验失败"},
         500: {"model": ErrorResponse, "description": "统计失败"},
     },
-    summary="查询决策信号后验统计",
-    description="默认统计当前 engine_version，且排除 archived 信号。",
+    summary="Get decision-signal backtest statistics",
+    description="Default stats target the current engine_version and exclude archived signals.",
     operation_id="getDecisionSignalOutcomeStats",
 )
 def get_outcome_stats(
@@ -333,7 +333,7 @@ def get_outcome_stats(
         422: {"model": ErrorResponse, "description": "请求体校验失败"},
         500: {"model": ErrorResponse, "description": "重评估失败"},
     },
-    summary="重评估决策风格并可选保存",
+    summary="Reassess decision profile (optional persist)",
     description=(
         "基于 source_report_id 对应的持久化历史报告快照重新计算 decision_profile 信号；"
         "persist=false 返回只读 preview，persist=true 将通过 guardrail 的服务端结果写入 DecisionSignal。"
@@ -371,8 +371,8 @@ def reassess_signal(request: DecisionSignalReassessRequest) -> DecisionSignalRea
         422: {"model": ErrorResponse, "description": "路径或查询参数校验失败"},
         500: {"model": ErrorResponse, "description": "查询失败"},
     },
-    summary="查询股票最新 active 决策信号",
-    description="返回指定股票最新 active 信号列表；读取前会执行懒过期。",
+    summary="Get latest active decision signals for a stock",
+    description="Return the latest active signals for a stock; lazy-expiry is applied before reads.",
     operation_id="getLatestDecisionSignals",
 )
 def get_latest_active(
@@ -406,8 +406,8 @@ def get_latest_active(
         422: {"model": ErrorResponse, "description": "路径参数校验失败"},
         500: {"model": ErrorResponse, "description": "查询失败"},
     },
-    summary="查询单条决策信号",
-    description="按 ID 查询单条 DecisionSignal；读取前会执行懒过期。",
+    summary="Get a single decision signal",
+    description="Fetch a single DecisionSignal by ID; lazy-expiry is applied before reads.",
     operation_id="getDecisionSignal",
 )
 def get_signal(signal_id: int) -> DecisionSignalItem:
@@ -431,8 +431,8 @@ def get_signal(signal_id: int) -> DecisionSignalItem:
         422: {"model": ErrorResponse, "description": "路径参数校验失败"},
         500: {"model": ErrorResponse, "description": "查询失败"},
     },
-    summary="查询单个决策信号后验结果",
-    description="返回指定 signal_id 在当前 engine_version 下的后验结果。",
+    summary="Get backtest outcome for a single decision signal",
+    description="Return the backtest outcome for a signal_id under the current engine_version.",
     operation_id="listDecisionSignalOutcomesBySignal",
 )
 def list_signal_outcomes(signal_id: int) -> DecisionSignalOutcomeListResponse:
@@ -454,8 +454,8 @@ def list_signal_outcomes(signal_id: int) -> DecisionSignalOutcomeListResponse:
         422: {"model": ErrorResponse, "description": "路径参数校验失败"},
         500: {"model": ErrorResponse, "description": "查询失败"},
     },
-    summary="查询决策信号用户反馈",
-    description="没有反馈时返回 feedback_value=null；信号不存在时返回 404。",
+    summary="Get decision-signal user feedback",
+    description="Returns feedback_value=null when no feedback exists; returns 404 if the signal does not exist.",
     operation_id="getDecisionSignalFeedback",
 )
 def get_feedback(signal_id: int) -> DecisionSignalFeedbackItem:
@@ -478,8 +478,8 @@ def get_feedback(signal_id: int) -> DecisionSignalFeedbackItem:
         422: {"model": ErrorResponse, "description": "请求体或路径参数校验失败"},
         500: {"model": ErrorResponse, "description": "更新失败"},
     },
-    summary="写入决策信号用户反馈",
-    description="按 signal_id upsert 最新 useful/not_useful 反馈。",
+    summary="Submit decision-signal user feedback",
+    description="Upsert the latest useful/not_useful feedback by signal_id.",
     operation_id="putDecisionSignalFeedback",
 )
 def put_feedback(signal_id: int, request: DecisionSignalFeedbackRequest) -> DecisionSignalFeedbackItem:
@@ -512,7 +512,7 @@ def put_feedback(signal_id: int, request: DecisionSignalFeedbackRequest) -> Deci
         422: {"model": ErrorResponse, "description": "请求体或路径参数校验失败"},
         500: {"model": ErrorResponse, "description": "更新失败"},
     },
-    summary="更新决策信号状态",
+    summary="Update decision-signal status",
     description=(
         "只更新合法状态和可选 metadata；省略 metadata 时保留原值，null 时清空，"
         "object 时按整包替换并保持正式 decision_profile 身份。"

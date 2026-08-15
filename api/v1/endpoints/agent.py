@@ -353,7 +353,7 @@ async def send_chat_to_notification(request: SendChatRequest):
         return {
             "success": False,
             "error": "no_channels",
-            "message": "未配置通知渠道，请先在设置中配置",
+            "message": "No notification channels configured. Please configure them in Settings first.",
         }
     return {"success": True}
 
@@ -623,7 +623,7 @@ async def agent_chat_stream(
                     else:
                         event = await asyncio.wait_for(queue.get(), timeout=300.0)
                 except asyncio.TimeoutError:
-                    event = {"type": "error", "message": "分析超时"}
+                    event = {"type": "error", "message": "Analysis timed out"}
                     yield "data: " + json.dumps(event, ensure_ascii=False) + "\n\n"
                     break
                 yield "data: " + json.dumps(event, ensure_ascii=False) + "\n\n"
