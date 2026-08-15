@@ -27,6 +27,13 @@ import {
 import { isNearBottom } from '../utils/chatScroll';
 import { getReportText } from '../utils/reportLanguage';
 import { extractStockCodesFromMessage } from '../utils/chatStockCode';
+import {
+  CHOICE_COMPARE_STOCK_MESSAGE_RE,
+  LINKED_COMPARE_STOCK_MESSAGE_RE,
+  STRONG_COMPARE_STOCK_MESSAGE_RE,
+  SWITCH_STOCK_MESSAGE_RE,
+  WEAK_COMPARE_STOCK_MESSAGE_RE,
+} from '../utils/chatIntent/zhPatterns';
 import { findMatchingStockCode, includesStockCode, normalizeStockCode } from '../utils/stockCode';
 import { useStockIndex } from '../hooks/useStockIndex';
 import type { StockIndexItem } from '../types/stockIndex';
@@ -50,11 +57,6 @@ const QUICK_QUESTIONS: Array<{
 
 const MAX_SELECTED_SKILLS = 3;
 const CONTEXT_COMPRESSION_CONFIG_KEY = 'AGENT_CONTEXT_COMPRESSION_ENABLED';
-const STRONG_COMPARE_STOCK_MESSAGE_RE = /比较|对比|\bvs\b|和[^，。,.!?！？]{0,40}比/i;
-const WEAK_COMPARE_STOCK_MESSAGE_RE = /差异(?!化)|区别|不同|相比|对照|比一比/;
-const CHOICE_COMPARE_STOCK_MESSAGE_RE = /哪个|哪只|哪一个|谁更|更值得|更适合|怎么选|选哪|二选一/;
-const LINKED_COMPARE_STOCK_MESSAGE_RE = /(?:和|与|跟|同)[^，。,.!?！？]{0,40}(?:差异(?!化)|区别|不同|相比|对照|比一比)/;
-const SWITCH_STOCK_MESSAGE_RE = /换成|改看|分析|看看|研究|诊断/;
 
 type ActiveStockResolution = {
   context: ActiveStockContext;
@@ -630,7 +632,7 @@ const ChatPage: React.FC = () => {
     setDeleteConfirmId(null);
   }, [deleteConfirmId, sessionId, loadSessions, handleStartNewChat]);
 
-  // Handle follow-up from report page: ?stock=600519&name=贵州茅台&recordId=xxx
+  // Handle follow-up from report page: ?stock=600519&name=<stockName>&recordId=xxx
   useEffect(() => {
     const stock = sanitizeFollowUpStockCode(searchParams.get('stock'));
     const name = sanitizeFollowUpStockName(searchParams.get('name'));
