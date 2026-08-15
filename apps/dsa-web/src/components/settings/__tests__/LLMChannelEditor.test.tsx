@@ -370,7 +370,7 @@ describe('LLMChannelEditor', () => {
     );
 
     expect(screen.getByText(/检测到ConfiguredAdvancedModel路由 YAML/i)).toBeInTheDocument();
-    expect(screen.getByText(/运行时主Model \\/ 备选Model \\/ Vision \\/ Temperature 仍由下方GeneralField决定/i)).toBeInTheDocument();
+    expect(screen.getByText(/运行时主Model \/ 备选Model \/ Vision \/ Temperature 仍由下方GeneralField决定/i)).toBeInTheDocument();
     expect(screen.queryByText(/LiteLLM/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/LITELLM_CONFIG/i)).not.toBeInTheDocument();
   });
@@ -456,7 +456,7 @@ describe('LLMChannelEditor', () => {
     fireEvent.change(screen.getByRole('slider'), { target: { value: '0.2' } });
     fireEvent.click(screen.getByRole('button', { name: 'Save AI Config' }));
 
-    expect(await screen.findByText(/Mixed Hermes\\/non-Hermes route 暂不支持作为主Generation或备选Model/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Mixed Hermes\/non-Hermes route 暂不支持作为主Generation或备选Model/i)).toBeInTheDocument();
     expect(update).not.toHaveBeenCalled();
   });
 
@@ -1816,8 +1816,8 @@ describe('LLMChannelEditor', () => {
     fireEvent.click(screen.getByRole('button', { name: 'TestConnect' }));
 
     expect(await screen.findByText(/聊dayInvoke · Model不Available：LLM channel test failed/i)).toBeInTheDocument();
-    expect(screen.getByText(/本次TestModel：openai\\/deepseek-ai\\/DeepSeek-V3/i)).toBeInTheDocument();
-    expect(screen.getByText(/BasicConnectTestDefault使用ModelList首项：deepseek-ai\\/DeepSeek-V3/i)).toBeInTheDocument();
+    expect(screen.getByText(/本次TestModel：openai\/deepseek-ai\/DeepSeek-V3/i)).toBeInTheDocument();
+    expect(screen.getByText(/BasicConnectTestDefault使用ModelList首项：deepseek-ai\/DeepSeek-V3/i)).toBeInTheDocument();
     expect(screen.getByText(/BasicConnectTestDefault只TestModelList中的第一个Model/i)).toBeInTheDocument();
     expect(screen.getByText(/调整Model顺序或Remove不AvailableModel/i)).toBeInTheDocument();
     expect(screen.getByText(/ModelWhether已开通、账号Whether可见/i)).toBeInTheDocument();
@@ -1861,7 +1861,7 @@ describe('LLMChannelEditor', () => {
     fireEvent.click(screen.getByRole('button', { name: 'TestConnect' }));
 
     expect(await screen.findByText(/聊dayInvoke · Request被拦截/i)).toBeInTheDocument();
-    expect(screen.getByText(/本次TestModel：openai\\/gpt-5\.5/i)).toBeInTheDocument();
+    expect(screen.getByText(/本次TestModel：openai\/gpt-5\.5/i)).toBeInTheDocument();
     expect(screen.getByText(/账号风控、地域限制、ModelPermission/i)).toBeInTheDocument();
     expect(screen.queryByText(/Base URL、Proxy、TLS/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/调整Model顺序或Remove不AvailableModel/i)).not.toBeInTheDocument();
@@ -1954,7 +1954,7 @@ describe('LLMChannelEditor', () => {
     fireEvent.click(screen.getByRole('button', { name: /OpenAI 官方/i }));
     fireEvent.click(screen.getByRole('button', { name: 'TestConnect' }));
 
-    await screen.findByText(/ConnectSuccess · openai\\/gpt-4o-mini/i);
+    await screen.findByText(/ConnectSuccess · openai\/gpt-4o-mini/i);
     expect(testLLMChannel).toHaveBeenCalledWith(expect.not.objectContaining({ capabilityChecks: expect.anything() }));
   });
 
@@ -2004,7 +2004,7 @@ describe('LLMChannelEditor', () => {
     fireEvent.click(screen.getByLabelText('Tools'));
     fireEvent.click(screen.getByRole('button', { name: 'DetectCapability' }));
 
-    expect(await screen.findByText(/能力检测Complete：1 通过 \\/ 1 Failure \\/ 0 Skip/i)).toBeInTheDocument();
+    expect(await screen.findByText(/能力检测Complete：1 通过 \/ 1 Failure \/ 0 Skip/i)).toBeInTheDocument();
     expect(screen.getByText('JSON Through过')).toBeInTheDocument();
     expect(screen.getByText('Tools Failure')).toBeInTheDocument();
     expect(screen.getByText(/当前Model或兼容层不支持该能力/i)).toBeInTheDocument();
@@ -2048,7 +2048,7 @@ describe('LLMChannelEditor', () => {
     fireEvent.click(screen.getByLabelText('JSON'));
     fireEvent.click(screen.getByRole('button', { name: 'DetectCapability' }));
 
-    expect(await screen.findByText(/能力检测Complete：0 通过 \\/ 0 Failure \\/ 1 Skip/i)).toBeInTheDocument();
+    expect(await screen.findByText(/能力检测Complete：0 通过 \/ 0 Failure \/ 1 Skip/i)).toBeInTheDocument();
     expect(screen.getByText('JSON Skip')).toBeInTheDocument();
     expect(screen.getByText(/服务商拒绝了当前 API Key/i)).toBeInTheDocument();
     expect(screen.getByLabelText('Model (逗号min隔) ')).toBeEnabled();
@@ -2088,7 +2088,7 @@ describe('LLMChannelEditor', () => {
     fireEvent.click(screen.getByRole('button', { name: 'GetModel' }));
 
     await screen.findByText(/Model发现 · 协议暂不支持：Model discovery is not supported for this protocol/i);
-    expect(screen.getByText(/当前仅对 OpenAI Compatible \\/ DeepSeek Channel提供自动Model发现/i)).toBeInTheDocument();
+    expect(screen.getByText(/当前仅对 OpenAI Compatible \/ DeepSeek Channel提供自动Model发现/i)).toBeInTheDocument();
 
     const manualInput = screen.getByLabelText('Model (逗号min隔) ');
     fireEvent.change(manualInput, { target: { value: 'gemini-2.5-flash' } });
@@ -2128,8 +2128,8 @@ describe('LLMChannelEditor', () => {
     fireEvent.click(screen.getByRole('button', { name: /OpenAI 官方/i }));
     fireEvent.click(screen.getByRole('button', { name: 'GetModel' }));
 
-    expect(await screen.findByText(/ResponseParse · 格式Exception：Failed to parse \\/models response/i)).toBeInTheDocument();
-    expect(screen.getByText(/该Channel返回的 \\/models Response格式不兼容，请改为Manual填写ModelList。/i)).toBeInTheDocument();
+    expect(await screen.findByText(/ResponseParse · 格式Exception：Failed to parse \/models response/i)).toBeInTheDocument();
+    expect(screen.getByText(/该Channel返回的 \/models Response格式不兼容，请改为Manual填写ModelList。/i)).toBeInTheDocument();
   });
 
   it('maps discovery empty responses to the /models troubleshooting hint', async () => {
@@ -2165,8 +2165,8 @@ describe('LLMChannelEditor', () => {
     fireEvent.click(screen.getByRole('button', { name: /OpenAI 官方/i }));
     fireEvent.click(screen.getByRole('button', { name: 'GetModel' }));
 
-    expect(await screen.findByText(/Model发现 · 空Response：No model IDs returned from \\/models response/i)).toBeInTheDocument();
-    expect(screen.getByText(/该Channel的 \\/models 接口未返回AvailableModel ID/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Model发现 · 空Response：No model IDs returned from \/models response/i)).toBeInTheDocument();
+    expect(screen.getByText(/该Channel的 \/models 接口未返回AvailableModel ID/i)).toBeInTheDocument();
     expect(screen.queryByText(/切换兼容Model、Close额外Response模式/i)).not.toBeInTheDocument();
   });
 

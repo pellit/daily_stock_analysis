@@ -908,7 +908,7 @@ describe('PortfolioPage FX refresh', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'RefreshExchange rate' }));
 
-    expect(await screen.findByText(/stale\\/fallback Exchange rate/)).toBeInTheDocument();
+    expect(await screen.findByText(/stale\/fallback Exchange rate/)).toBeInTheDocument();
   });
 
   it('shows warning feedback when FX refresh returns online errors without stale pairs', async () => {
