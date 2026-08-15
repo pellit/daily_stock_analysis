@@ -257,7 +257,7 @@ function getDesktopUpdateNotice(
   }
 
   if (state.status === 'downloading') {
-    const percentText = typeof state.downloadPercent === 'number' ? `（${state.downloadPercent}%）` : '';
+    const percentText = typeof state.downloadPercent === 'number' ? `(${state.downloadPercent}%)` : '';
     return {
       title: t('settings.desktopDownloading'),
       message: state.message || t('settings.desktopUpdateDownloadingMessage', { percent: percentText }),
@@ -1559,7 +1559,7 @@ const SettingsPage: React.FC = () => {
                 onRefresh={refreshSetupStatus}
                 onSelectCategory={setActiveCategory}
                 onRunSmoke={handleRunSetupSmoke}
-                listSeparator={uiLanguage === 'en' ? ', ' : '、'}
+                listSeparator=", "
                 t={t}
               />
             ) : null}
