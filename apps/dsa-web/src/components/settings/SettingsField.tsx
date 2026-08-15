@@ -3,7 +3,7 @@ import type React from 'react';
 import { Badge, Button, Select, Input } from '../common';
 import type { ConfigValidationIssue, SystemConfigFieldSchema, SystemConfigItem } from '../../types/systemConfig';
 import { useUiLanguage } from '../../contexts/UiLanguageContext';
-import { getFieldDescription, getFieldOptionLabel } from '../../utils/systemConfigI18n';
+import { getFieldDescription, getFieldOptionLabel, getFieldTitle } from '../../utils/systemConfigI18n';
 import type { UiLanguage, UiTextKey } from '../../i18n/uiText';
 import { cn } from '../../utils/cn';
 import { SettingsHelpButton } from './SettingsHelpButton';
@@ -223,8 +223,7 @@ export const SettingsField: React.FC<SettingsFieldProps> = ({
   const schema = item.schema;
   const isMultiValue = isMultiValueField(item);
   const localizationKey = schema?.key ?? item.key;
-  const fallbackTitle = schema?.title ?? item.key;
-  const title = fallbackTitle;
+  const title = getFieldTitle(localizationKey, schema?.title ?? item.key);
   const description = getFieldDescription(localizationKey, getFieldDescription(item.key, schema?.description));
   const hasError = issues.some((issue) => issue.severity === 'error');
   const [isPasswordEditable, setIsPasswordEditable] = useState(false);
