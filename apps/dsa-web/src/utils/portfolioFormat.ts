@@ -18,7 +18,7 @@ export type FxRefreshFeedback = {
 export type PortfolioAlertVariant = 'info' | 'success' | 'warning' | 'danger';
 
 const MONEY_LOCALE: Record<UiLanguage, string> = {
-  zh: 'en-US', en: 'en-US',
+  en: 'en-US',
 };
 
 const PRICE_LABEL: Record<UiLanguage, {
@@ -27,23 +27,23 @@ const PRICE_LABEL: Record<UiLanguage, {
   historyClose: string;
   unknown: string;
 }> = {
-  zh: { missing: 'Price unavailable', realtime: 'Live price', historyClose: 'Closing price', unknown: 'Unknown source' }, en: { missing: 'Price unavailable', realtime: 'Live price', historyClose: 'Closing price', unknown: 'Unknown source' },
+  en: { missing: 'Price unavailable', realtime: 'Live price', historyClose: 'Closing price', unknown: 'Unknown source' },
 };
 
 const SIDE_LABEL: Record<UiLanguage, Record<PortfolioSide, string>> = {
-  zh: { buy: 'Buy', sell: 'Sell' }, en: { buy: 'Buy', sell: 'Sell' },
+  en: { buy: 'Buy', sell: 'Sell' },
 };
 
 const CASH_DIRECTION_LABEL: Record<UiLanguage, Record<PortfolioCashDirection, string>> = {
-  zh: { in: 'Inflow', out: 'Outflow' }, en: { in: 'Inflow', out: 'Outflow' },
+  en: { in: 'Inflow', out: 'Outflow' },
 };
 
 const CORPORATE_ACTION_LABEL: Record<UiLanguage, Record<PortfolioCorporateActionType, string>> = {
-  zh: { cash_dividend: 'Cash dividend', split_adjustment: 'Split adjustment' }, en: { cash_dividend: 'Cash dividend', split_adjustment: 'Split adjustment' },
+  en: { cash_dividend: 'Cash dividend', split_adjustment: 'Split adjustment' },
 };
 
 const BROKER_DISPLAY_NAME: Record<UiLanguage, Record<string, string>> = {
-  zh: { huatai: 'Huatai', citic: 'CITIC', cmb: 'CMB' }, en: { huatai: 'Huatai', citic: 'CITIC', cmb: 'CMB' },
+  en: { huatai: 'Huatai', citic: 'CITIC', cmb: 'CMB' },
 };
 
 export function getTodayIso(): string {
@@ -139,11 +139,11 @@ export function formatBrokerLabel(
 }
 
 const FX_REFRESH_DISABLED: Record<UiLanguage, string> = {
-  zh: 'Online FX refresh is disabled.', en: 'Online FX refresh is disabled.',
+  en: 'Online FX refresh is disabled.',
 };
 
 const FX_REFRESH_NO_PAIRS: Record<UiLanguage, string> = {
-  zh: 'No FX pairs available to refresh in the current scope.', en: 'No FX pairs available to refresh in the current scope.',
+  en: 'No FX pairs available to refresh in the current scope.',
 };
 
 export function buildFxRefreshFeedback(

@@ -10,15 +10,15 @@ const DATE_FORMAT_OPTIONS = {
 } as const;
 
 const CHAT_EXPORT_LOCALE: Record<UiLanguage, string> = {
-  zh: 'en-US', en: 'en-US',
+  en: 'en-US',
 };
 
 const HEADING: Record<UiLanguage, { title: string; user: string; assistant: string; generatedAt: string }> = {
-  zh: { title: 'Ask session', user: '## User', assistant: '## AI', generatedAt: 'Generated at' }, en: { title: 'Ask session', user: '## User', assistant: '## AI', generatedAt: 'Generated at' },
+  en: { title: 'Ask session', user: '## User', assistant: '## AI', generatedAt: 'Generated at' },
 };
 
 const FILENAME_PREFIX: Record<UiLanguage, string> = {
-  zh: 'ask_session', en: 'ask_session',
+  en: 'ask_session',
 };
 
 /**

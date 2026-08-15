@@ -532,7 +532,7 @@ const getRiskLabel = (riskLevel: string | undefined, text: ScreeningText) => {
   return text.riskPending;
 };
 
-const getRouteTimeLabel = (item: ScreeningHotspotDetail['route'][number], language: UiLanguage) => {
+const getRouteTimeLabel = (item: ScreeningHotspotDetail['route'][number]) => {
   const rawTime = item.publishedAt || item.date || item.time || '';
   if (!rawTime) {
     return '';
@@ -542,7 +542,7 @@ const getRouteTimeLabel = (item: ScreeningHotspotDetail['route'][number], langua
   }
   const parsed = new Date(rawTime);
   if (!Number.isNaN(parsed.getTime())) {
-    return parsed.toLocaleString(language === 'zh' ? 'zh-CN' : 'en-US', {
+    return parsed.toLocaleString('en-US', {
       month: '2-digit',
       day: '2-digit',
       hour: '2-digit',
@@ -766,7 +766,7 @@ const formatStockChangeText = (value: unknown, text: ScreeningText) => {
   return formatted === '-' ? text.hotspotNoQuote : `${formatted}%`;
 };
 
-const formatHotspotUpdatedAt = (value: string | null, text: ScreeningText, language: UiLanguage) => {
+const formatHotspotUpdatedAt = (value: string | null, text: ScreeningText) => {
   if (!value) {
     return text.hotspotPendingRefresh;
   }
@@ -774,7 +774,7 @@ const formatHotspotUpdatedAt = (value: string | null, text: ScreeningText, langu
   if (Number.isNaN(parsed.getTime())) {
     return value;
   }
-  return parsed.toLocaleString(language === 'zh' ? 'zh-CN' : 'en-US', {
+  return parsed.toLocaleString('en-US', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
@@ -1366,7 +1366,7 @@ const StockScreeningPage: React.FC = () => {
               ) : null}
             </div>
             {hotspotsUpdatedAt ? (
-              <p className="text-xs text-secondary-text">{text.hotspotUpdatedAt.replace('{time}', formatHotspotUpdatedAt(hotspotsUpdatedAt, text, language))}</p>
+              <p className="text-xs text-secondary-text">{text.hotspotUpdatedAt.replace('{time}', formatHotspotUpdatedAt(hotspotsUpdatedAt, text))}</p>
             ) : null}
           </div>
         </div>
@@ -1521,7 +1521,7 @@ const StockScreeningPage: React.FC = () => {
                       <div key={`${item.title}-${index}`} className="relative pb-4 last:pb-0">
                         <span className="absolute -left-4 top-1 h-2.5 w-2.5 rounded-full border border-orange-400 bg-card" />
                         <div className="rounded-lg border border-border/70 bg-card/80 p-3">
-                          <p className="text-[11px] font-semibold text-orange-500">{getRouteTimeLabel(item, language)}</p>
+                          <p className="text-[11px] font-semibold text-orange-500">{getRouteTimeLabel(item)}</p>
                           <p className="mt-1 text-xs font-semibold text-foreground">{formatHotspotRouteTitle(item.title, text)}</p>
                           <p className="mt-1 text-xs leading-5 text-secondary-text">{formatHotspotRouteDescription(item.description, text)}</p>
                           {item.url ? (

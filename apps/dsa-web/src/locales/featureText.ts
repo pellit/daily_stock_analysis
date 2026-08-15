@@ -10,123 +10,51 @@ const portfolioAlertTypes = alertTypes.slice(8, 12);
 const marketAlertTypes = alertTypes.slice(12);
 
 export const BACKTEST_TEXT = {
-  zh: { documentTitle: 'Strategy Backtest - DSA', codePlaceholder: 'Filter by stock code (leave empty for all)', filter: 'Filter', evalWindow: 'Evaluation window', phase: 'Phase', startDate: 'Start date', startDateAria: 'Analysis start date', endDate: 'End date', endDateAria: 'Analysis end date', oneDayValidation: '1D validation', forceRerun: 'Force rerun', running: 'Backtesting...', runBacktest: 'Run backtest', oneDayModeDescription: '1D validation checks AI predictions against the next trading day close.', windowModeDescription: 'Set the evaluation window to 1 to compare AI predictions with the next trading day close.', overallPerformance: 'Overall performance', noMetricsTitle: 'No metrics', noMetricsDescription: 'Portfolio-level performance metrics appear after a backtest runs.', loadingResults: 'Loading results...', noResultsTitle: 'No results', noResultsDescription: 'Run a backtest to evaluate historical analysis accuracy.', nextDayValidation: 'Next-day validation', resultSet: 'Result set', allStocks: 'All stocks', filteredStock: 'Filtered {code}', dayWindow: '{days}-day window', fromDate: 'from {date}', toDate: 'to {date}', scrollHint: 'Scroll horizontally on small screens', stock: 'Stock', analysisDate: 'Analysis date', aiPrediction: 'AI prediction', actualPerformance: 'Actual performance', windowReturn: 'Window return', accuracy: 'Accuracy', directionMatch: 'Direction match', result: 'Result', status: 'Status', totalPage: '{total} results · Page {page} / {pages}', directionAccuracy: 'Direction accuracy', winRate: 'Win rate', avgSimulatedReturn: 'Avg simulated return', avgStockReturn: 'Avg stock return', stopLossTriggerRate: 'Stop-loss trigger rate', takeProfitTriggerRate: 'Take-profit trigger rate', avgDaysToFirstHit: 'Avg days to first hit', evaluationCount: 'Evaluations', outcomeSummary: 'Win / Loss / Neutral', phaseDistribution: 'Phase breakdown: {text}', processed: 'Processed:', saved: 'Saved:', completed: 'Completed:', insufficient: 'Insufficient:', errors: 'Errors:', yes: 'Yes', no: 'No', unknown: 'Unknown' }, en: { documentTitle: 'Strategy Backtest - DSA', codePlaceholder: 'Filter by stock code (leave empty for all)', filter: 'Filter', evalWindow: 'Evaluation window', phase: 'Phase', startDate: 'Start date', startDateAria: 'Analysis start date', endDate: 'End date', endDateAria: 'Analysis end date', oneDayValidation: '1D validation', forceRerun: 'Force rerun', running: 'Backtesting...', runBacktest: 'Run backtest', oneDayModeDescription: '1D validation checks AI predictions against the next trading day close.', windowModeDescription: 'Set the evaluation window to 1 to compare AI predictions with the next trading day close.', overallPerformance: 'Overall performance', noMetricsTitle: 'No metrics', noMetricsDescription: 'Portfolio-level performance metrics appear after a backtest runs.', loadingResults: 'Loading results...', noResultsTitle: 'No results', noResultsDescription: 'Run a backtest to evaluate historical analysis accuracy.', nextDayValidation: 'Next-day validation', resultSet: 'Result set', allStocks: 'All stocks', filteredStock: 'Filtered {code}', dayWindow: '{days}-day window', fromDate: 'from {date}', toDate: 'to {date}', scrollHint: 'Scroll horizontally on small screens', stock: 'Stock', analysisDate: 'Analysis date', aiPrediction: 'AI prediction', actualPerformance: 'Actual performance', windowReturn: 'Window return', accuracy: 'Accuracy', directionMatch: 'Direction match', result: 'Result', status: 'Status', totalPage: '{total} results · Page {page} / {pages}', directionAccuracy: 'Direction accuracy', winRate: 'Win rate', avgSimulatedReturn: 'Avg simulated return', avgStockReturn: 'Avg stock return', stopLossTriggerRate: 'Stop-loss trigger rate', takeProfitTriggerRate: 'Take-profit trigger rate', avgDaysToFirstHit: 'Avg days to first hit', evaluationCount: 'Evaluations', outcomeSummary: 'Win / Loss / Neutral', phaseDistribution: 'Phase breakdown: {text}', processed: 'Processed:', saved: 'Saved:', completed: 'Completed:', insufficient: 'Insufficient:', errors: 'Errors:', yes: 'Yes', no: 'No', unknown: 'Unknown' },
+  en: { documentTitle: 'Strategy Backtest - DSA', codePlaceholder: 'Filter by stock code (leave empty for all)', filter: 'Filter', evalWindow: 'Evaluation window', phase: 'Phase', startDate: 'Start date', startDateAria: 'Analysis start date', endDate: 'End date', endDateAria: 'Analysis end date', oneDayValidation: '1D validation', forceRerun: 'Force rerun', running: 'Backtesting...', runBacktest: 'Run backtest', oneDayModeDescription: '1D validation checks AI predictions against the next trading day close.', windowModeDescription: 'Set the evaluation window to 1 to compare AI predictions with the next trading day close.', overallPerformance: 'Overall performance', noMetricsTitle: 'No metrics', noMetricsDescription: 'Portfolio-level performance metrics appear after a backtest runs.', loadingResults: 'Loading results...', noResultsTitle: 'No results', noResultsDescription: 'Run a backtest to evaluate historical analysis accuracy.', nextDayValidation: 'Next-day validation', resultSet: 'Result set', allStocks: 'All stocks', filteredStock: 'Filtered {code}', dayWindow: '{days}-day window', fromDate: 'from {date}', toDate: 'to {date}', scrollHint: 'Scroll horizontally on small screens', stock: 'Stock', analysisDate: 'Analysis date', aiPrediction: 'AI prediction', actualPerformance: 'Actual performance', windowReturn: 'Window return', accuracy: 'Accuracy', directionMatch: 'Direction match', result: 'Result', status: 'Status', totalPage: '{total} results · Page {page} / {pages}', directionAccuracy: 'Direction accuracy', winRate: 'Win rate', avgSimulatedReturn: 'Avg simulated return', avgStockReturn: 'Avg stock return', stopLossTriggerRate: 'Stop-loss trigger rate', takeProfitTriggerRate: 'Take-profit trigger rate', avgDaysToFirstHit: 'Avg days to first hit', evaluationCount: 'Evaluations', outcomeSummary: 'Win / Loss / Neutral', phaseDistribution: 'Phase breakdown: {text}', processed: 'Processed:', saved: 'Saved:', completed: 'Completed:', insufficient: 'Insufficient:', errors: 'Errors:', yes: 'Yes', no: 'No', unknown: 'Unknown' },
 } as const;
 
 export const BACKTEST_PHASE_FILTER_OPTIONS: Record<UiLanguage, Array<Option<BacktestPhaseFilter>>> = {
-  zh: [{ value: 'all', label: 'All phases' }, { value: 'premarket', label: 'Pre-market' }, { value: 'intraday', label: 'Intraday' }, { value: 'postmarket', label: 'Post-market' }, { value: 'unknown', label: 'Unknown' }], en: [{ value: 'all', label: 'All phases' }, { value: 'premarket', label: 'Pre-market' }, { value: 'intraday', label: 'Intraday' }, { value: 'postmarket', label: 'Post-market' }, { value: 'unknown', label: 'Unknown' }],
+  en: [{ value: 'all', label: 'All phases' }, { value: 'premarket', label: 'Pre-market' }, { value: 'intraday', label: 'Intraday' }, { value: 'postmarket', label: 'Post-market' }, { value: 'unknown', label: 'Unknown' }],
 };
-export const BACKTEST_PHASE_LABELS: Record<UiLanguage, Record<string, string>> = { zh: { premarket: 'Pre-market', intraday: 'Intraday', postmarket: 'Post-market', unknown: 'Unknown' }, en: { premarket: 'Pre-market', intraday: 'Intraday', postmarket: 'Post-market', unknown: 'Unknown' } };
-export const BACKTEST_OUTCOME_LABELS: Record<UiLanguage, Record<string, string>> = { zh: { win: 'Win', loss: 'Loss', neutral: 'Neutral' }, en: { win: 'Win', loss: 'Loss', neutral: 'Neutral' } };
-export const BACKTEST_STATUS_LABELS: Record<UiLanguage, Record<string, string>> = { zh: { completed: 'Completed', insufficient: 'Insufficient data', insufficient_data: 'Insufficient data', error: 'Error' }, en: { completed: 'Completed', insufficient: 'Insufficient data', insufficient_data: 'Insufficient data', error: 'Error' } };
-export const BACKTEST_MOVEMENT_LABELS: Record<UiLanguage, Record<string, string>> = { zh: { up: 'Up', down: 'Down', flat: 'Flat' }, en: { up: 'Up', down: 'Down', flat: 'Flat' } };
-export const BACKTEST_DIRECTION_EXPECTED_LABELS: Record<UiLanguage, Record<string, string>> = { zh: { long: 'Long', cash: 'Cash', up: 'Bullish', down: 'Bearish', not_down: 'Not bearish', flat: 'Flat' }, en: { long: 'Long', cash: 'Cash', up: 'Bullish', down: 'Bearish', not_down: 'Not bearish', flat: 'Flat' } };
+export const BACKTEST_PHASE_LABELS: Record<UiLanguage, Record<string, string>> = { en: { premarket: 'Pre-market', intraday: 'Intraday', postmarket: 'Post-market', unknown: 'Unknown' } };
+export const BACKTEST_OUTCOME_LABELS: Record<UiLanguage, Record<string, string>> = { en: { win: 'Win', loss: 'Loss', neutral: 'Neutral' } };
+export const BACKTEST_STATUS_LABELS: Record<UiLanguage, Record<string, string>> = { en: { completed: 'Completed', insufficient: 'Insufficient data', insufficient_data: 'Insufficient data', error: 'Error' } };
+export const BACKTEST_MOVEMENT_LABELS: Record<UiLanguage, Record<string, string>> = { en: { up: 'Up', down: 'Down', flat: 'Flat' } };
+export const BACKTEST_DIRECTION_EXPECTED_LABELS: Record<UiLanguage, Record<string, string>> = { en: { long: 'Long', cash: 'Cash', up: 'Bullish', down: 'Bearish', not_down: 'Not bearish', flat: 'Flat' } };
 
 export const ALERT_TYPE_LABELS: Record<UiLanguage, Record<AlertType, string>> = {
-  zh: { price_cross: 'Price crossing', price_change_percent: 'Price change', volume_spike: 'Volume spike', ma_price_cross: 'Price/MA crossing', rsi_threshold: 'RSI threshold', macd_cross: 'MACD cross', kdj_cross: 'KDJ cross', cci_threshold: 'CCI threshold', portfolio_stop_loss: 'Portfolio stop loss', portfolio_concentration: 'Portfolio concentration', portfolio_drawdown: 'Portfolio drawdown', portfolio_price_stale: 'Portfolio price status', market_light_status: 'Market traffic light status', market_light_score_drop: 'Market traffic light score drop' }, en: { price_cross: 'Price crossing', price_change_percent: 'Price change', volume_spike: 'Volume spike', ma_price_cross: 'Price/MA crossing', rsi_threshold: 'RSI threshold', macd_cross: 'MACD cross', kdj_cross: 'KDJ cross', cci_threshold: 'CCI threshold', portfolio_stop_loss: 'Portfolio stop loss', portfolio_concentration: 'Portfolio concentration', portfolio_drawdown: 'Portfolio drawdown', portfolio_price_stale: 'Portfolio price status', market_light_status: 'Market traffic light status', market_light_score_drop: 'Market traffic light score drop' },
+  en: { price_cross: 'Price crossing', price_change_percent: 'Price change', volume_spike: 'Volume spike', ma_price_cross: 'Price/MA crossing', rsi_threshold: 'RSI threshold', macd_cross: 'MACD cross', kdj_cross: 'KDJ cross', cci_threshold: 'CCI threshold', portfolio_stop_loss: 'Portfolio stop loss', portfolio_concentration: 'Portfolio concentration', portfolio_drawdown: 'Portfolio drawdown', portfolio_price_stale: 'Portfolio price status', market_light_status: 'Market traffic light status', market_light_score_drop: 'Market traffic light score drop' },
 };
-export const ALERT_SEVERITY_LABELS: Record<UiLanguage, Record<string, string>> = { zh: { info: 'Info', warning: 'Warning', critical: 'Critical' }, en: { info: 'Info', warning: 'Warning', critical: 'Critical' } };
-export const ALERT_SCOPE_LABELS: Record<UiLanguage, Record<AlertTargetScope, string>> = { zh: { single_symbol: 'Single symbol', watchlist: 'Watchlist', portfolio_holdings: 'Portfolio holdings', portfolio_account: 'Portfolio account', market: 'Market' }, en: { single_symbol: 'Single symbol', watchlist: 'Watchlist', portfolio_holdings: 'Portfolio holdings', portfolio_account: 'Portfolio account', market: 'Market' } };
-export const ALERT_MARKET_REGION_LABELS: Record<UiLanguage, Record<MarketRegion, string>> = { zh: { cn: 'A-shares', hk: 'Hong Kong', us: 'US' }, en: { cn: 'A-shares', hk: 'Hong Kong', us: 'US' } };
-export const ALERT_MARKET_LIGHT_STATUS_LABELS: Record<UiLanguage, Record<MarketLightStatus, string>> = { zh: { yellow: 'Yellow', red: 'Red' }, en: { yellow: 'Yellow', red: 'Red' } };
+export const ALERT_SEVERITY_LABELS: Record<UiLanguage, Record<string, string>> = { en: { info: 'Info', warning: 'Warning', critical: 'Critical' } };
+export const ALERT_SCOPE_LABELS: Record<UiLanguage, Record<AlertTargetScope, string>> = { en: { single_symbol: 'Single symbol', watchlist: 'Watchlist', portfolio_holdings: 'Portfolio holdings', portfolio_account: 'Portfolio account', market: 'Market' } };
+export const ALERT_MARKET_REGION_LABELS: Record<UiLanguage, Record<MarketRegion, string>> = { en: { cn: 'A-shares', hk: 'Hong Kong', us: 'US' } };
+export const ALERT_MARKET_LIGHT_STATUS_LABELS: Record<UiLanguage, Record<MarketLightStatus, string>> = { en: { yellow: 'Yellow', red: 'Red' } };
 export const ALERT_DIRECTION_LABELS = {
-  zh: { abovePrice: 'above', belowPrice: 'below', upChange: 'up', downChange: 'down', aboveThreshold: 'above', belowThreshold: 'below', bullishCross: 'bullish cross', bearishCross: 'bearish cross', stopLossNear: 'Near stop loss', stopLossBreach: 'Stop loss breached' }, en: { abovePrice: 'above', belowPrice: 'below', upChange: 'up', downChange: 'down', aboveThreshold: 'above', belowThreshold: 'below', bullishCross: 'bullish cross', bearishCross: 'bearish cross', stopLossNear: 'Near stop loss', stopLossBreach: 'Stop loss breached' },
+  en: { abovePrice: 'above', belowPrice: 'below', upChange: 'up', downChange: 'down', aboveThreshold: 'above', belowThreshold: 'below', bullishCross: 'bullish cross', bearishCross: 'bearish cross', stopLossNear: 'Near stop loss', stopLossBreach: 'Stop loss breached' },
 } as const;
 export const ALERT_LIST_TEXT = {
-  zh: { title: 'Alert rules', subtitle: '{total} rules', enabledFilter: 'Status', alertTypeFilter: 'Rule type', loadingRules: 'Loading rules', emptyTitle: 'No alert rules', emptyDescription: 'After rules are created, background evaluation processes enabled alerts on the polling schedule.', rule: 'Rule', target: 'Target', type: 'Type', parameters: 'Parameters', status: 'Status', cooldown: 'Cooldown', updatedAt: 'Updated', action: 'Actions', source: 'Source: {source}', allAccounts: 'All accounts', accountTarget: 'Account {target}', enabled: 'Enabled', disabled: 'Disabled', coolingDown: 'Cooling down', notCoolingDown: 'Not cooling down', childTargetCooldown: 'Per-target cooldowns are in trigger history', test: 'Test', testing: 'Testing', disabling: 'Disabling', enabling: 'Enabling', disable: 'Disable', enable: 'Enable', delete: 'Delete', cancel: 'Cancel', scoreDropAtLeast: 'Score drop >= {value}', deleteAria: 'Delete {name}', deleteTitle: 'Delete alert rule', deleteMessage: 'Delete "{name}"? Existing trigger history will be kept.' }, en: { title: 'Alert rules', subtitle: '{total} rules', enabledFilter: 'Status', alertTypeFilter: 'Rule type', loadingRules: 'Loading rules', emptyTitle: 'No alert rules', emptyDescription: 'After rules are created, background evaluation processes enabled alerts on the polling schedule.', rule: 'Rule', target: 'Target', type: 'Type', parameters: 'Parameters', status: 'Status', cooldown: 'Cooldown', updatedAt: 'Updated', action: 'Actions', source: 'Source: {source}', allAccounts: 'All accounts', accountTarget: 'Account {target}', enabled: 'Enabled', disabled: 'Disabled', coolingDown: 'Cooling down', notCoolingDown: 'Not cooling down', childTargetCooldown: 'Per-target cooldowns are in trigger history', test: 'Test', testing: 'Testing', disabling: 'Disabling', enabling: 'Enabling', disable: 'Disable', enable: 'Enable', delete: 'Delete', cancel: 'Cancel', scoreDropAtLeast: 'Score drop >= {value}', deleteAria: 'Delete {name}', deleteTitle: 'Delete alert rule', deleteMessage: 'Delete "{name}"? Existing trigger history will be kept.' },
+  en: { title: 'Alert rules', subtitle: '{total} rules', enabledFilter: 'Status', alertTypeFilter: 'Rule type', loadingRules: 'Loading rules', emptyTitle: 'No alert rules', emptyDescription: 'After rules are created, background evaluation processes enabled alerts on the polling schedule.', rule: 'Rule', target: 'Target', type: 'Type', parameters: 'Parameters', status: 'Status', cooldown: 'Cooldown', updatedAt: 'Updated', action: 'Actions', source: 'Source: {source}', allAccounts: 'All accounts', accountTarget: 'Account {target}', enabled: 'Enabled', disabled: 'Disabled', coolingDown: 'Cooling down', notCoolingDown: 'Not cooling down', childTargetCooldown: 'Per-target cooldowns are in trigger history', test: 'Test', testing: 'Testing', disabling: 'Disabling', enabling: 'Enabling', disable: 'Disable', enable: 'Enable', delete: 'Delete', cancel: 'Cancel', scoreDropAtLeast: 'Score drop >= {value}', deleteAria: 'Delete {name}', deleteTitle: 'Delete alert rule', deleteMessage: 'Delete "{name}"? Existing trigger history will be kept.' },
 } as const;
-export const ALERT_ENABLED_FILTER_OPTIONS: Record<UiLanguage, Array<Option<'all' | 'enabled' | 'disabled'>>> = { zh: [{ value: 'all', label: 'All statuses' }, { value: 'enabled', label: 'Enabled' }, { value: 'disabled', label: 'Disabled' }], en: [{ value: 'all', label: 'All statuses' }, { value: 'enabled', label: 'Enabled' }, { value: 'disabled', label: 'Disabled' }] };
-export const ALERT_TYPE_FILTER_OPTIONS: Record<UiLanguage, Array<Option<'all' | AlertType>>> = { zh: [{ value: 'all', label: 'All types' }, ...alertTypes.map((value) => ({ value, label: ALERT_TYPE_LABELS.en[value] }))], en: [{ value: 'all', label: 'All types' }, ...alertTypes.map((value) => ({ value, label: ALERT_TYPE_LABELS.en[value] }))] };
+export const ALERT_ENABLED_FILTER_OPTIONS: Record<UiLanguage, Array<Option<'all' | 'enabled' | 'disabled'>>> = { en: [{ value: 'all', label: 'All statuses' }, { value: 'enabled', label: 'Enabled' }, { value: 'disabled', label: 'Disabled' }] };
+export const ALERT_TYPE_FILTER_OPTIONS: Record<UiLanguage, Array<Option<'all' | AlertType>>> = { en: [{ value: 'all', label: 'All types' }, ...alertTypes.map((value) => ({ value, label: ALERT_TYPE_LABELS.en[value] }))] };
 export const ALERT_FORM_TEXT = {
-  zh: { accountLoadFailed: 'Account loading failed', allAccounts: 'All accounts', cardTitle: 'Create alert rule', cardSubtitle: 'Web alert center', ruleName: 'Rule name', ruleNamePlaceholder: 'Optional, e.g. Moutai price crossing', targetScope: 'Target scope', targetCode: 'Symbol', target: 'Target', marketRegion: 'Market region', account: 'Account', ruleType: 'Rule type', severity: 'Severity', direction: 'Direction', priceThreshold: 'Price threshold', changePctThreshold: 'Change threshold (%)', volumeMultiplier: 'Volume multiplier', crossDirection: 'Cross direction', thresholdDirection: 'Threshold direction', maDirection: 'Cross direction', maWindow: 'MA window', rsiPeriod: 'RSI period', rsiThreshold: 'RSI threshold', fastPeriod: 'Fast period', slowPeriod: 'Slow period', signalPeriod: 'Signal period', kdjPeriod: 'KDJ period', kPeriod: 'K smoothing period', dPeriod: 'D smoothing period', cciPeriod: 'CCI period', cciThreshold: 'CCI threshold', stopLossMode: 'Stop-loss mode', triggerStatus: 'Trigger status', scoreDropThreshold: 'Score drop threshold', enableAfterCreate: 'Enable immediately', creating: 'Creating...', create: 'Create rule', positiveNumber: '{label} must be a number greater than 0', integerRange: '{label} must be an integer from {min} to {max}', required: '{label} is required', finiteNumber: '{label} must be a valid number', rsiRange: 'RSI threshold must be between 0 and 100', requiredBarsLimit: '{label} requires {requiredBars} daily bars, up to {max} are supported', fastLessThanSlow: 'Fast period must be less than slow period', noMarketStatus: 'Select at least one traffic light status', invalidStockCode: 'Invalid stock code format' }, en: { accountLoadFailed: 'Account loading failed', allAccounts: 'All accounts', cardTitle: 'Create alert rule', cardSubtitle: 'Web alert center', ruleName: 'Rule name', ruleNamePlaceholder: 'Optional, e.g. Moutai price crossing', targetScope: 'Target scope', targetCode: 'Symbol', target: 'Target', marketRegion: 'Market region', account: 'Account', ruleType: 'Rule type', severity: 'Severity', direction: 'Direction', priceThreshold: 'Price threshold', changePctThreshold: 'Change threshold (%)', volumeMultiplier: 'Volume multiplier', crossDirection: 'Cross direction', thresholdDirection: 'Threshold direction', maDirection: 'Cross direction', maWindow: 'MA window', rsiPeriod: 'RSI period', rsiThreshold: 'RSI threshold', fastPeriod: 'Fast period', slowPeriod: 'Slow period', signalPeriod: 'Signal period', kdjPeriod: 'KDJ period', kPeriod: 'K smoothing period', dPeriod: 'D smoothing period', cciPeriod: 'CCI period', cciThreshold: 'CCI threshold', stopLossMode: 'Stop-loss mode', triggerStatus: 'Trigger status', scoreDropThreshold: 'Score drop threshold', enableAfterCreate: 'Enable immediately', creating: 'Creating...', create: 'Create rule', positiveNumber: '{label} must be a number greater than 0', integerRange: '{label} must be an integer from {min} to {max}', required: '{label} is required', finiteNumber: '{label} must be a valid number', rsiRange: 'RSI threshold must be between 0 and 100', requiredBarsLimit: '{label} requires {requiredBars} daily bars, up to {max} are supported', fastLessThanSlow: 'Fast period must be less than slow period', noMarketStatus: 'Select at least one traffic light status', invalidStockCode: 'Invalid stock code format' },
+  en: { accountLoadFailed: 'Account loading failed', allAccounts: 'All accounts', cardTitle: 'Create alert rule', cardSubtitle: 'Web alert center', ruleName: 'Rule name', ruleNamePlaceholder: 'Optional, e.g. Moutai price crossing', targetScope: 'Target scope', targetCode: 'Symbol', target: 'Target', marketRegion: 'Market region', account: 'Account', ruleType: 'Rule type', severity: 'Severity', direction: 'Direction', priceThreshold: 'Price threshold', changePctThreshold: 'Change threshold (%)', volumeMultiplier: 'Volume multiplier', crossDirection: 'Cross direction', thresholdDirection: 'Threshold direction', maDirection: 'Cross direction', maWindow: 'MA window', rsiPeriod: 'RSI period', rsiThreshold: 'RSI threshold', fastPeriod: 'Fast period', slowPeriod: 'Slow period', signalPeriod: 'Signal period', kdjPeriod: 'KDJ period', kPeriod: 'K smoothing period', dPeriod: 'D smoothing period', cciPeriod: 'CCI period', cciThreshold: 'CCI threshold', stopLossMode: 'Stop-loss mode', triggerStatus: 'Trigger status', scoreDropThreshold: 'Score drop threshold', enableAfterCreate: 'Enable immediately', creating: 'Creating...', create: 'Create rule', positiveNumber: '{label} must be a number greater than 0', integerRange: '{label} must be an integer from {min} to {max}', required: '{label} is required', finiteNumber: '{label} must be a valid number', rsiRange: 'RSI threshold must be between 0 and 100', requiredBarsLimit: '{label} requires {requiredBars} daily bars, up to {max} are supported', fastLessThanSlow: 'Fast period must be less than slow period', noMarketStatus: 'Select at least one traffic light status', invalidStockCode: 'Invalid stock code format' },
 } as const;
-export const ALERT_SYMBOL_TYPE_OPTIONS: Record<UiLanguage, Array<Option<AlertType>>> = { zh: symbolAlertTypes.map((value) => ({ value, label: ALERT_TYPE_LABELS.en[value] })), en: symbolAlertTypes.map((value) => ({ value, label: ALERT_TYPE_LABELS.en[value] })) };
-export const ALERT_PORTFOLIO_TYPE_OPTIONS: Record<UiLanguage, Array<Option<AlertType>>> = { zh: portfolioAlertTypes.map((value) => ({ value, label: ALERT_TYPE_LABELS.en[value] })), en: portfolioAlertTypes.map((value) => ({ value, label: ALERT_TYPE_LABELS.en[value] })) };
-export const ALERT_MARKET_TYPE_OPTIONS: Record<UiLanguage, Array<Option<AlertType>>> = { zh: marketAlertTypes.map((value) => ({ value, label: ALERT_TYPE_LABELS.en[value] })), en: marketAlertTypes.map((value) => ({ value, label: ALERT_TYPE_LABELS.en[value] })) };
-export const ALERT_TARGET_SCOPE_OPTIONS: Record<UiLanguage, Array<Option<AlertTargetScope>>> = { zh: Object.entries(ALERT_SCOPE_LABELS.zh).map(([value, label]) => ({ value: value as AlertTargetScope, label })), en: Object.entries(ALERT_SCOPE_LABELS.en).map(([value, label]) => ({ value: value as AlertTargetScope, label })) };
-export const ALERT_SEVERITY_OPTIONS: Record<UiLanguage, Array<Option<'info' | 'warning' | 'critical'>>> = { zh: Object.entries(ALERT_SEVERITY_LABELS.zh).map(([value, label]) => ({ value: value as 'info' | 'warning' | 'critical', label })), en: Object.entries(ALERT_SEVERITY_LABELS.en).map(([value, label]) => ({ value: value as 'info' | 'warning' | 'critical', label })) };
-export const ALERT_PRICE_DIRECTION_OPTIONS: Record<UiLanguage, Array<Option<'above' | 'below'>>> = { zh: [{ value: 'above', label: 'Crosses above' }, { value: 'below', label: 'Crosses below' }], en: [{ value: 'above', label: 'Crosses above' }, { value: 'below', label: 'Crosses below' }] };
-export const ALERT_CHANGE_DIRECTION_OPTIONS: Record<UiLanguage, Array<Option<'up' | 'down'>>> = { zh: [{ value: 'up', label: 'Rises by' }, { value: 'down', label: 'Falls by' }], en: [{ value: 'up', label: 'Rises by' }, { value: 'down', label: 'Falls by' }] };
-export const ALERT_THRESHOLD_DIRECTION_OPTIONS: Record<UiLanguage, Array<Option<'above' | 'below'>>> = { zh: [{ value: 'above', label: 'Crosses above' }, { value: 'below', label: 'Crosses below' }], en: [{ value: 'above', label: 'Crosses above' }, { value: 'below', label: 'Crosses below' }] };
-export const ALERT_CROSS_DIRECTION_OPTIONS: Record<UiLanguage, Array<Option<'bullish_cross' | 'bearish_cross'>>> = { zh: [{ value: 'bullish_cross', label: 'Bullish cross' }, { value: 'bearish_cross', label: 'Bearish cross' }], en: [{ value: 'bullish_cross', label: 'Bullish cross' }, { value: 'bearish_cross', label: 'Bearish cross' }] };
-export const ALERT_STOP_LOSS_MODE_OPTIONS: Record<UiLanguage, Array<Option<PortfolioStopLossMode>>> = { zh: [{ value: 'near', label: 'Near stop loss' }, { value: 'breach', label: 'Stop loss breached' }], en: [{ value: 'near', label: 'Near stop loss' }, { value: 'breach', label: 'Stop loss breached' }] };
-export const ALERT_MARKET_REGION_OPTIONS: Record<UiLanguage, Array<Option<MarketRegion>>> = { zh: [{ value: 'cn', label: 'A-shares (cn)' }, { value: 'hk', label: 'Hong Kong (hk)' }, { value: 'us', label: 'US (us)' }], en: [{ value: 'cn', label: 'A-shares (cn)' }, { value: 'hk', label: 'Hong Kong (hk)' }, { value: 'us', label: 'US (us)' }] };
-export const ALERT_MARKET_LIGHT_STATUS_OPTIONS: Record<UiLanguage, Array<Option<MarketLightStatus>>> = { zh: [{ value: 'red', label: 'Red' }, { value: 'yellow', label: 'Yellow' }], en: [{ value: 'red', label: 'Red' }, { value: 'yellow', label: 'Yellow' }] };
+export const ALERT_SYMBOL_TYPE_OPTIONS: Record<UiLanguage, Array<Option<AlertType>>> = { en: symbolAlertTypes.map((value) => ({ value, label: ALERT_TYPE_LABELS.en[value] })) };
+export const ALERT_PORTFOLIO_TYPE_OPTIONS: Record<UiLanguage, Array<Option<AlertType>>> = { en: portfolioAlertTypes.map((value) => ({ value, label: ALERT_TYPE_LABELS.en[value] })) };
+export const ALERT_MARKET_TYPE_OPTIONS: Record<UiLanguage, Array<Option<AlertType>>> = { en: marketAlertTypes.map((value) => ({ value, label: ALERT_TYPE_LABELS.en[value] })) };
+export const ALERT_TARGET_SCOPE_OPTIONS: Record<UiLanguage, Array<Option<AlertTargetScope>>> = { en: Object.entries(ALERT_SCOPE_LABELS.en).map(([value, label]) => ({ value: value as AlertTargetScope, label })) };
+export const ALERT_SEVERITY_OPTIONS: Record<UiLanguage, Array<Option<'info' | 'warning' | 'critical'>>> = { en: Object.entries(ALERT_SEVERITY_LABELS.en).map(([value, label]) => ({ value: value as 'info' | 'warning' | 'critical', label })) };
+export const ALERT_PRICE_DIRECTION_OPTIONS: Record<UiLanguage, Array<Option<'above' | 'below'>>> = { en: [{ value: 'above', label: 'Crosses above' }, { value: 'below', label: 'Crosses below' }] };
+export const ALERT_CHANGE_DIRECTION_OPTIONS: Record<UiLanguage, Array<Option<'up' | 'down'>>> = { en: [{ value: 'up', label: 'Rises by' }, { value: 'down', label: 'Falls by' }] };
+export const ALERT_THRESHOLD_DIRECTION_OPTIONS: Record<UiLanguage, Array<Option<'above' | 'below'>>> = { en: [{ value: 'above', label: 'Crosses above' }, { value: 'below', label: 'Crosses below' }] };
+export const ALERT_CROSS_DIRECTION_OPTIONS: Record<UiLanguage, Array<Option<'bullish_cross' | 'bearish_cross'>>> = { en: [{ value: 'bullish_cross', label: 'Bullish cross' }, { value: 'bearish_cross', label: 'Bearish cross' }] };
+export const ALERT_STOP_LOSS_MODE_OPTIONS: Record<UiLanguage, Array<Option<PortfolioStopLossMode>>> = { en: [{ value: 'near', label: 'Near stop loss' }, { value: 'breach', label: 'Stop loss breached' }] };
+export const ALERT_MARKET_REGION_OPTIONS: Record<UiLanguage, Array<Option<MarketRegion>>> = { en: [{ value: 'cn', label: 'A-shares (cn)' }, { value: 'hk', label: 'Hong Kong (hk)' }, { value: 'us', label: 'US (us)' }] };
+export const ALERT_MARKET_LIGHT_STATUS_OPTIONS: Record<UiLanguage, Array<Option<MarketLightStatus>>> = { en: [{ value: 'red', label: 'Red' }, { value: 'yellow', label: 'Yellow' }] };
 
 export const PORTFOLIO_TEXT = {
-  zh: { documentTitle: 'Portfolio Analysis - DSA', title: 'Portfolio management', description: 'Portfolio snapshots, manual entries, CSV import, and risk analysis with full-portfolio or single-account views', accountView: 'Account view', allAccounts: 'All accounts', costMethod: 'Cost method', fifo: 'FIFO', avg: 'Average cost', collapseCreate: 'Collapse', createAccount: 'New account', deleteAccount: 'Delete account', deletingAccount: 'Deleting...', deleteAccountTitle: 'Delete portfolio account', deleteAccountConfirm: 'Delete account', deleteAccountMessage: 'Delete account {name} (#{id})? It will be hidden from default lists, snapshots, risk views, and entry forms; historical ledger rows are not physically deleted.', refreshing: 'Refreshing...', refreshData: 'Refresh data', noAccounts: 'No accounts are available. Create an account before entering trades or importing CSV files.', riskDegraded: 'Risk module degraded', operationHint: 'Operation hint', analysisTask: 'Analysis task', snapshotPartialTitle: 'Portfolio valuation limitations', totalEquity: 'Total equity', totalMarketValue: 'Total market value', totalCash: 'Total cash', fxStatus: 'FX status', refreshFx: 'Refresh FX', stale: 'Stale', latest: 'Current', fxRefreshResult: 'FX refresh result', positionsTitle: 'Positions', countItems: '{count} items', noPositionsTitle: 'No positions', noPositionsDescription: 'After you enter trades or import CSV data, account-level positions appear here.', account: 'Account', code: 'Code', quantity: 'Quantity', avgCost: 'Avg cost', lastPrice: 'Last price', marketValue: 'Market value', unrealizedPnl: 'Unrealized P/L', returnPct: 'Return', action: 'Action', submitting: 'Submitting', analyze: 'Analyze', sectorConcentration: 'Sector concentration', positionConcentrationFallback: 'Sector data unavailable; showing position concentration', noConcentrationTitle: 'No concentration data', noConcentrationDescription: 'Sector or position concentration appears after the risk module finishes.', displayScope: 'Display scope', sectorDimension: 'Sector', positionDimensionFallback: 'Position fallback', sectorAlert: 'Sector concentration alert', topWeight: 'Top1 weight', yes: 'Yes', no: 'No', writeBlocked: 'You are viewing all accounts. Select a specific account before manual entry or CSV submission to avoid writing to the wrong scope.', drawdownMonitor: 'Drawdown monitor', maxDrawdown: 'Max drawdown', currentDrawdown: 'Current drawdown', alert: 'Alert', stopLossWarning: 'Stop-loss proximity warning', triggeredCount: 'Triggered', nearCount: 'Near', scope: 'Scope', accountCount: 'Accounts', currency: 'Quote currency', costMethodShort: 'Cost method', aiRiskSignals: 'AI risk signals', aiRiskUnavailable: 'Signal risk unavailable', aiRiskTotal: 'Risk signals', sellSignals: 'Sell', reduceSignals: 'Reduce', alertSignals: 'Alert', noAiRiskSignals: 'No defensive signals',
-    brokerLoadWarningEmpty: 'Broker list endpoint returned empty; falling back to built-in broker list (Huatai/CITIC/CMB).',
-    brokerLoadWarningFailed: 'Broker list endpoint unavailable; falling back to built-in broker list (Huatai/CITIC/CMB).',
-    brokerFallbackList: 'Huatai/CITIC/CMB',
-    brokerLabelHuatai: 'Huatai', brokerLabelCitic: 'CITIC', brokerLabelCmb: 'CMB',
-    riskWarningFailed: 'Risk data fetch failed; showing snapshot data only.',
-    positionAnalysisSubmitted: 'Submitted analysis task for {symbol}: {taskId}',
-    writeWarningSelectAccountForEntry: 'Select a specific account in the top-right before entry or import.',
-    writeWarningSelectAccountForDelete: 'Select a specific account in the top-right before deletion correction.',
-    writeWarningSelectAccountForPositionDelete: 'Select a specific account before deleting a portfolio account.',
-    accountCreateNameRequired: 'Account name is required.',
-    accountCreateSuccess: 'Account created. Switched to the new account.',
-    accountCreateError: 'Account creation failed. Please retry later.',
-    accountCreateTitle: 'New account',
-    accountCreateHint: 'Switches to the new account automatically',
-    accountCreateFailedTitle: 'Account creation failed',
-    accountCreateSuccessTitle: 'Account created',
-    accountCreateNamePlaceholder: 'Account name (required)',
-    accountCreateBrokerPlaceholder: 'Broker (optional, e.g. Demo/Huatai)',
-    accountCreateBaseCurrencyPlaceholder: 'Base currency (e.g. CNY/USD/HKD)',
-    accountCreateCreating: 'Creating...',
-    accountCreateCreate: 'Create account',
-    accountCreateMarketCn: 'Market: A-shares (cn)', accountCreateMarketHk: 'Market: Hong Kong (hk)', accountCreateMarketUs: 'Market: US (us)', accountCreateMarketJp: 'Market: Japan (jp)', accountCreateMarketKr: 'Market: Korea (kr)', accountCreateMarketTw: 'Market: Taiwan (tw)',
-    accountCreateCollapse: 'Collapse',
-    formTradeTitle: 'Manual entry: trade',
-    formTradeSymbolPlaceholder: 'Stock code (e.g. 600519)',
-    formTradeBuy: 'Buy', formTradeSell: 'Sell',
-    formTradeQuantityPlaceholder: 'Quantity (required)', formTradePricePlaceholder: 'Price (required)',
-    formTradeFeePlaceholder: 'Fee (optional)', formTradeTaxPlaceholder: 'Tax (optional)',
-    formTradeFeeHint: 'Fee and tax are optional; empty values are treated as 0.',
-    formTradeSubmit: 'Submit trade',
-    formCashTitle: 'Manual entry: cash flow',
-    formCashIn: 'Inflow', formCashOut: 'Outflow',
-    formCashAmountPlaceholder: 'Amount',
-    formCashCurrencyPlaceholder: 'Currency (optional, default {currency})',
-    formCashDefaultCurrency: 'account base currency',
-    formCashSubmit: 'Submit cash flow',
-    formCorpTitle: 'Manual entry: corporate action',
-    formCorpSymbolPlaceholder: 'Stock code',
-    formCorpDividend: 'Cash dividend', formCorpSplit: 'Split adjustment',
-    formCorpDividendPlaceholder: 'Dividend per share', formCorpSplitPlaceholder: 'Split ratio',
-    formCorpSubmit: 'Submit corporate action',
-    formCsvTitle: 'Broker CSV import',
-    formCsvBrokerHuatai: 'huatai (Huatai)',
-    formCsvPick: 'Pick CSV',
-    formCsvDryRun: 'Dry-run only (do not write)',
-    formCsvParsing: 'Parsing...', formCsvParseFile: 'Parse file',
-    formCsvCommitting: 'Submitting...', formCsvCommitImport: 'Submit import',
-    formCsvParseResultTitle: 'CSV parse result',
-    formCsvParseResultMessage: '{valid} valid, {skipped} skipped, {errors} errors.',
-    formCsvCommitResultTitleDry: 'CSV dry-run result',
-    formCsvCommitResultTitleNormal: 'CSV commit result',
-    formCsvCommitResultMessage: '{label}: inserted {inserted}, duplicate {duplicate}, failed {failed}.',
-    csvCommitDryRunLabel: 'Dry-run check', csvCommitActualLabel: 'Actual write',
-    eventsTitle: 'Ledger events',
-    eventsTypeTrade: 'Trades', eventsTypeCash: 'Cash flows', eventsTypeCorporate: 'Corporate actions',
-    eventsLoading: 'Loading...', eventsRefresh: 'Refresh ledger',
-    eventsSymbolFilter: 'Filter by stock code',
-    eventsAllSides: 'All trade sides', eventsAllDirections: 'All cash flows', eventsAllActions: 'All corporate actions',
-    eventsWriteBlockedHint: 'Deletion correction is only available in single-account view. Select a specific account first.',
-    eventsWriteAllowedHint: 'You can delete incorrect ledger rows and re-enter them.',
-    eventsTradeLine: '{date} {side} {symbol} qty={quantity} price={price}',
-    eventsConfirmDeleteTrade: 'Delete {date} {side} {symbol} (qty {quantity}, price {price})?',
-    eventsConfirmDeleteCash: 'Delete {date} cash flow ({direction} {amount} {currency})?',
-    eventsConfirmDeleteCorp: 'Delete {date} corporate action {action} ({symbol})?',
-    eventsEmptyTitle: 'No ledger events',
-    eventsEmptyDescription: 'Adjust filters or enter a trade, cash flow, or corporate action first.',
-    eventsPageIndicator: 'Page {page} / {total}',
-    eventsPrev: 'Previous', eventsNext: 'Next',
-    eventsDeleteTitle: 'Delete ledger row',
-    eventsDeleteMessage: 'Delete this ledger row?',
-    eventsDeleting: 'Deleting...', eventsDeleteConfirm: 'Delete', eventsCancel: 'Cancel',
-  }, en: { documentTitle: 'Portfolio Analysis - DSA', title: 'Portfolio management', description: 'Portfolio snapshots, manual entries, CSV import, and risk analysis with full-portfolio or single-account views', accountView: 'Account view', allAccounts: 'All accounts', costMethod: 'Cost method', fifo: 'FIFO', avg: 'Average cost', collapseCreate: 'Collapse', createAccount: 'New account', deleteAccount: 'Delete account', deletingAccount: 'Deleting...', deleteAccountTitle: 'Delete portfolio account', deleteAccountConfirm: 'Delete account', deleteAccountMessage: 'Delete account {name} (#{id})? It will be hidden from default lists, snapshots, risk views, and entry forms; historical ledger rows are not physically deleted.', refreshing: 'Refreshing...', refreshData: 'Refresh data', noAccounts: 'No accounts are available. Create an account before entering trades or importing CSV files.', riskDegraded: 'Risk module degraded', operationHint: 'Operation hint', analysisTask: 'Analysis task', snapshotPartialTitle: 'Portfolio valuation limitations', totalEquity: 'Total equity', totalMarketValue: 'Total market value', totalCash: 'Total cash', fxStatus: 'FX status', refreshFx: 'Refresh FX', stale: 'Stale', latest: 'Current', fxRefreshResult: 'FX refresh result', positionsTitle: 'Positions', countItems: '{count} items', noPositionsTitle: 'No positions', noPositionsDescription: 'After you enter trades or import CSV data, account-level positions appear here.', account: 'Account', code: 'Code', quantity: 'Quantity', avgCost: 'Avg cost', lastPrice: 'Last price', marketValue: 'Market value', unrealizedPnl: 'Unrealized P/L', returnPct: 'Return', action: 'Action', submitting: 'Submitting', analyze: 'Analyze', sectorConcentration: 'Sector concentration', positionConcentrationFallback: 'Sector data unavailable; showing position concentration', noConcentrationTitle: 'No concentration data', noConcentrationDescription: 'Sector or position concentration appears after the risk module finishes.', displayScope: 'Display scope', sectorDimension: 'Sector', positionDimensionFallback: 'Position fallback', sectorAlert: 'Sector concentration alert', topWeight: 'Top1 weight', yes: 'Yes', no: 'No', writeBlocked: 'You are viewing all accounts. Select a specific account before manual entry or CSV submission to avoid writing to the wrong scope.', drawdownMonitor: 'Drawdown monitor', maxDrawdown: 'Max drawdown', currentDrawdown: 'Current drawdown', alert: 'Alert', stopLossWarning: 'Stop-loss proximity warning', triggeredCount: 'Triggered', nearCount: 'Near', scope: 'Scope', accountCount: 'Accounts', currency: 'Quote currency', costMethodShort: 'Cost method', aiRiskSignals: 'AI risk signals', aiRiskUnavailable: 'Signal risk unavailable', aiRiskTotal: 'Risk signals', sellSignals: 'Sell', reduceSignals: 'Reduce', alertSignals: 'Alert', noAiRiskSignals: 'No defensive signals',
+  en: { documentTitle: 'Portfolio Analysis - DSA', title: 'Portfolio management', description: 'Portfolio snapshots, manual entries, CSV import, and risk analysis with full-portfolio or single-account views', accountView: 'Account view', allAccounts: 'All accounts', costMethod: 'Cost method', fifo: 'FIFO', avg: 'Average cost', collapseCreate: 'Collapse', createAccount: 'New account', deleteAccount: 'Delete account', deletingAccount: 'Deleting...', deleteAccountTitle: 'Delete portfolio account', deleteAccountConfirm: 'Delete account', deleteAccountMessage: 'Delete account {name} (#{id})? It will be hidden from default lists, snapshots, risk views, and entry forms; historical ledger rows are not physically deleted.', refreshing: 'Refreshing...', refreshData: 'Refresh data', noAccounts: 'No accounts are available. Create an account before entering trades or importing CSV files.', riskDegraded: 'Risk module degraded', operationHint: 'Operation hint', analysisTask: 'Analysis task', snapshotPartialTitle: 'Portfolio valuation limitations', totalEquity: 'Total equity', totalMarketValue: 'Total market value', totalCash: 'Total cash', fxStatus: 'FX status', refreshFx: 'Refresh FX', stale: 'Stale', latest: 'Current', fxRefreshResult: 'FX refresh result', positionsTitle: 'Positions', countItems: '{count} items', noPositionsTitle: 'No positions', noPositionsDescription: 'After you enter trades or import CSV data, account-level positions appear here.', account: 'Account', code: 'Code', quantity: 'Quantity', avgCost: 'Avg cost', lastPrice: 'Last price', marketValue: 'Market value', unrealizedPnl: 'Unrealized P/L', returnPct: 'Return', action: 'Action', submitting: 'Submitting', analyze: 'Analyze', sectorConcentration: 'Sector concentration', positionConcentrationFallback: 'Sector data unavailable; showing position concentration', noConcentrationTitle: 'No concentration data', noConcentrationDescription: 'Sector or position concentration appears after the risk module finishes.', displayScope: 'Display scope', sectorDimension: 'Sector', positionDimensionFallback: 'Position fallback', sectorAlert: 'Sector concentration alert', topWeight: 'Top1 weight', yes: 'Yes', no: 'No', writeBlocked: 'You are viewing all accounts. Select a specific account before manual entry or CSV submission to avoid writing to the wrong scope.', drawdownMonitor: 'Drawdown monitor', maxDrawdown: 'Max drawdown', currentDrawdown: 'Current drawdown', alert: 'Alert', stopLossWarning: 'Stop-loss proximity warning', triggeredCount: 'Triggered', nearCount: 'Near', scope: 'Scope', accountCount: 'Accounts', currency: 'Quote currency', costMethodShort: 'Cost method', aiRiskSignals: 'AI risk signals', aiRiskUnavailable: 'Signal risk unavailable', aiRiskTotal: 'Risk signals', sellSignals: 'Sell', reduceSignals: 'Reduce', alertSignals: 'Alert', noAiRiskSignals: 'No defensive signals',
     brokerLoadWarningEmpty: 'Broker list endpoint returned empty; falling back to built-in broker list (Huatai/CITIC/CMB).',
     brokerLoadWarningFailed: 'Broker list endpoint unavailable; falling back to built-in broker list (Huatai/CITIC/CMB).',
     brokerFallbackList: 'Huatai/CITIC/CMB',
@@ -200,180 +128,12 @@ export const PORTFOLIO_TEXT = {
     eventsDeleting: 'Deleting...', eventsDeleteConfirm: 'Delete', eventsCancel: 'Cancel',
   },
 } as const;
-export const PORTFOLIO_SIDE_LABELS: Record<UiLanguage, Record<PortfolioSide, string>> = { zh: { buy: 'Buy', sell: 'Sell' }, en: { buy: 'Buy', sell: 'Sell' } };
-export const PORTFOLIO_CASH_DIRECTION_LABELS: Record<UiLanguage, Record<PortfolioCashDirection, string>> = { zh: { in: 'Inflow', out: 'Outflow' }, en: { in: 'Inflow', out: 'Outflow' } };
-export const PORTFOLIO_CORPORATE_ACTION_LABELS: Record<UiLanguage, Record<PortfolioCorporateActionType, string>> = { zh: { cash_dividend: 'Cash dividend', split_adjustment: 'Split adjustment' }, en: { cash_dividend: 'Cash dividend', split_adjustment: 'Split adjustment' } };
+export const PORTFOLIO_SIDE_LABELS: Record<UiLanguage, Record<PortfolioSide, string>> = { en: { buy: 'Buy', sell: 'Sell' } };
+export const PORTFOLIO_CASH_DIRECTION_LABELS: Record<UiLanguage, Record<PortfolioCashDirection, string>> = { en: { in: 'Inflow', out: 'Outflow' } };
+export const PORTFOLIO_CORPORATE_ACTION_LABELS: Record<UiLanguage, Record<PortfolioCorporateActionType, string>> = { en: { cash_dividend: 'Cash dividend', split_adjustment: 'Split adjustment' } };
 
 export const SCREENING_TEXT = {
-  zh: {
-    documentTitle: 'Screening - DSA',
-    marketCn: 'A-shares',
-    strategyCategoryFramework: 'Framework', strategyCategoryIncome: 'Income', strategyCategoryMomentum: 'Momentum',
-    strategyCategoryQuality: 'Quality', strategyCategoryReversal: 'Reversal', strategyCategoryTrend: 'Trend', strategyCategoryValue: 'Value',
-    strategyCustom: 'Custom',
-    strategyCustomOption: 'Custom strategy…',
-    strategyCustomId: 'Custom strategy ID',
-    strategyCustomIdPlaceholder: 'Enter strategy ID',
-    strategyCustomLabelWithId: 'Custom strategy ({id})',
-    strategyFilterDescription: 'The strategy runs hard filters, factor scoring, then risk and portfolio constraints.',
-    factorValue: 'Value', factorLiquidity: 'Liquidity', factorMomentum: 'Momentum', factorReversal: 'Reversal',
-    factorActivity: 'Activity', factorStability: 'Stability', factorSize: 'Size',
-    factorThemeHeat: 'Theme heat', factorTopicAlignment: 'Topic alignment',
-    postTagValueQuality: 'Value-quality', postTagControlledReversal: 'Controlled reversal', postTagMomentum: 'Trend momentum', postTagLiquidity: 'Liquidity',
-    hotspotQualityAvailable: 'Available', hotspotQualityFailed: 'Unavailable', hotspotQualityPartial: 'Partial', hotspotQualityStale: 'Cached',
-    hotspotStageAccelerating: 'Accelerating', hotspotStageCooling: 'Cooling', hotspotStageDiverging: 'Diverging',
-    hotspotStageInitial: 'Initial move', hotspotStagePersistentHot: 'Confirmed spread', hotspotStageWarming: 'Confirmed spread', hotspotStageWeakening: 'Cooling',
-    hotspotRoleCoreLeader: 'Core leader', hotspotRoleFollower: 'Follower', hotspotRoleLaggard: 'Laggard', hotspotRoleLeader: 'Core leader', hotspotRoleSecondary: 'Lagger rebound',
-    hotspotMissingFieldCanonicalTopic: 'Canonical topic', hotspotMissingFieldConstituents: 'Constituents',
-    hotspotMissingFieldLeaderStocks: 'Leaders', hotspotMissingFieldLiveStocks: 'Live constituents',
-    hotspotMissingFieldRoute: 'Fermentation route', hotspotMissingFieldSource: 'Source',
-    hotspotMissingFieldStocks: 'Constituents', hotspotMissingFieldTimeline: 'Timeline',
-    hotspotConcepts: 'Constituents', hotspotQualityPending: 'Pending',
-    hotspotFormatHeat: 'Heat {score}', hotspotFormatStage: 'Stage {stage}', hotspotFormatLeaders: 'Leaders {leaders}',
-    hotspotWatch: 'Watching', hotspotWatching: 'Watching active stocks', hotspotNoQuote: 'No quote',
-    hotspotCoverage: 'Covers {count} stocks',
-    hotspotPollingUnrecoverableTitle: 'Screening task is unrecoverable',
-    hotspotPollingTimeout: 'The screening task is still running in the background; the status poll timed out and will retry.',
-    hotspotPollingNetwork: 'The screening task is still running in the background; cannot connect to the local service for status and will retry.',
-    hotspotPollingGeneric: 'Cannot read screening task status right now; will retry.',
-    hotspotNoneSummary: 'No summary yet; see factor and risk information.',
-    hotspotLlmFinished: 'LLM completed the relative ranking.',
-    hotspotSignalWatch: 'Watch',
-    hotspotMainReason: 'Top strengths: {factors}',
-    hotspotMainReasonTag: 'Top strengths: {factors}; tags: {tags}',
-    riskHigh: 'High', riskMedium: 'Medium', riskLow: 'Low', riskPending: 'Pending',
-    hotspotStagePending: 'Time pending',
-    hotspotCurrent: 'Active',
-    hotspotNewsCatalyst: 'News catalyst',
-    hotspotChange: 'Hotspot change',
-    hotspotNoMoreDetail: 'No further details.',
-    hotspotDataChanged: 'Hotspot data has new changes.',
-    hotspotLoadDone: 'Hotspot details loaded.',
-    hotspotDetailEmpty: 'No recent valid news for this topic.',
-    hotspotSearchRetry: 'News search failed; please retry.',
-    hotspotDetailRetry: 'Hotspot detail load failed; please retry.',
-    hotspotLoadFailed: 'Hotspot load failed; please retry.',
-    hotspotPendingRefresh: 'Pending refresh',
-    strategyLoadFailed: 'Failed to load strategy list',
-    formatBillion: '{value} B', formatTenThousand: '{value} k',
-    cacheFallback: 'Cache fallback', cacheFallbackHours: 'Cache fallback {hours}h', fallbackSource: 'Fallback source',
-    heatStrongLeading: 'Strong leading', heatStrong: 'Strong', heatModerate: 'Moderately strong',
-    pageTitle: 'Screening - DSA',
-    pageHeading: 'Screening',
-    enableTitle: 'Screening not enabled',
-    enableMessage: 'Enable screening to run strategies.',
-    enabling: 'Enabling...',
-    enableCta: 'Enable screening',
-    disabledTitle: 'Screening unavailable',
-    disabledMessage: 'Check backend logs, strategy files, and base data dependencies, then restart the service.',
-    errorTitle: 'Call failed',
-    hotspotHeading: 'Hotspot topics',
-    hotspotCollapse: 'Collapse hotspot topics',
-    hotspotExpand: 'Expand hotspot topics{count}',
-    hotspotRefreshing: 'Refreshing...',
-    hotspotRefresh: 'Refresh hotspot topics',
-    hotspotUpdatedAt: 'Updated at {time}',
-    hotspotEmpty: 'No hotspot data yet. Click "Refresh hotspot topics" to load.',
-    hotspotTrendChange: 'Change {value}%',
-    hotspotTrendLine: 'Trend {trend} · persistence {persistence}',
-    hotspotLeaderLine: 'Leader {leaders}',
-    hotspotLoadingDetail: 'Loading route and constituents...',
-    hotspotClickDetail: 'Click a topic to view its route and constituents.',
-    hotspotCanonicalTopic: 'Canonical topic: {topic}',
-    hotspotSearching: 'Searching...',
-    hotspotSearch: 'Search latest news',
-    hotspotEnriching: 'Enriching details',
-    hotspotQualityLine: 'Quality {status}',
-    hotspotStockCount: 'Constituents {count}',
-    hotspotDegradedSummary: 'Detail data is degraded; expand to view reasons',
-    hotspotMissingFields: 'Missing: {fields}',
-    hotspotTimeline: 'Timeline',
-    hotspotViewMessage: 'View message',
-    hotspotStocksHeading: 'Constituents',
-    hotspotAnalyzeAria: 'Analyze {name}',
-    hotspotAnalyze: 'Analyze',
-    hotspotStockMetrics: 'Change {change} · heat {heat}',
-    sectionRun: 'Run screening',
-    sectionMarket: 'Market',
-    sectionStrategy: 'Strategy',
-    sectionMaxResults: 'Max results',
-    sectionScreening: 'Screening...',
-    sectionRunScreening: 'Run screening',
-    statusEnabled: 'Screening enabled',
-    statusDisabled: 'Screening not enabled',
-    resultsRunning: 'Screening running',
-    resultsComplete: 'Screening complete',
-    resultsStatusProgress: '{message} · {progress}%',
-    resultsStatusFallback: 'Running screening',
-    resultsDetails: 'Run details',
-    resultsTask: 'Task: {id}',
-    resultsSnapshotCounts: 'Snapshots {total} · after filter {filtered} · candidates {count}',
-    resultsRankLlm: 'LLM rerank',
-    resultsRankFactor: 'Deterministic factor',
-    resultsRankPending: '-',
-    resultsCoverage: ' · coverage {pct}',
-    resultsVariantDiff: 'Candidate diff: near pool {pool} ·',
-    resultsVariantRotated: 'rotated {count} slots',
-    resultsVariantPreserved: 'kept baseline',
-    resultsEnrichment: 'Deep enrichment: {done} / {requested}',
-    resultsNotifyFallback: 'Using factor ranking now',
-    resultsNotifyTitle: 'Screening notice',
-    resultsHeading: 'Screening results',
-    resultsCandidates: '{count} candidates',
-    resultsEmpty: 'No candidates match the criteria',
-    resultsColCode: 'Code', resultsColName: 'Name', resultsColSector: 'Sector', resultsColPrice: 'Price',
-    resultsColChange: 'Change', resultsColScore: 'Score', resultsColRankCause: 'Ranked by',
-    resultsColRisk: 'Risk', resultsColDetails: 'Details',
-    resultsFactorRank: 'Factor rank',
-    resultsExpand: 'Expand', resultsCollapse: 'Collapse',
-    resultsSummary: 'Summary', resultsActionSignal: 'Action signal', resultsDeepAnalysis: 'Deep analysis',
-    resultsEnhancedSummary: 'Enhanced summary', resultsJudgment: 'LLM judgment',
-    resultsSectorTheme: 'Sector {sector} · theme {theme} · confidence {confidence}',
-    resultsRiskLabels: 'Risk labels', resultsNoRiskLabels: 'None',
-    resultsMainFactors: 'Top factors', resultsNoFactorDetail: 'No factor detail',
-    resultsTurnover: 'Turnover', resultsSmartFocus: 'Smart focus', resultsCatalyst: 'Catalysts',
-    resultsRelatedNews: 'Related news', resultsNoNews: 'None',
-    resultsAnnouncements: 'Announcements & events', resultsDataEnrichment: 'Data enrichment notice',
-    taskSubmitting: 'Submitting screening task...',
-    taskSubmitted: 'Screening task submitted',
-    taskSubmitFailed: 'Screening submit failed; please retry.',
-    taskRestored: 'Restoring screening task state...',
-    taskUnrecoverable: 'Screening task is unrecoverable; please re-submit.',
-    taskUnknownStatus: 'Unknown screening task status: {status}',
-    taskNoCandidates: 'Screening task completed but no candidates were returned.',
-    taskStartFailed: 'Failed to enable screening',
-    feedbackLlmSkipped: 'LLM rerank incomplete; candidates continue with deterministic factor scoring.',
-    feedbackLlmSkippedWith: 'LLM rerank incomplete: {reason}; candidates continue with deterministic factor scoring.',
-    feedbackNoRerank: 'No LLM rerank model configured; using deterministic factor ranking.',
-    diagnosticNoresult: 'No usable data returned',
-    diagnosticApiKeyMissing: 'No available LLM API key',
-    diagnosticNoJson: 'Model did not return a usable structured ranking',
-    diagnosticCallFailed: 'Model call failed',
-    diagnosticTradeCalendarEmpty: 'No open trading days in the calendar',
-    diagnosticTooManyRequests: 'Too many requests',
-    diagnosticAccessDenied: 'Access denied',
-    diagnosticTimeout: 'Request timed out',
-    diagnosticNetwork: 'Network connection lost',
-    diagnosticScreeningFailed: 'Screening task failed; please retry.',
-    diagnosticScreeningFailedWith: 'Screening task failed: {reason}',
-    diagnosticHotspotNoCache: 'No hotspot cache',
-    diagnosticHotspotTopicNoData: 'Hotspot topic returned no data',
-    diagnosticHotspotNoDataWith: 'Hotspot topic returned no data: {reason}',
-    diagnosticSnapshotIncomplete: 'Some candidates had incomplete daily data; result uses available data.',
-    diagnosticDailyOptional: 'Optional daily data enrichment incomplete; result uses snapshot data.',
-    diagnosticAuxIncomplete: 'Some candidates had incomplete auxiliary data.',
-    diagnosticSectorIncomplete: 'Some sector or topic information is incomplete.',
-    diagnosticDeepIncomplete: 'Some candidates had incomplete deep analysis.',
-    diagnosticSourceDegraded: 'Source downgraded: {detail}',
-    diagnosticSourceDegradedParsed: 'Source downgraded: {source} ({detail})',
-    diagnosticMissingPartial: 'Partial detail',
-    diagnosticTimeoutWithSec: 'Hotspot detail request timed out ({seconds} s)',
-    diagnosticHotspotTimeout: 'Hotspot detail request timed out',
-    diagnosticHotspotNetwork: 'Hotspot data source disconnected',
-    diagnosticHotspotNoData: 'Hotspot data source returned no data',
-    diagnosticHotspotTooMany: 'Hotspot data requests too frequent',
-    diagnosticHotspotSomeUnavailable: 'Some hotspot data is unavailable',
-  }, en: {
+  en: {
     documentTitle: 'Screening - DSA',
     marketCn: 'A-shares',
     strategyCategoryFramework: 'Framework', strategyCategoryIncome: 'Income', strategyCategoryMomentum: 'Momentum',

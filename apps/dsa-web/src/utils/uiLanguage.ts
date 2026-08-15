@@ -3,7 +3,7 @@ import { formatUiText, UI_TEXT, type UiLanguage, type UiTextKey, type UiTextPara
 export const UI_LANGUAGE_STORAGE_KEY = 'dsa.uiLanguage';
 
 export function normalizeUiLanguage(value?: string | null): UiLanguage | null {
-  if (value === 'zh' || value === 'en') {
+  if (value === 'en') {
     return value;
   }
   return null;
@@ -55,9 +55,6 @@ function getBrowserUiLanguage(navigatorLike?: Pick<Navigator, 'language' | 'lang
     const normalized = candidate.toLowerCase();
     if (normalized.startsWith('en')) {
       return 'en';
-    }
-    if (normalized.startsWith('zh')) {
-      return 'zh';
     }
   }
 

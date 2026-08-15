@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import type { ReactNode } from 'react';
 import { UiLanguageProvider, useUiLanguage } from '../../../contexts/UiLanguageContext';
-import { getFieldDescription, getFieldTitle } from '../../../utils/systemConfigI18n';
+import { getFieldDescription } from '../../../utils/systemConfigI18n';
 import { UI_LANGUAGE_STORAGE_KEY } from '../../../utils/uiLanguage';
 import { SettingsField } from '../SettingsField';
 

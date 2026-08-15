@@ -3,8 +3,7 @@ import type React from 'react';
 import { Badge, Button, Select, Input } from '../common';
 import type { ConfigValidationIssue, SystemConfigFieldSchema, SystemConfigItem } from '../../types/systemConfig';
 import { useUiLanguage } from '../../contexts/UiLanguageContext';
-import { getSettingsHelpContent } from '../../locales/settingsHelp';
-import { getFieldDescription, getFieldOptionLabel, getFieldTitle } from '../../utils/systemConfigI18n';
+import { getFieldDescription, getFieldOptionLabel } from '../../utils/systemConfigI18n';
 import type { UiLanguage, UiTextKey } from '../../i18n/uiText';
 import { cn } from '../../utils/cn';
 import { SettingsHelpButton } from './SettingsHelpButton';
@@ -223,7 +222,6 @@ export const SettingsField: React.FC<SettingsFieldProps> = ({
   const { language, t } = useUiLanguage();
   const schema = item.schema;
   const isMultiValue = isMultiValueField(item);
-  const helpContent = getSettingsHelpContent(schema?.helpKey, schema?.description, language);
   const localizationKey = schema?.key ?? item.key;
   const fallbackTitle = schema?.title ?? item.key;
   const title = fallbackTitle;

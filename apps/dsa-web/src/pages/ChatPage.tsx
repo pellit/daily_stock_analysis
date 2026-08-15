@@ -818,9 +818,9 @@ const ChatPage: React.FC = () => {
     const last = steps[steps.length - 1];
     if (last.type === 'thinking') return last.message || t('chat.stage.thinking');
     if (last.type === 'tool_start')
-      return t('chat.thinking.toolRunning', { name: last.display_name || last.tool });
+      return t('chat.thinking.toolRunning', { name: last.display_name || last.tool || '' });
     if (last.type === 'tool_done')
-      return t('chat.thinking.toolDone', { name: last.display_name || last.tool });
+      return t('chat.thinking.toolDone', { name: last.display_name || last.tool || '' });
     if (last.type === 'stage_start')
       return last.message || t('chat.stage.starting', { stage: last.stage || 'stage' });
     if (last.type === 'stage_done')
@@ -878,17 +878,17 @@ const ChatPage: React.FC = () => {
         let iconClass = 'chat-progress-dot-muted';
         let text = '';
         if (step.type === 'thinking') {
-          text = step.message || t('chat.thinking.stepThink', { step: step.step });
+          text = step.message || t('chat.thinking.stepThink', { step: step.step ?? 0 });
           statusClass = 'chat-progress-item-thinking';
           iconClass = 'chat-progress-dot-thinking';
         } else if (step.type === 'tool_start') {
-          text = t('chat.thinking.toolRunning', { name: step.display_name || step.tool });
+          text = t('chat.thinking.toolRunning', { name: step.display_name || step.tool || '' });
           statusClass = 'chat-progress-item-tool';
           iconClass = 'chat-progress-dot-tool';
         } else if (step.type === 'tool_done') {
           text = t('chat.thinking.toolDoneWithDuration', {
-            name: step.display_name || step.tool,
-            seconds: step.duration,
+            name: step.display_name || step.tool || '',
+            seconds: step.duration ?? 0,
           });
           statusClass = step.success ? 'chat-progress-item-success' : 'chat-progress-item-danger';
           iconClass = step.success ? 'chat-progress-dot-success' : 'chat-progress-dot-danger';
