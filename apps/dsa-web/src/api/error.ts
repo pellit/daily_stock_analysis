@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { translateBackendPayload } from '../utils/backendPayloadI18n';
 
 export type ApiErrorCategory =
   | 'agent_disabled'
@@ -292,14 +293,20 @@ export function isLocalConnectionFailure(error: unknown): boolean {
 export function parseApiError(error: unknown): ParsedApiError {
   const response = getResponse(error);
   const status = response?.status;
-  const payloadText = extractErrorPayloadText(response?.data);
+  const rawPayloadText = extractErrorPayloadText(response?.data);
   const errorCode = extractErrorCode(response?.data);
   const errorMessage = getErrorMessage(error);
   const causeMessage = getCauseMessage(error);
   const code = getErrorCode(error);
-  const rawMessage = pickString(payloadText, response?.statusText, errorMessage, causeMessage, code)
+  // Run backend-supplied text through the defensive phrase dictionary so any
+  // cached or legacy payload that still carries CJK is rewritten to English
+  // before it surfaces in the UI.
+  const payloadText = translateBackendPayload(rawPayloadText);
+  const translatedErrorMessage = translateBackendPayload(errorMessage);
+  const translatedCauseMessage = translateBackendPayload(causeMessage);
+  const rawMessage = pickString(payloadText, response?.statusText, translatedErrorMessage, translatedCauseMessage, code)
     ?? 'Request failed, please try again later.';
-  const matchText = buildMatchText([rawMessage, errorMessage, causeMessage, code, errorCode, response?.statusText]);
+  const matchText = buildMatchText([rawMessage, translatedErrorMessage, translatedCauseMessage, code, errorCode, response?.statusText]);
 
   if (includesAny(matchText, ['agent mode is not enabled', 'agent_mode'])) {
     return createParsedApiError({
