@@ -411,7 +411,10 @@ const FirstRunSetupCard: React.FC<FirstRunSetupCardProps> = ({
     : requiredMissing.length
       ? t('settings.setupGuideMissingSummary', {
         count: requiredMissing.length,
-        labels: requiredMissing.slice(0, 3).map((check) => check.title).join(listSeparator),
+        labels: requiredMissing
+          .slice(0, 3)
+          .map((check) => translateBackendPayload(check.title))
+          .join(listSeparator),
       })
       : t('settings.setupGuideReadySummary');
 
