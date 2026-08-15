@@ -26,6 +26,7 @@ import {
 import { WEB_BUILD_INFO } from '../utils/constants';
 import { parseStockListValue } from '../utils/stockList';
 import { getCategoryDescription, getCategoryTitle } from '../utils/systemConfigI18n';
+import { translateBackendPayload } from '../utils/backendPayloadI18n';
 import type {
   ConfigValidationIssue,
   SchedulerStatusResponse,
@@ -481,14 +482,14 @@ const FirstRunSetupCard: React.FC<FirstRunSetupCardProps> = ({
                   {getSetupCheckIcon(check)}
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <p className="text-sm font-semibold text-foreground">{check.title}</p>
+                      <p className="text-sm font-semibold text-foreground">{translateBackendPayload(check.title)}</p>
                       <span className="rounded-full border settings-border bg-background/60 px-2 py-0.5 text-[11px] font-medium text-muted-text">
                         {getSetupCheckStatusLabel(check, t)}
                       </span>
                     </div>
-                    <p className="mt-1 text-xs leading-5 text-muted-text">{check.message}</p>
+                    <p className="mt-1 text-xs leading-5 text-muted-text">{translateBackendPayload(check.message)}</p>
                     {check.nextStep ? (
-                      <p className="mt-2 text-xs leading-5 text-secondary-text">{check.nextStep}</p>
+                      <p className="mt-2 text-xs leading-5 text-secondary-text">{translateBackendPayload(check.nextStep)}</p>
                     ) : null}
                   </div>
                 </div>
@@ -800,7 +801,7 @@ const SchedulerSettingsCard: React.FC<SchedulerSettingsCardProps> = ({
               {status?.lastError ? (
                 <div className="rounded-xl border border-danger/40 bg-danger/10 px-3 py-2">
                   <dt className="text-danger">{t('settings.schedulerLastError')}</dt>
-                  <dd data-testid="scheduler-last-error" className="mt-1 break-words text-danger">{status.lastError}</dd>
+                  <dd data-testid="scheduler-last-error" className="mt-1 break-words text-danger">{translateBackendPayload(status.lastError)}</dd>
                 </div>
               ) : null}
             </dl>

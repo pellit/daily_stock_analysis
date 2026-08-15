@@ -35,6 +35,7 @@ import {
   WEAK_COMPARE_STOCK_MESSAGE_RE,
 } from '../utils/chatIntent/zhPatterns';
 import { findMatchingStockCode, includesStockCode, normalizeStockCode } from '../utils/stockCode';
+import { translateBackendPayload } from '../utils/backendPayloadI18n';
 import { useStockIndex } from '../hooks/useStockIndex';
 import type { StockIndexItem } from '../types/stockIndex';
 import { useUiLanguage } from '../contexts/UiLanguageContext';
@@ -105,13 +106,13 @@ const isStageDoneSuccessful = (status?: string): boolean => {
 
 const getStageDoneLabel = (step: ProgressStep, t: (key: string, params?: Record<string, string | number>) => string): string => {
   const stage = step.stage || 'stage';
-  if (step.message) return step.message;
+  if (step.message) return translateBackendPayload(step.message);
   if (isStageDoneSuccessful(step.status)) return t('chat.stage.completed', { stage });
   return `${stage} ${step.status || 'finished'}`;
 };
 
 const getPipelineBudgetSkippedLabel = (step: ProgressStep, t: (key: string, params?: Record<string, string | number>) => string): string => {
-  if (step.message) return step.message;
+  if (step.message) return translateBackendPayload(step.message);
   return t('chat.stage.skippedBudget', { stage: step.stage || 'pipeline' });
 };
 
@@ -825,21 +826,21 @@ const ChatPage: React.FC = () => {
   const getCurrentStage = (steps: ProgressStep[]): string => {
     if (steps.length === 0) return t('chat.stage.connecting');
     const last = steps[steps.length - 1];
-    if (last.type === 'thinking') return last.message || t('chat.stage.thinking');
+    if (last.type === 'thinking') return translateBackendPayload(last.message) || t('chat.stage.thinking');
     if (last.type === 'tool_start')
       return t('chat.thinking.toolRunning', { name: last.display_name || last.tool || '' });
     if (last.type === 'tool_done')
       return t('chat.thinking.toolDone', { name: last.display_name || last.tool || '' });
     if (last.type === 'stage_start')
-      return last.message || t('chat.stage.starting', { stage: last.stage || 'stage' });
+      return translateBackendPayload(last.message) || t('chat.stage.starting', { stage: last.stage || 'stage' });
     if (last.type === 'stage_done')
       return getStageDoneLabel(last, t);
     if (last.type === 'pipeline_timeout')
-      return last.message || t('chat.stage.timedOut', { stage: last.stage || 'pipeline' });
+      return translateBackendPayload(last.message) || t('chat.stage.timedOut', { stage: last.stage || 'pipeline' });
     if (last.type === 'pipeline_budget_skipped')
       return getPipelineBudgetSkippedLabel(last, t);
     if (last.type === 'generating')
-      return last.message || t('chat.stage.generating');
+      return translateBackendPayload(last.message) || t('chat.stage.generating');
     return t('chat.stage.processing');
   };
 
@@ -887,7 +888,7 @@ const ChatPage: React.FC = () => {
         let iconClass = 'chat-progress-dot-muted';
         let text = '';
         if (step.type === 'thinking') {
-          text = step.message || t('chat.thinking.stepThink', { step: step.step ?? 0 });
+          text = translateBackendPayload(step.message) || t('chat.thinking.stepThink', { step: step.step ?? 0 });
           statusClass = 'chat-progress-item-thinking';
           iconClass = 'chat-progress-dot-thinking';
         } else if (step.type === 'tool_start') {
@@ -902,7 +903,7 @@ const ChatPage: React.FC = () => {
           statusClass = step.success ? 'chat-progress-item-success' : 'chat-progress-item-danger';
           iconClass = step.success ? 'chat-progress-dot-success' : 'chat-progress-dot-danger';
         } else if (step.type === 'stage_start') {
-          text = step.message || t('chat.stage.starting', { stage: step.stage || 'stage' });
+          text = translateBackendPayload(step.message) || t('chat.stage.starting', { stage: step.stage || 'stage' });
           statusClass = 'chat-progress-item-thinking';
           iconClass = 'chat-progress-dot-thinking';
         } else if (step.type === 'stage_done') {
@@ -911,7 +912,7 @@ const ChatPage: React.FC = () => {
           statusClass = isSuccess ? 'chat-progress-item-success' : 'chat-progress-item-danger';
           iconClass = isSuccess ? 'chat-progress-dot-success' : 'chat-progress-dot-danger';
         } else if (step.type === 'pipeline_timeout') {
-          text = step.message || t('chat.stage.timedOut', { stage: step.stage || 'pipeline' });
+          text = translateBackendPayload(step.message) || t('chat.stage.timedOut', { stage: step.stage || 'pipeline' });
           statusClass = 'chat-progress-item-danger';
           iconClass = 'chat-progress-dot-danger';
         } else if (step.type === 'pipeline_budget_skipped') {
@@ -919,11 +920,11 @@ const ChatPage: React.FC = () => {
           statusClass = 'chat-progress-item-muted';
           iconClass = 'chat-progress-dot-muted';
         } else if (step.type === 'generating') {
-          text = step.message || t('chat.thinking.generating');
+          text = translateBackendPayload(step.message) || t('chat.thinking.generating');
           statusClass = 'chat-progress-item-generating';
           iconClass = 'chat-progress-dot-generating';
         } else {
-          text = step.message || step.type;
+          text = translateBackendPayload(step.message) || step.type;
         }
         return (
           <div
