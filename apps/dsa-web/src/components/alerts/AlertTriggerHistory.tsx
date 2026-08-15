@@ -5,7 +5,7 @@ import type { ReportLanguage } from '../../types/analysis';
 import type { AlertTriggerItem } from '../../types/alerts';
 import { Badge, Card, EmptyState, Loading } from '../common';
 import { formatDateTime } from '../../utils/format';
-import { getMarketPhaseSummaryLabel } from '../../utils/marketPhase';
+import { getMarketPhaseToken } from '../../utils/marketPhase';
 
 function statusVariant(status: string): 'success' | 'warning' | 'danger' | 'default' {
   if (status === 'triggered') return 'success';
@@ -33,10 +33,8 @@ export const AlertTriggerHistory: React.FC<AlertTriggerHistoryProps> = ({ trigge
     degraded: t('alerts.triggerStatus.degraded'),
     failed: t('alerts.triggerStatus.failed'),
   };
-  const stripPhasePrefix = (value: string): string =>
-    value.replace(/^Market phase:\s*/i, '').replace(/^市场阶段[::]\s*/u, '');
   const renderPhaseQuality = (trigger: AlertTriggerItem): React.ReactNode => {
-    const phase = getMarketPhaseSummaryLabel(trigger.marketPhaseSummary, reportLanguage);
+    const phase = getMarketPhaseToken(trigger.marketPhaseSummary, reportLanguage);
     const quality = trigger.analysisContextPackOverview?.dataQuality?.level;
     const limitations = trigger.analysisContextPackOverview?.dataQuality?.limitations?.slice(0, 2) ?? [];
     if (!phase && !quality && limitations.length === 0) {
@@ -44,7 +42,7 @@ export const AlertTriggerHistory: React.FC<AlertTriggerHistoryProps> = ({ trigge
     }
     return (
       <div className="space-y-1">
-        {phase ? <Badge variant="default">{stripPhasePrefix(phase)}</Badge> : null}
+        {phase ? <Badge variant="default">{phase}</Badge> : null}
         {quality ? (
           <div className="text-xs text-secondary-text">{t('alerts.triggerHistory.quality', { quality })}</div>
         ) : null}

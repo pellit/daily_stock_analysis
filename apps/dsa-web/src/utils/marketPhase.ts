@@ -108,5 +108,23 @@ export const getMarketPhaseSummaryLabel = (
   return `${TEXT[reportLanguage].finalPrefix}: ${value}`;
 };
 
+/**
+ * Returns the bare phase token ("Intraday", "Lunch break", ...) for a
+ * market-phase summary, without the localized "Market phase:" / "市场阶段:" /
+ * "시장 단계:" prefix that {@link getMarketPhaseSummaryLabel} prepends.
+ * Falls back to the summary's `phase` enum value when no label exists.
+ */
+export const getMarketPhaseToken = (
+  summary?: MarketPhaseSummary | null,
+  language?: ReportLanguage | null,
+): string | null => {
+  if (!summary) {
+    return null;
+  }
+
+  const reportLanguage = normalizeReportLanguage(language);
+  return MARKET_PHASE_LABELS[reportLanguage][summary.phase] ?? summary.phase ?? null;
+};
+
 export const getPartialBarLabel = (language?: ReportLanguage | null): string =>
   TEXT[normalizeReportLanguage(language)].partialBar;
