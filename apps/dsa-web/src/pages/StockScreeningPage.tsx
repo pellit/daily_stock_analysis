@@ -375,9 +375,12 @@ const normalizeScreenMessageKey = (value: string, text: ScreeningText) => {
 
 const formatEnrichmentSummary = (value: string) =>
   value
-    .replace(/DSA行情\s*[:：]\s*/gi, '行情：')
-    .replace(/DSA新闻\s*[:：]\s*/gi, '新闻：')
-    .replace(/DSA事件\s*[:：]\s*/gi, '事件：');
+    .replace(/DSA行情\s*[:：]\s*/gi, 'Quote: ')
+    .replace(/DSA新闻\s*[:：]\s*/gi, 'News: ')
+    .replace(/DSA事件\s*[:：]\s*/gi, 'Events: ')
+    .replace(/行情\s*[:：]\s*/g, 'Quote: ')
+    .replace(/新闻\s*[:：]\s*/g, 'News: ')
+    .replace(/事件\s*[:：]\s*/g, 'Events: ');
 
 const formatScreenMessage = (value: string, text: ScreeningText) => {
   if (/^DSA provider context applied \d+ of \d+ candidates/i.test(value)) {
