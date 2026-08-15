@@ -27,13 +27,6 @@ export const UI_TEXT: Record<string, string> = {
   'common.copy': 'Copy',
   'common.copied': 'Copied!',
 
-  'language.current': 'English',
-  'language.english': 'English',
-  'language.short.en': 'EN',
-  'language.short.zh': '中',
-  'language.toggle': 'Switch UI language',
-  'language.uiLanguage': 'UI language',
-
   'theme.dark': 'Dark',
   'theme.light': 'Light',
   'theme.menu': 'Theme mode',
