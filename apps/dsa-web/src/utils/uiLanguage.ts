@@ -100,5 +100,5 @@ export function getRuntimeInitialLanguage(): UiLanguage {
  * `useUiLanguage` hook from a component.
  */
 export function translateUiText(key: UiTextKey, params?: UiTextParams): string {
-  return formatUiText(UI_TEXT.en[key], params);
+  return formatUiText(UI_TEXT[key], params);
 }

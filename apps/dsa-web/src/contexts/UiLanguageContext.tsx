@@ -19,7 +19,7 @@ type UiLanguageContextValue = {
 const fallbackContext: UiLanguageContextValue = {
   language: 'en',
   setLanguage: () => undefined,
-  t: (key, params) => formatUiText(UI_TEXT.en[key], params),
+  t: (key, params) => formatUiText(UI_TEXT[key], params),
 };
 
 const UiLanguageContext = createContext<UiLanguageContextValue | null>(null);
@@ -38,7 +38,7 @@ export const UiLanguageProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const value = useMemo<UiLanguageContextValue>(() => ({
     language: 'en',
     setLanguage,
-    t: (key, params) => formatUiText(UI_TEXT.en[key], params),
+    t: (key, params) => formatUiText(UI_TEXT[key], params),
   }), [setLanguage]);
 
   return (

@@ -20,13 +20,9 @@ const STOCK_CODE_PATTERNS = [
   /^[A-Z]{1,5}(?:\.(?:US|[A-Z]))?$/, // Common US ticker format
 ];
 
-const REQUIRED_MESSAGE: Record<UiLanguage, string> = {
-  zh: 'Please enter a stock code', en: 'Please enter a stock code',
-};
+const REQUIRED_MESSAGE = 'Please enter a stock code';
 
-const INVALID_FORMAT_MESSAGE: Record<UiLanguage, string> = {
-  zh: 'Invalid stock code format', en: 'Invalid stock code format',
-};
+const INVALID_FORMAT_MESSAGE = 'Invalid stock code format';
 
 /**
  * Check whether the input looks like a stock code.
@@ -41,19 +37,19 @@ export const looksLikeStockCode = (value: string): boolean => {
  */
 export const validateStockCode = (
   value: string,
-  language: UiLanguage = 'en',
+  _language?: UiLanguage,
 ): ValidationResult => {
   const normalized = value.trim().toUpperCase();
 
   if (!normalized) {
-    return { valid: false, message: REQUIRED_MESSAGE[language], normalized };
+    return { valid: false, message: REQUIRED_MESSAGE, normalized };
   }
 
   const valid = looksLikeStockCode(normalized);
 
   return {
     valid,
-    message: valid ? undefined : INVALID_FORMAT_MESSAGE[language],
+    message: valid ? undefined : INVALID_FORMAT_MESSAGE,
     normalized,
   };
 };
