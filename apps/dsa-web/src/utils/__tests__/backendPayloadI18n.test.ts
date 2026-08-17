@@ -85,6 +85,150 @@ describe('translateBackendPayload', () => {
     expect(translateBackendPayload('当前 STOCK_LIST 为空。')).toBe('STOCK_LIST is currently empty.');
   });
 
+  it('rewrites market-review top-level heading', () => {
+    expect(translateBackendPayload('## 2026-08-17 大盘复盘')).toBe('## 2026-08-17 Market Review');
+    expect(translateBackendPayload('## 2026-08-17 A股市场复盘')).toBe('## 2026-08-17 A-share Market Review');
+    expect(translateBackendPayload('## 2026-08-17 A 股市场复盘')).toBe('## 2026-08-17 A-share Market Review');
+  });
+
+  it('rewrites market-review chapter headings', () => {
+    expect(translateBackendPayload('### 一、盘面总览')).toBe('### 1. Market Summary');
+    expect(translateBackendPayload('### 二、指数结构')).toBe('### 2. Index Commentary');
+    expect(translateBackendPayload('### 三、板块主线')).toBe('### 3. Sector / Theme Highlights');
+    expect(translateBackendPayload('### 四、资金与情绪')).toBe('### 4. Funds & Sentiment');
+    expect(translateBackendPayload('### 五、消息催化')).toBe('### 5. News Catalysts');
+    expect(translateBackendPayload('### 六、策略框架')).toBe('### 6. Strategy Framework');
+    expect(translateBackendPayload('### 七、风险提示')).toBe('### 7. Risk Disclosure');
+  });
+
+  it('rewrites market-review subsection headings', () => {
+    expect(translateBackendPayload('#### 行业板块领涨 Top 5')).toBe('#### Industry Sector Leaders Top 5');
+    expect(translateBackendPayload('#### 行业板块领跌 Top 5')).toBe('#### Industry Sector Laggards Top 5');
+    expect(translateBackendPayload('#### 概念板块领涨 Top 5')).toBe('#### Concept Theme Leaders Top 5');
+    expect(translateBackendPayload('#### 概念板块领跌 Top 5')).toBe('#### Concept Theme Laggards Top 5');
+  });
+
+  it('rewrites market-review section labels', () => {
+    expect(translateBackendPayload('## 市场概况')).toBe('## Market Overview');
+    expect(translateBackendPayload('## 数据边界')).toBe('## Data Limits');
+    expect(translateBackendPayload('## 市场新闻')).toBe('## Market News');
+  });
+
+  it('rewrites market-review table column headers (multiple per markdown)', () => {
+    const table = '| 指标 | 数值 | 观察 |\n| 上涨/下跌/平盘 | 4335 | 上涨占比(不含平盘) 80.3% |';
+    expect(translateBackendPayload(table)).toBe(
+      '| Metric | Value | Observation |\n| Advancers/Decliners/Flat | 4335 | Up ratio (excluding flat) 80.3% |',
+    );
+  });
+
+  it('rewrites market-review table column headers for indices', () => {
+    const table = '| 指数 | 最新 | 涨跌幅 | 开盘 | 最高 | 最低 | 振幅 | 成交额(亿) |';
+    expect(translateBackendPayload(table)).toBe(
+      '| Index | Last | Change% | Open | High | Low | Amplitude | Turnover (亿) |',
+    );
+  });
+
+  it('rewrites market-review bold inline labels', () => {
+    expect(translateBackendPayload('**盘面信号**：83/100')).toBe('**Market signal**: 83/100');
+    expect(translateBackendPayload('**信号依据**：上涨家数占比 80%')).toBe('**Signal basis**: 上涨家数占比 80%');
+    expect(translateBackendPayload('**趋势结构**: 判断市场处于上升阶段。')).toBe('**Trend structure**: 判断市场处于上升阶段。');
+  });
+
+  it('rewrites market-review inline labels without bold', () => {
+    expect(translateBackendPayload('盘面信号：')).toBe('Market signal: ');
+    expect(translateBackendPayload('信号依据：')).toBe('Signal basis: ');
+    expect(translateBackendPayload('操作建议：')).toBe('Action advice: ');
+  });
+
+  it('rewrites market-review LLM prose intro patterns', () => {
+    // The dictionary translates the structural connector phrases
+    // (今日A股市场整体呈现, 优先观察, 指数承接，...) but leaves the LLM's
+    // free-form mood words (态势, 强势上涨) untouched. Translating free-form
+    // prose is out of scope — the canonical fix is to regenerate the report
+    // with report_language='en'.
+    expect(translateBackendPayload('今日A股市场整体呈现**强势上涨**态势，优先观察指数承接、成交额变化和板块持续性。')).toBe(
+      "Today's A-share market overall showed**强势上涨**态势; prioritize observing index support, turnover changes, and sector persistence。",
+    );
+  });
+
+  it('rewrites market-review stats labels', () => {
+    expect(translateBackendPayload('涨停/跌停')).toBe('Limit-up/Limit-down');
+    expect(translateBackendPayload('涨跌停差 +105')).toBe('Limit up/down diff +105');
+    expect(translateBackendPayload('高活跃度')).toBe('High activity');
+  });
+
+  it('rewrites market-review mood descriptors', () => {
+    expect(translateBackendPayload('（强势，可进攻）')).toBe('(strong, can attack)');
+    expect(translateBackendPayload('（偏暖）')).toBe('(warming)');
+    expect(translateBackendPayload('（震荡）')).toBe('(choppy)');
+  });
+
+  it('rewrites market-review data-absence fallbacks', () => {
+    expect(translateBackendPayload('暂无指数数据。')).toBe('No index data.');
+    expect(translateBackendPayload('暂无板块涨跌榜数据。')).toBe('No sector ranking data.');
+    expect(translateBackendPayload('暂无市场宽度数据。')).toBe('No market breadth data.');
+    expect(translateBackendPayload('暂无相关新闻。')).toBe('No related news.');
+  });
+
+  it('rewrites market-review sector labels', () => {
+    expect(translateBackendPayload('行业领涨:')).toBe('Industry leading:');
+    expect(translateBackendPayload('行业领跌:')).toBe('Industry lagging:');
+    expect(translateBackendPayload('概念领涨:')).toBe('Concept leading:');
+    expect(translateBackendPayload('概念领跌:')).toBe('Concept lagging:');
+  });
+
+  it('rewrites market-review risk disclosure and footer', () => {
+    expect(translateBackendPayload('市场有风险，投资需谨慎。')).toBe('Market conditions carry risk; invest with caution.');
+    expect(translateBackendPayload('以上数据仅供参考，不构成投资建议。')).toBe(
+      'The data above is for reference only and does not constitute investment advice.',
+    );
+    expect(translateBackendPayload('*复盘时间: 17:46*')).toBe('*Review Time: 17:46*');
+  });
+
+  it('rewrites a full market-review markdown body', () => {
+    const input = [
+      '# 🎯 大盘复盘',
+      '## 2026-08-17 大盘复盘',
+      '',
+      '> 今日A股市场整体呈现**强势上涨**态势，优先观察指数承接、成交额变化和板块持续性。',
+      '',
+      '### 一、盘面总览',
+      '- **盘面信号**：83/100（强势，可进攻）',
+      '',
+      '### 二、指数结构',
+      '| 指标 | 数值 | 观察 |',
+      '|------|------|------|',
+      '| 上涨/下跌/平盘 | 4335 / 1063 / 140 | 上涨占比(不含平盘) 80.3% |',
+      '',
+      '### 七、风险提示',
+      '- 市场有风险，投资需谨慎。以上数据仅供参考，不构成投资建议。',
+      '',
+      '*复盘时间: 17:46*',
+    ].join('\n');
+    expect(translateBackendPayload(input)).toBe(
+      [
+        '# 🎯 大盘复盘',
+        '## 2026-08-17 Market Review',
+        '',
+        "> Today's A-share market overall showed**强势上涨**态势; prioritize observing index support, turnover changes, and sector persistence。",
+        '',
+        '### 1. Market Summary',
+        '- **Market signal**: 83/100(strong, can attack)',
+        '',
+        '### 2. Index Commentary',
+        '| Metric | Value | Observation |',
+        '|------|------|------|',
+        '| Advancers/Decliners/Flat | 4335 / 1063 / 140 | Up ratio (excluding flat) 80.3% |',
+        '',
+        '### 7. Risk Disclosure',
+        '- Market conditions carry risk; invest with caution.The data above is for reference only and does not constitute investment advice.',
+        '',
+        '*Review Time: 17:46*',
+      ].join('\n'),
+    );
+  });
+
+
   it('rewrites setup-status notification and storage check messages', () => {
     expect(translateBackendPayload('已检测到至少一个通知渠道配置。')).toBe(
       'At least one notification channel configuration has been detected.',

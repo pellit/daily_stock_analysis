@@ -96,11 +96,159 @@ const PHRASE_MAP: Array<{ from: RegExp; to: string }> = [
   { from: /^数据库上级目录可创建: (.+)$/, to: 'Database parent directory can be created: $1' },
   { from: /^数据库路径上级目录不可写: (.+)$/, to: 'Database path parent directory is not writable: $1' },
   { from: /^请调整 DATABASE_PATH 或目录权限。$/, to: 'Adjust DATABASE_PATH or the directory permissions.' },
+
+  // =====================================================
+  // Market-review report structural phrases
+  // =====================================================
+  // Cached Chinese-tagged market-review reports (analysis_history rows
+  // whose raw_result / context_snapshot was generated before the
+  // report_language='en' default) contain chapter headings, section
+  // labels, table column headers, and inline structural phrases in the
+  // markdown body. Translate them at display time so the legacy cache
+  // renders in English without needing a purge. The canonical fix is to
+  // regenerate the report with report_language='en'; once new reports
+  // exist, this rewriter is a no-op for them.
+
+  // Top-level heading (date + market review)
+  { from: /^## (\d{4}-\d{2}-\d{2}) 大盘复盘$/gm, to: '## $1 Market Review' },
+  { from: /^## (\d{4}-\d{2}-\d{2}) A股市场复盘$/gm, to: '## $1 A-share Market Review' },
+  { from: /^## (\d{4}-\d{2}-\d{2}) A 股市场复盘$/gm, to: '## $1 A-share Market Review' },
+  { from: /^## 大盘复盘$/gm, to: '## Market Review' },
+  { from: /^## A股市场复盘$/gm, to: '## A-share Market Review' },
+  { from: /^## A 股市场复盘$/gm, to: '## A-share Market Review' },
+
+  // Chapter headings (### xxx)
+  { from: /^### 一、盘面总览$/gm, to: '### 1. Market Summary' },
+  { from: /^### 一、市场总结$/gm, to: '### 1. Market Summary' },
+  { from: /^### 二、指数结构$/gm, to: '### 2. Index Commentary' },
+  { from: /^### 二、指数点评$/gm, to: '### 2. Index Commentary' },
+  { from: /^### 二、主要指数$/gm, to: '### 2. Index Commentary' },
+  { from: /^### 三、板块主线$/gm, to: '### 3. Sector / Theme Highlights' },
+  { from: /^### 三、热点解读$/gm, to: '### 3. Sector / Theme Highlights' },
+  { from: /^### 三、板块表现$/gm, to: '### 3. Sector / Theme Highlights' },
+  { from: /^### 四、资金与情绪$/gm, to: '### 4. Funds & Sentiment' },
+  { from: /^### 四、资金动向$/gm, to: '### 4. Funds & Sentiment' },
+  { from: /^### 五、消息催化$/gm, to: '### 5. News Catalysts' },
+  { from: /^### 五、后市展望$/gm, to: '### 5. Outlook' },
+  { from: /^### 六、策略框架$/gm, to: '### 6. Strategy Framework' },
+  { from: /^### 七、风险提示$/gm, to: '### 7. Risk Disclosure' },
+
+  // Subsection headings (#### 行业板块领涨 Top 5)
+  { from: /^#### 行业板块领涨 Top 5$/gm, to: '#### Industry Sector Leaders Top 5' },
+  { from: /^#### 行业板块领跌 Top 5$/gm, to: '#### Industry Sector Laggards Top 5' },
+  { from: /^#### 概念板块领涨 Top 5$/gm, to: '#### Concept Theme Leaders Top 5' },
+  { from: /^#### 概念板块领跌 Top 5$/gm, to: '#### Concept Theme Laggards Top 5' },
+
+  // Section labels (## xxx - smaller headers used in the data block)
+  { from: /^## 指数$/gm, to: '## Index' },
+  { from: /^## 行业板块$/gm, to: '## Industry Sectors' },
+  { from: /^## 概念板块$/gm, to: '## Concept Themes' },
+  { from: /^## 板块表现$/gm, to: '## Sector Performance' },
+  { from: /^## 市场概况$/gm, to: '## Market Overview' },
+  { from: /^## 数据边界$/gm, to: '## Data Limits' },
+  { from: /^## 市场新闻$/gm, to: '## Market News' },
+  { from: /^## 市场宽度$/gm, to: '## Market Breadth' },
+
+  // Table column headers (between pipes, with g flag)
+  { from: /\| 指标 \|/g, to: '| Metric |' },
+  { from: /\| 数值 \|/g, to: '| Value |' },
+  { from: /\| 观察 \|/g, to: '| Observation |' },
+  { from: /\| 最新 \|/g, to: '| Last |' },
+  { from: /\| 指数 \|/g, to: '| Index |' },
+  { from: /\| 涨跌幅 \|/g, to: '| Change% |' },
+  { from: /\| 开盘 \|/g, to: '| Open |' },
+  { from: /\| 最高 \|/g, to: '| High |' },
+  { from: /\| 最低 \|/g, to: '| Low |' },
+  { from: /\| 振幅 \|/g, to: '| Amplitude |' },
+  { from: /\| 成交额\(亿\) \|/g, to: '| Turnover (亿) |' },
+  { from: /\| 成交额 \|/g, to: '| Turnover |' },
+  { from: /\| 排名 \|/g, to: '| Rank |' },
+  { from: /\| 行业板块 \|/g, to: '| Industry Sector |' },
+  { from: /\| 概念板块 \|/g, to: '| Concept Theme |' },
+
+  // Bold inline label: **xxx**:
+  { from: /\*\*盘面信号\*\*[:：]/g, to: '**Market signal**: ' },
+  { from: /\*\*信号依据\*\*[:：]/g, to: '**Signal basis**: ' },
+  { from: /\*\*操作建议\*\*[:：]/g, to: '**Action advice**: ' },
+  { from: /\*\*趋势结构\*\*[:：] ?/g, to: '**Trend structure**: ' },
+  { from: /\*\*资金情绪\*\*[:：]/g, to: '**Funds & sentiment**: ' },
+  { from: /\*\*主线板块\*\*[:：]/g, to: '**Key themes**: ' },
+
+  // Inline label: (without markdown bold)
+  { from: /盘面信号：/g, to: 'Market signal: ' },
+  { from: /信号依据：/g, to: 'Signal basis: ' },
+  { from: /操作建议：/g, to: 'Action advice: ' },
+
+  // LLM prose intro patterns (specific markets first, then generic fallback)
+  { from: /今日A股市场整体呈现/g, to: "Today's A-share market overall showed" },
+  { from: /今日美股市场整体呈现/g, to: "Today's US market overall showed" },
+  { from: /今日港股市场整体呈现/g, to: "Today's HK market overall showed" },
+  { from: /今日日股市场整体呈现/g, to: "Today's Japan market overall showed" },
+  { from: /今日韩股市场整体呈现/g, to: "Today's Korea market overall showed" },
+  { from: /今日(.{0,30})市场整体呈现/g, to: "Today's $1 market overall showed" },
+  { from: /，优先观察/g, to: '; prioritize observing ' },
+  { from: /指数承接、成交额变化和板块持续性/g, to: 'index support, turnover changes, and sector persistence' },
+  { from: /指数承接、消息催化和整体风险状态/g, to: 'index support, news catalysts, and overall risk state' },
+
+  // Stats labels (inline)
+  { from: /上涨\/下跌\/平盘/g, to: 'Advancers/Decliners/Flat' },
+  { from: /涨停\/跌停/g, to: 'Limit-up/Limit-down' },
+  { from: /两市成交额/g, to: 'Total market turnover' },
+  { from: /涨跌停差/g, to: 'Limit up/down diff' },
+  { from: /上涨占比\(不含平盘\)/g, to: 'Up ratio (excluding flat)' },
+  { from: /高活跃度/g, to: 'High activity' },
+  { from: /中等活跃度/g, to: 'Moderate activity' },
+  { from: /低活跃度/g, to: 'Low activity' },
+
+  // Mood descriptors (in parens)
+  { from: /（强势，可进攻）/g, to: '(strong, can attack)' },
+  { from: /（偏暖）/g, to: '(warming)' },
+  { from: /（震荡）/g, to: '(choppy)' },
+  { from: /（偏弱）/g, to: '(weakening)' },
+  { from: /（弱势）/g, to: '(weak)' },
+
+  // Data absence
+  { from: /暂无指数数据。/g, to: 'No index data.' },
+  { from: /暂无板块涨跌榜数据。/g, to: 'No sector ranking data.' },
+  { from: /暂无市场宽度数据。/g, to: 'No market breadth data.' },
+  { from: /暂无相关新闻。/g, to: 'No related news.' },
+  { from: /暂无数据。/g, to: 'No data available.' },
+  { from: /当前以主要指数与可用新闻线索评估整体风险状态。/g, to: 'Currently using major indices and available news leads to assess overall risk state.' },
+
+  // Sector label (in data block)
+  { from: /行业领涨:/g, to: 'Industry leading:' },
+  { from: /行业领跌:/g, to: 'Industry lagging:' },
+  { from: /概念领涨:/g, to: 'Concept leading:' },
+  { from: /概念领跌:/g, to: 'Concept lagging:' },
+
+  // Funds section prose
+  { from: /结合成交额和涨跌家数看，当前更适合等待确认，避免仅凭单一热点追高。/g, to: 'Combined with turnover and advance/decline counts, it is currently better to wait for confirmation and avoid chasing a single hot theme.' },
+
+  // News catalysts prose
+  { from: /暂无可用新闻时，应降低对题材持续性的确定性判断。/g, to: 'When no news is available, reduce confidence in the persistence of themes.' },
+
+  // Strategy framework definitions
+  { from: /判断市场处于上升、震荡还是防守阶段。/g, to: 'Determine whether the market is in an uptrend, range, or defensive phase.' },
+  { from: /识别短线风险偏好与情绪温度。/g, to: 'Identify short-term risk appetite and sentiment temperature.' },
+  { from: /提炼可交易主线与规避方向。/g, to: 'Extract tradable themes and areas to avoid.' },
+
+  // Risk disclosure (combined pattern first to preserve sentence boundary space)
+  { from: /市场有风险，投资需谨慎。 以上数据仅供参考，不构成投资建议。/g, to: 'Market conditions carry risk; invest with caution. The data above is for reference only and does not constitute investment advice.' },
+  { from: /市场有风险，投资需谨慎。/g, to: 'Market conditions carry risk; invest with caution.' },
+  { from: /市场有风险，投资需谨慎/g, to: 'Market conditions carry risk; invest with caution' },
+  { from: /以上数据仅供参考，不构成投资建议。/g, to: 'The data above is for reference only and does not constitute investment advice.' },
+  { from: /以上数据仅供参考，不构成投资建议/g, to: 'The data above is for reference only and does not constitute investment advice' },
+
+  // Footer
+  { from: /\*复盘时间: /g, to: '*Review Time: ' },
 ];
 
-// Compiled regex cache (the source patterns are stable).
+// Compiled regex cache (the source patterns are stable). Preserve the
+// original flags so `g` / `gm` patterns actually replace globally — the
+// previous compilation stripped them, which silently degraded inline
+// rewrites to single-match replacements.
 const COMPILED: Array<{ from: RegExp; to: string }> = PHRASE_MAP.map((entry) => ({
-  from: new RegExp(entry.from.source),
+  from: new RegExp(entry.from.source, entry.from.flags),
   to: entry.to,
 }));
 

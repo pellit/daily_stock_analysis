@@ -11,6 +11,7 @@ import type {
 } from '../../types/analysis';
 import { markdownToPlainText } from '../../utils/markdown';
 import { getReportText, normalizeReportLanguage } from '../../utils/reportLanguage';
+import { translateBackendPayload } from '../../utils/backendPayloadI18n';
 import { Card } from '../common';
 import { Tooltip } from '../common/Tooltip';
 import { ReportMarkdownBody } from './ReportMarkdownBody';
@@ -382,13 +383,17 @@ export const MarketReviewReportView: React.FC<MarketReviewReportViewProps> = ({
   const marketReviewPayload = providedPayload ?? (isMarketReviewPayload(contextPayload) ? contextPayload : null);
   const loadedContent = loadedMarkdown && loadedMarkdown.recordId === recordId ? loadedMarkdown.content : '';
   const content = providedContent ?? marketReviewPayload?.markdownReport ?? loadedContent;
+  // Translate cached Chinese-tagged market-review markdown on the fly so
+  // legacy rows render in English without requiring a purge. The defensive
+  // phrase dictionary is a no-op for already-English content.
+  const translatedContent = useMemo(() => translateBackendPayload(content), [content]);
   const error = loadError && loadError.recordId === recordId ? loadError.message : null;
   const hasStructuredContent = Boolean(marketReviewPayload?.sections?.length || marketReviewPayload?.markets);
   const isLoading = Boolean(recordId && !providedContent && !hasStructuredContent && loadedMarkdown?.recordId !== recordId && !error);
   const displayTitle = marketReviewPayload?.rootTitle || marketReviewPayload?.title || meta?.stockName || 'Market Review';
   const structuredContent = useMemo(
-    () => stripTopHeading(content, displayTitle),
-    [content, displayTitle],
+    () => stripTopHeading(translatedContent, displayTitle),
+    [translatedContent, displayTitle],
   );
   const sections = useMemo(
     () => {
@@ -450,7 +455,7 @@ export const MarketReviewReportView: React.FC<MarketReviewReportViewProps> = ({
     {
       icon: FileText,
       label: marketReviewText.reviewSummary,
-      value: summary?.analysisSummary || marketReviewText.noReviewSummary,
+      value: translateBackendPayload(summary?.analysisSummary) || marketReviewText.noReviewSummary,
     },
     {
       icon: Gauge,
@@ -462,12 +467,12 @@ export const MarketReviewReportView: React.FC<MarketReviewReportViewProps> = ({
     {
       icon: Layers,
       label: marketReviewText.rotationAndFunds,
-      value: summary?.operationAdvice || marketReviewText.noRotationView,
+      value: translateBackendPayload(summary?.operationAdvice) || marketReviewText.noRotationView,
     },
     {
       icon: ShieldAlert,
       label: marketReviewText.riskAndWatch,
-      value: summary?.trendPrediction || marketReviewText.noRiskWatch,
+      value: translateBackendPayload(summary?.trendPrediction) || marketReviewText.noRiskWatch,
     },
   ], [marketReviewText, summary, text.marketSentiment]);
 
